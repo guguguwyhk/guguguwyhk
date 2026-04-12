@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/removedbg_gugugu.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gu Gu Gu: Campus Ecology</title>
+    <!-- Google Fonts: Inter and Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+  </head>
+  <body class="theme-light">
+    <!-- Fixed Background for Mobile Compatibility -->
+    <div class="fixed-bg"></div>
+
+    <!-- App Container -->
+    <div id="app"></div>
+
+    <!-- Global Bird Detail Modal (Outside App to avoid transform conflicts) -->
+    <div id="bird-modal" class="centered-modal-overlay hidden" style="z-index: 100000;">
+      <div class="centered-modal-content" style="max-width:1100px; width:95%; max-height:88vh; padding:0; overflow:hidden; display:flex; flex-direction:column; position:relative; background:rgba(5, 12, 8, 0.85); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border:1px solid rgba(134,239,172,0.3); border-radius:32px; box-shadow: 0 40px 100px rgba(0,0,0,0.8);">
+        <!-- Navigation -->
+        <button id="prev-bird-btn" class="modal-nav-btn" style="left:12px;">&larr;</button>
+        <button id="next-bird-btn" class="modal-nav-btn" style="right:12px;">&rarr;</button>
+
+        <div class="modal-body-flex" style="display:flex; height:100%; max-height:88vh;">
+          <div class="modal-img-container" style="width:380px; flex-shrink:0; position:relative; background:#000;">
+            <img id="modal-img" src="" style="width:100%; height:100%; object-fit:cover; min-height:400px;" />
+            <button id="close-modal" class="modal-close-btn">&times;</button>
+          </div>
+          <div class="modal-info-scroll" style="flex:1; padding:2.5rem 3rem; background:transparent; overflow-y:auto;">
+             <h2 id="modal-name" style="margin-bottom:0.2rem; font-size:2.8rem; color:#86efac;"></h2>
+             <p id="modal-enName" style="font-style:italic; font-size:1.2rem; color:#94a3b8; margin-bottom:2rem;"></p>
+             <div class="glass-panel" style="margin-bottom:2rem; padding:1.5rem; background:rgba(0,0,0,0.4);">
+                <h3 style="font-size:0.9rem; color:#86efac; margin-bottom:1.2rem;" data-i18n="eco-data">📊 生態數據</h3>
+                <div style="display:flex; flex-direction:column; gap:1.2rem;">
+                   <div class="stat-row">
+                      <span data-i18n="stat-size">體型</span>
+                      <div class="stat-bar-bg"><div id="bar-size" class="stat-bar" style="background:var(--secondary-color)"></div></div>
+                      <span id="label-size" class="stat-val"></span>
+                   </div>
+                   <div class="stat-row">
+                      <span data-i18n="stat-rate">出沒機率</span>
+                      <div class="stat-bar-bg"><div id="bar-prob" class="stat-bar" style="background:#86efac"></div></div>
+                      <span id="label-prob" class="stat-val"></span>
+                   </div>
+                   <div class="stat-row">
+                      <span data-i18n="stat-rarity">稀有度</span>
+                      <div class="stat-bar-bg"><div id="bar-rare" class="stat-bar" style="background:#f87171"></div></div>
+                      <span id="label-rare" class="stat-val"></span>
+                   </div>
+                </div>
+             </div>
+             <div style="margin-bottom:2rem;">
+                <h3 style="font-size:1rem; color:#86efac; margin-bottom:0.8rem;" data-i18n="learn-more">🌿 深入了解</h3>
+                <p id="modal-details" style="color:#e2e8f0; font-size:1.15rem; line-height:1.8;"></p>
+             </div>
+             <div style="margin-bottom:2rem; padding:1.2rem 1.5rem; border-radius:12px; background:rgba(134,239,172,0.05); border:1px solid rgba(134,239,172,0.2);">
+                <h3 style="font-size:0.9rem; color:#86efac; margin-bottom:1rem;" data-i18n="similar-birds">🔍 你看到的可能也是...</h3>
+                <div id="modal-similar-icons" style="display:flex; gap:12px; flex-wrap:wrap;"></div>
+             </div>
+             <div style="display:flex; gap:1rem; margin-top:1rem;">
+                <button id="btn-play-audio" class="btn-primary" style="flex:1;" data-i18n="btn-voice">🎵 聆聽叫聲</button>
+                <button id="btn-read-aloud" class="btn-secondary" style="flex:1;" data-i18n="btn-tts">🔊 語音朗讀</button>
+             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Global Translate System (Bottom Right) -->
+    <div id="global-lang-btn" class="glass-panel" style="position: fixed; bottom: 30px; right: 30px; z-index: 200001; cursor: pointer; transition: transform 0.2s; border-radius: 50%; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+      <span style="color: white; font-weight: 900; font-size: 1.2rem;">EN</span>
+    </div>
+
+    <!-- Interactive Mascot Widget (Persistent, Bottom Left) -->
+    <div id="mascot-widget" class="hidden" style="position: fixed; bottom: 30px; left: 30px; z-index: 200000; display: flex; flex-direction: column; align-items: flex-start; pointer-events: none;">
+      <div id="mascot-bubble" class="hidden mascot-bubble" style="background: rgba(20,20,20,0.95); backdrop-filter: blur(10px); border: 2px solid var(--primary-color); color: white; padding: 18px 24px; border-radius: 24px; border-bottom-left-radius: 4px; font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,0.5); max-width: 320px; font-size: 1.2rem; line-height: 1.5; margin-bottom: 12px;">
+        Gu Gu Gu!
+      </div>
+      <img src="/removedbg_gugugu.png" alt="Gu Gu Gu Mascot" id="mascot-img" class="mascot-img" style="width: 200px; cursor: pointer; pointer-events: auto; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4)); animation: mascotBlink 5s infinite;" />
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

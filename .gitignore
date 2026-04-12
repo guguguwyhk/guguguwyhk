@@ -1,0 +1,7 @@
+node_modules/
+.DS_Store
+dist/
+*.avi
+*.mp4
+*.MOV
+public/footage/previous_videos/
