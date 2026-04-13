@@ -30,13 +30,9 @@
 3.  輸入以下 **Git 指令**（純英文）：
 
 ```bash
-# 1. 抓取所有更改
+cd C:\Users\astin\Downloads\gugugu
 git add .
-
-# 2. 存檔 (註解可以隨便改)
 git commit -m "Update website content"
-
-# 3. 推上 GitHub
 git push
 ```
 
