@@ -1,7 +1,8 @@
 node_modules/
 .DS_Store
 dist/
-*.avi
-*.mp4
-*.MOV
-public/footage/previous_videos/
+# 允許這些資源上傳到 GitHub 以供部署
+# *.avi
+# *.mp4
+# *.MOV
+# public/footage/previous_videos/
