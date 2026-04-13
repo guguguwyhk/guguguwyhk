@@ -16,12 +16,12 @@
 #include <WiFiClientSecure.h>
 
 // ==================== WiFi & Cloud Config ====================
-const char* ssid     = "g_home";        // 你的 WiFi 名稱
+const char* ssid     = "ghome";        // 你的 WiFi 名稱
 const char* password = "9477063800";    // 你的 WiFi 密碼
 
 // ☁️ 你的 Render 網域 (不要加 https://)
 // 等你部署到 Render 後改成你的專屬網址，例如: "gugugu-relay.onrender.com"
-const char* host     = "localhost";     // TODO: 更換為 Render 網域
+const char* host     = "gugugu-relay.onrender.com";     // TODO: 更換為 Render 網域
 const int   port     = 443;             // Render 預設走 HTTPS (443)
 const char* path     = "/upload";
 
