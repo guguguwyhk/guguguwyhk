@@ -11,7 +11,7 @@ export function renderMap(container) {
       <!-- Interactive Map Image -->
       <div id="map-container" style="width:100%; height:100%; overflow:auto; position:relative; background:#8cdba9;">
         <!-- Placeholder map image, normally using zoom/pan library, but CSS works for mockup -->
-        <img src="/footage/wy_map/plan_view_of_wy.png" style="min-width:1200px; height:auto; display:block;" />
+        <img src="./footage/wy_map/plan_view_of_wy.png" style="min-width:1200px; height:auto; display:block;" />
         
         <!-- Hotspots numbers overlay -->
         <a href="https://docs.google.com/presentation/d/1VSy2uOezuxn5Yt3TwVZJix5QXO6nm9RgnlIfarfubPE/edit?slide=id.gc5ddde5fd9_2_147" target="_blank" class="hotspot" style="top: 35%; left: 42%;" data-bird="草叢" data-loc="第一檢查點" data-desc="點擊查看簡報詳情">1</a>

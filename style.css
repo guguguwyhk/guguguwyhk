@@ -154,6 +154,12 @@ select.glass-input {
   padding-right: 40px;
 }
 
+select.glass-input option {
+  background-color: #050c08;
+  color: #86efac;
+  padding: 10px;
+}
+
 /* =================== Modals =================== */
 .centered-modal-overlay {
   position: fixed;
@@ -552,29 +558,32 @@ select.glass-input {
 /* =================== Mascot Widget =================== */
 #mascot-widget {
   position: fixed;
-  bottom: 20px;
-  left: 24px;
+  bottom: 30px;
+  left: 30px;
   z-index: 200000;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0;
+  pointer-events: none;
 }
 
 #mascot-bubble {
-  background: rgba(5, 15, 8, 0.92);
-  border: 1px solid rgba(134, 239, 172, 0.3);
-  border-radius: 18px 18px 18px 4px;
-  padding: 12px 18px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #86efac;
-  max-width: 240px;
-  margin-bottom: 10px;
-  position: relative;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  background: rgba(20, 20, 20, 0.95);
   backdrop-filter: blur(10px);
-  line-height: 1.5;
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid var(--primary-color);
+  color: white;
+  padding: 16px 22px;
+  border-radius: 24px;
+  border-bottom-left-radius: 4px;
+  font-weight: 700;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  max-width: 300px;
+  font-size: 1.1rem;
+  line-height: 1.4;
+  margin-bottom: 10px;
+  pointer-events: auto;
+  position: relative;
 }
 
 #mascot-bubble::after {
@@ -584,27 +593,124 @@ select.glass-input {
   left: 24px;
   border-width: 10px 8px 0;
   border-style: solid;
-  border-color: rgba(134, 239, 172, 0.3) transparent transparent;
+  border-color: rgba(34, 197, 94, 0.3) transparent transparent;
 }
 
 #mascot-img {
   width: 180px;
   cursor: pointer;
-  filter: drop-shadow(0 4px 12px rgba(34, 197, 94, 0.4));
-  transition: transform 0.15s ease;
+  pointer-events: auto;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.4));
+  transition: transform 0.2s;
   animation: mascotBounce 3s ease-in-out infinite, mascotBlink 5s ease-in-out infinite;
 }
 
 #mascot-img:hover {
-  filter: drop-shadow(0 6px 20px rgba(74, 222, 128, 0.7));
+  transform: scale(1.05);
+  filter: drop-shadow(0 12px 25px rgba(34, 197, 94, 0.3));
+}
+
+/* =================== Global Language Button =================== */
+#global-lang-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 200001;
+  cursor: pointer;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: white;
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#global-lang-btn:hover {
+  transform: scale(1.15) rotate(5deg);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 20px rgba(34,197,94,0.4);
+}
+
+/* =================== Modal Structural Refinements =================== */
+#bird-modal-content {
+  max-width: 1100px;
+  width: 95%;
+  max-height: 88vh;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: rgba(5, 12, 8, 0.88);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(134,239,172,0.3);
+  border-radius: 32px;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.9);
+}
+
+.modal-body-flex {
+  display: flex;
+  height: 100%;
+  max-height: 88vh;
+}
+
+.modal-img-container {
+  width: 380px;
+  flex-shrink: 0;
+  position: relative;
+  background: #000;
+}
+
+.modal-img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  min-height: 400px;
+}
+
+.modal-info-scroll {
+  flex: 1;
+  padding: 2.5rem 3rem;
+  background: transparent;
+  overflow-y: auto;
+}
+
+#modal-name {
+  margin-bottom: 0.2rem;
+  font-size: 2.6rem;
+  color: #86efac;
+}
+
+#modal-enName {
+  font-style: italic;
+  font-size: 1.1rem;
+  color: #94a3b8;
+  margin-bottom: 1.8rem;
+}
+
+/* =================== Layout Grids =================== */
+.nav-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.mobile-stack {
+  display: flex;
 }
 
 /* =================== Stat bar for encyclopedia =================== */
-.stat-row { display:flex; align-items:center; gap:1.5rem; font-size:1.1rem; }
-.stat-row span:first-child { width:140px; color:#94a3b8; font-weight:600; }
-.stat-bar-bg { flex:1; height:16px; background:rgba(255,255,255,0.08); border-radius:8px; overflow:hidden; }
-.stat-bar { height:100% !important; border-radius:8px; transition: width 0.8s cubic-bezier(0.165, 0.84, 0.44, 1); min-width: 2px; }
-.stat-val { width:70px; text-align:right; font-weight:900; color:#fff; }
+.stat-row { display:flex; align-items:center; gap:1.2rem; font-size:1rem; }
+.stat-row span:first-child { width:120px; color:#94a3b8; font-weight:600; font-size: 0.9rem; }
+.stat-bar-bg { flex:1; height:12px; background:rgba(255,255,255,0.08); border-radius:6px; overflow:hidden; }
+.stat-bar { height:100% !important; border-radius:6px; transition: width 0.8s cubic-bezier(0.165, 0.84, 0.44, 1); min-width: 2px; }
+.stat-val { width:60px; text-align:right; font-weight:900; color:#fff; font-size: 0.9rem; }
 
 /* =================== Bird Cards =================== */
 .grid-responsive {
@@ -647,9 +753,9 @@ select.glass-input {
 
 .bird-card:hover::after { transform: translateY(0); }
 
-.bird-card img { width: 100%; height: 260px; object-fit: cover; transition: transform 0.5s ease; display:block; }
+.bird-card img { width: 100%; height: 220px; object-fit: cover; transition: transform 0.5s ease; display:block; }
 .bird-card:hover img { transform: scale(1.1); }
-.bird-card-info { padding: 1.2rem; text-align: center; }
+.bird-card-info { padding: 1rem; text-align: center; }
 
 /* =================== Poll Overhaul Styles =================== */
 .poll-card {
@@ -727,37 +833,135 @@ select.glass-input {
 /* =================== Utility classes =================== */
 .hidden { display: none !important; }
 
-/* =================== Responsive Media Queries =================== */
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
+  /* Layout & Spacing */
+  .page-header { flex-direction: column; gap: 0.8rem; align-items: flex-start; }
+  .page-title { font-size: 1.6rem !important; }
+  .page-container { padding: 1.5rem 1rem 7rem 1rem !important; }
+  
+  .mobile-stack {
+    flex-direction: column !important;
+  }
+  
+  /* Grid Nav - Home Page */
+  .nav-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1rem !important;
+  }
+  .nav-card {
+    padding: 1.2rem !important;
+  }
+  .nav-card div:first-child {
+    font-size: 2rem !important;
+  }
+  .nav-card h3 {
+    font-size: 1.2rem !important;
+  }
+  
+  /* Daily Highlight Stacking */
+  .daily-highlight {
+    flex-direction: column !important;
+    padding: 1.5rem !important;
+    text-align: center;
+  }
+  .daily-img {
+    width: 100% !important;
+    height: 160px !important;
+    margin-top: 1rem;
+  }
+  
+  /* Encyclopedia Grid */
   .grid-responsive {
     grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.8rem !important;
   }
-}
+  .bird-card img { height: 140px !important; }
+  .bird-card-info { padding: 0.8rem !important; }
+  .bird-card-info h3 { font-size: 1rem !important; }
 
-@media (max-width: 768px) {
-  .page-header { flex-direction: column; gap: 1rem; align-items: flex-start; }
-  .page-title { font-size: 1.8rem !important; }
-  .page-container { padding-left: 1rem; padding-right: 1rem; }
-  
-  .grid-responsive {
-    grid-template-columns: 1fr !important;
+  /* Modals Refinement */
+  .centered-modal-content {
+    width: 96% !important;
+    max-height: 90vh !important;
+    border-radius: 20px !important;
   }
-
-  /* Specific Encyclopedia Modal Mobile Fix */
   .modal-body-flex {
     flex-direction: column !important;
     overflow-y: auto !important;
   }
   .modal-img-container {
     width: 100% !important;
-    height: 300px !important;
+    height: 220px !important;
   }
   .modal-info-scroll {
-    padding: 1.5rem !important;
+    padding: 1.2rem !important;
+    padding-bottom: 4rem !important;
   }
   
+  /* Mascot (The Bird) - SMALLER on mobile */
+  #mascot-widget {
+    bottom: 12px;
+    left: 12px;
+    pointer-events: none; /* Let clicks pass through widget area */
+  }
   #mascot-img {
+    width: 70px !important;
+    pointer-events: auto; /* Re-enable for the image itself */
+  }
+  #mascot-bubble {
+    font-size: 0.75rem !important;
+    padding: 6px 10px !important;
+    max-width: 140px !important;
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+  
+  /* Critical Buttons Accessibility */
+  .modal-close-btn {
+    top: 8px;
+    left: 8px;
+    width: 36px;
+    height: 36px;
+    font-size: 1.4rem;
+    z-index: 1000001; /* Ensure above bubble */
+  }
+  
+  #global-lang-btn {
+    bottom: 12px;
+    right: 12px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    z-index: 1000001;
+  }
+
+  /* Footer responsiveness */
+  footer {
+    flex-direction: column !important;
+    text-align: center;
+    padding-bottom: 8rem !important;
+  }
+  footer div {
+    justify-content: center !important;
+  }
+  
+  /* Login Panel Fix */
+  .login-wrapper .glass-panel {
+    padding: 2rem !important;
+    width: 90% !important;
+  }
+  .login-wrapper img {
     width: 140px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .nav-grid, .grid-responsive {
+    grid-template-columns: 1fr !important;
   }
 }
 

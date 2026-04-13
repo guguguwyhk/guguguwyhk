@@ -12,7 +12,7 @@ export function renderAbout(container) {
 
       <!-- Hero Visual -->
       <div class="glass-panel" style="overflow:hidden; margin-bottom:2.5rem;">
-        <img src="/footage/about_us/birdhouse_3.jpeg" style="width:100%; height:300px; object-fit:cover; filter:brightness(0.7);" onerror="this.style.display='none'" />
+        <img src="./footage/about_us/birdhouse_3.jpeg" style="width:100%; height:300px; object-fit:cover; filter:brightness(0.7);" onerror="this.style.display='none'" />
         <div style="padding:2rem; background:rgba(0,0,0,0.5); border-top:1px solid var(--glass-border);">
            <h2 style="margin:0; font-size:1.8rem;">We are group 4 from 3K</h2>
            <p style="opacity:0.8; margin-top:0.5rem;">IDEEA Project — Wah Yan College, Hong Kong</p>
@@ -84,8 +84,8 @@ export function renderAbout(container) {
            </div>
 
            <div class="glass-panel" style="padding:1rem; overflow:hidden; border-radius:24px;">
-              <img src="/footage/about_us/birdhouse1.jpeg" style="width:100%; height:180px; object-fit:cover; border-radius:16px; margin-bottom:0.8rem;" onerror="this.style.display='none'" />
-              <img src="/footage/about_us/birdhouse4.jpeg" style="width:100%; height:180px; object-fit:cover; border-radius:16px;" onerror="this.style.display='none'" />
+              <img src="./footage/about_us/birdhouse1.jpeg" style="width:100%; height:180px; object-fit:cover; border-radius:16px; margin-bottom:0.8rem;" onerror="this.style.display='none'" />
+              <img src="./footage/about_us/birdhouse4.jpeg" style="width:100%; height:180px; object-fit:cover; border-radius:16px;" onerror="this.style.display='none'" />
            </div>
 
            <div class="glass-panel" style="padding:1.5rem; text-align:center;">

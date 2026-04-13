@@ -19,20 +19,20 @@
     <div id="app"></div>
 
     <!-- Global Bird Detail Modal (Outside App to avoid transform conflicts) -->
-    <div id="bird-modal" class="centered-modal-overlay hidden" style="z-index: 100000;">
-      <div class="centered-modal-content" style="max-width:1100px; width:95%; max-height:88vh; padding:0; overflow:hidden; display:flex; flex-direction:column; position:relative; background:rgba(5, 12, 8, 0.85); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border:1px solid rgba(134,239,172,0.3); border-radius:32px; box-shadow: 0 40px 100px rgba(0,0,0,0.8);">
+    <div id="bird-modal" class="centered-modal-overlay hidden">
+      <div class="centered-modal-content" id="bird-modal-content">
         <!-- Navigation -->
         <button id="prev-bird-btn" class="modal-nav-btn" style="left:12px;">&larr;</button>
         <button id="next-bird-btn" class="modal-nav-btn" style="right:12px;">&rarr;</button>
 
-        <div class="modal-body-flex" style="display:flex; height:100%; max-height:88vh;">
-          <div class="modal-img-container" style="width:380px; flex-shrink:0; position:relative; background:#000;">
-            <img id="modal-img" src="" style="width:100%; height:100%; object-fit:cover; min-height:400px;" />
+        <div class="modal-body-flex">
+          <div class="modal-img-container">
+            <img id="modal-img" src="" />
             <button id="close-modal" class="modal-close-btn">&times;</button>
           </div>
-          <div class="modal-info-scroll" style="flex:1; padding:2.5rem 3rem; background:transparent; overflow-y:auto;">
-             <h2 id="modal-name" style="margin-bottom:0.2rem; font-size:2.8rem; color:#86efac;"></h2>
-             <p id="modal-enName" style="font-style:italic; font-size:1.2rem; color:#94a3b8; margin-bottom:2rem;"></p>
+          <div class="modal-info-scroll">
+             <h2 id="modal-name"></h2>
+             <p id="modal-enName"></p>
              <div class="glass-panel" style="margin-bottom:2rem; padding:1.5rem; background:rgba(0,0,0,0.4);">
                 <h3 style="font-size:0.9rem; color:#86efac; margin-bottom:1.2rem;" data-i18n="eco-data">📊 生態數據</h3>
                 <div style="display:flex; flex-direction:column; gap:1.2rem;">
@@ -71,16 +71,16 @@
     </div>
 
     <!-- Global Translate System (Bottom Right) -->
-    <div id="global-lang-btn" class="glass-panel" style="position: fixed; bottom: 30px; right: 30px; z-index: 200001; cursor: pointer; transition: transform 0.2s; border-radius: 50%; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
-      <span style="color: white; font-weight: 900; font-size: 1.2rem;">EN</span>
+    <div id="global-lang-btn" class="glass-panel">
+      <span>EN</span>
     </div>
 
     <!-- Interactive Mascot Widget (Persistent, Bottom Left) -->
-    <div id="mascot-widget" class="hidden" style="position: fixed; bottom: 30px; left: 30px; z-index: 200000; display: flex; flex-direction: column; align-items: flex-start; pointer-events: none;">
-      <div id="mascot-bubble" class="hidden mascot-bubble" style="background: rgba(20,20,20,0.95); backdrop-filter: blur(10px); border: 2px solid var(--primary-color); color: white; padding: 18px 24px; border-radius: 24px; border-bottom-left-radius: 4px; font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,0.5); max-width: 320px; font-size: 1.2rem; line-height: 1.5; margin-bottom: 12px;">
+    <div id="mascot-widget" class="hidden">
+      <div id="mascot-bubble" class="hidden">
         Gu Gu Gu!
       </div>
-      <img src="/removedbg_gugugu.png" alt="Gu Gu Gu Mascot" id="mascot-img" class="mascot-img" style="width: 200px; cursor: pointer; pointer-events: auto; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4)); animation: mascotBlink 5s infinite;" />
+      <img src="/removedbg_gugugu.png" alt="Gu Gu Gu Mascot" id="mascot-img" />
     </div>
 
     <!-- Scripts -->

@@ -37,12 +37,24 @@ app.post('/upload', (req, res) => {
   res.status(200).send(`Received and broadcast to ${clientCount} viewers`);
 });
 
-// WebSocket connection logging (optional, for debugging)
+// Function to broadcast viewer count
+function broadcastViewerCount() {
+  const countMessage = JSON.stringify({ type: 'viewer_count', count: wss.clients.size });
+  wss.clients.forEach((client) => {
+    if (client.readyState === 1) {
+      client.send(countMessage);
+    }
+  });
+}
+
+// WebSocket connection logging
 wss.on('connection', (ws) => {
-  console.log(`[WS] New viewer connected. Total viewers: ${wss.clients.size}`);
+  console.log(`[WS] New viewer connected. Total: ${wss.clients.size}`);
+  broadcastViewerCount();
   
   ws.on('close', () => {
-    console.log(`[WS] Viewer disconnected. Total viewers: ${wss.clients.size}`);
+    console.log(`[WS] Viewer disconnected. Total: ${wss.clients.size}`);
+    broadcastViewerCount();
   });
 });
 

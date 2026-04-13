@@ -53,12 +53,12 @@ export function renderShowOff(container) {
       <!-- Main Content Layout -->
       <div style="flex:1; display:flex; flex-direction:column; padding:2vh 4vw; z-index:1; min-height:0;">
         
-        <header class="page-header" style="padding-top: 5vh; margin-bottom: 3vh; flex-shrink:0;">
+        <header class="page-header" style="padding-top: 10vh; margin-bottom: 3vh; flex-shrink:0;">
           <div style="display:flex; flex-direction:column; align-items:flex-start;">
             <h1 class="page-title neon-title" style="font-size:clamp(4rem, 10vh, 7rem) !important; line-height:1; margin-bottom: 0.5rem;">Gu Gu Gu 🌿</h1>
             <p style="font-size:clamp(1rem, 2vh, 1.4rem); color:#94a3b8; letter-spacing:4px; text-transform:uppercase; margin-top:0.4rem; opacity:0.8;">Master IDEEA Project Group 4-- 24/7 Monitoring Smart Website</p>
           </div>
-          <button id="dev-exit" class="btn-secondary btn-back" style="padding:12px 24px; font-size:1.1rem;">← 退出 Exit</button>
+          <button id="dev-exit" class="btn-secondary btn-back" style="position: fixed; top: 15px; right: 20px; padding: 8px 16px; font-size: 0.9rem; z-index: 1000; transform: scale(0.85); min-width: auto; opacity: 0.7;">← 退出 Exit</button>
         </header>
 
         <div style="display:flex; gap:3vw; flex:1; min-height:0; margin-bottom:1vh;">
@@ -70,9 +70,9 @@ export function renderShowOff(container) {
                 <span class="rec-dot"></span> 專案宣傳影片
               </h2>
               <div style="width:100%; flex:1; background:#000; border-radius:25px; overflow:hidden; position:relative; min-height:0; border:1px solid rgba(255,255,255,0.1);">
-                <video id="promo-video" loop autoplay muted style="width:100%; height:100%; object-fit:cover;">
-                  <source src="/footage/previous_videos/video1.mp4" type="video/mp4" />
-                </video>
+                  <video id="leaderboard-video" style="width:100%; height:100%; border-radius:24px; object-fit:cover; display:block;" autoplay loop muted playsinline>
+                    <source src="./footage/previous_videos/video1.mp4" type="video/mp4" />
+                  </video>
                 <div style="position:absolute; bottom:20px; left:20px; background:rgba(0,0,0,0.6); padding:8px 15px; border-radius:10px; font-size:0.9rem; font-weight:bold; backdrop-filter:blur(5px); transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">Auto-Loop Active</div>
               </div>
             </div>
@@ -86,7 +86,7 @@ export function renderShowOff(container) {
           </div>
 
           <!-- Right: Leaderboard & Mascot -->
-          <div style="flex:1; display:flex; flex-direction:column; gap:2vh; min-width:0;">
+          <div style="flex:1; display:flex; flex-direction:column; gap:2vh; min-width:0; margin-top: -3vh;">
             
             <div class="glass-panel" style="flex:1.8; display:flex; flex-direction:column; padding:2rem; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.1); border-radius:40px; min-height:0;">
               <h2 style="font-size:1.6rem; color:#3b82f6; display:flex; align-items:center; gap:15px; margin-bottom:2rem; flex-shrink:0; font-weight:800;">
@@ -104,15 +104,12 @@ export function renderShowOff(container) {
 
             <!-- Bottom UI Area -->
             <div style="flex:1; display:flex; justify-content:space-between; align-items:flex-end; min-height:0;">
-              <!-- Mini QR Zone -->
-              <div class="glass-panel" style="width:140px; height:180px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; background:rgba(255,255,255,0.05); border-radius:30px; box-shadow:0 10px 30px rgba(0,0,0,0.3); flex-shrink:0;">
-                <div style="width:100px; height:100px; background:white; padding:8px; border-radius:15px; display:flex; align-items:center; justify-content:center;">
-                  <svg viewBox="0 0 100 100" style="width:100%; height:100%; fill:#111;">
-                    <path d="M0 0h30v10h10V0h30v30h-10v10h10v30h-10v10h10v30H70v-10h-10v10H30v-10h-10v10H0V70h10V60H0V30h10V0H0zm10 10v10h10V10H10zm50 0v10h10V10H60zM10 60v10h10V60H10zm50 20v10h10V80H60z" />
-                    <rect x="40" y="40" width="20" height="20" />
-                  </svg>
+              <!-- Mini QR Zone - Scaled up with real image -->
+              <div class="glass-panel" style="width:200px; height:240px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:15px; background:rgba(255,255,255,0.05); border-radius:30px; box-shadow:0 15px 40px rgba(0,0,0,0.4); flex-shrink:0;">
+                <div style="width:160px; height:160px; background:white; padding:10px; border-radius:15px; display:flex; align-items:center; justify-content:center; border: 4px solid #4ade80;">
+                  <img src="./gugugu_qrcode.png" style="width:100%; height:100%; object-fit:contain;" />
                 </div>
-                <span style="font-size:0.8rem; font-weight:900; color:#4ade80; text-align:center;">手機掃碼投票</span>
+                <span style="font-size:1rem; font-weight:900; color:#4ade80; text-align:center;">手機掃碼投票</span>
               </div>
 
               <!-- Mascot area scaled for PC - Unique IDs and adjusted padding -->
@@ -120,7 +117,7 @@ export function renderShowOff(container) {
                 <div id="exhibit-mascot-bubble" style="position:absolute; bottom:220px; right:80px; background:white; color:#111; padding:12px 20px; border-radius:20px; font-weight:900; font-size:1.1rem; opacity:0; transform:scale(0.8) translateY(20px); transition:all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); white-space:nowrap; z-index:10; box-shadow: 0 10px 40px rgba(0,0,0,0.4); border: 2px solid #4ade80;">
                   投票中... Gu!
                 </div>
-                <img src="/removedbg_gugugu.png" id="exhibit-mascot-img" style="height:clamp(200px, 30vh, 320px); filter:drop-shadow(0 15px 30px rgba(0,0,0,0.5)); cursor:pointer; animation:mascotSway 5s ease-in-out infinite; transform-origin: bottom center;" />
+                <img src="./removedbg_gugugu.png" id="exhibit-mascot-img" style="height:clamp(200px, 30vh, 320px); filter:drop-shadow(0 15px 30px rgba(0,0,0,0.5)); cursor:pointer; animation:mascotSway 5s ease-in-out infinite; transform-origin: bottom center;" />
               </div>
             </div>
 

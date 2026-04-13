@@ -22,7 +22,7 @@ export function renderGame(container) {
         <!-- Start/End Overlay -->
         <div id="start-overlay" style="position:absolute; top:0; left:0; width:100%; height:100%; background:linear-gradient(135deg, rgba(0,10,5,0.85) 0%, rgba(0,20,10,0.9) 100%); backdrop-filter: blur(10px); display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:100; text-align:center; padding:2rem;">
            <div style="margin-bottom:1.5rem; animation:mascotBounce 1.5s ease infinite;">
-             <img src="/removedbg_gugugu.png" style="width:120px; filter: drop-shadow(0 0 20px rgba(74,222,128,0.6));" />
+             <img src="./removedbg_gugugu.png" style="width:120px; filter: drop-shadow(0 0 20px rgba(74,222,128,0.6));" />
            </div>
            <h2 id="overlay-title" style="color:#4ade80; font-size: 2.8rem; margin-bottom: 0.8rem; text-shadow: 0 0 30px rgba(74,222,128,0.5);" data-i18n="game-start-title">GUARDIAN FLIGHT</h2>
            <p id="overlay-desc" style="color:#94a3b8; margin-bottom:2rem; font-size:1.1rem; max-width: 480px; line-height: 1.7;" data-i18n="game-start-desc">守護校園!飛行躲避石柱，收集果實，擊退入侵的烏鴉！</p>

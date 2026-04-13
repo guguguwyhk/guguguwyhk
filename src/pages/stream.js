@@ -9,16 +9,9 @@ export function renderStream(container) {
       <button class="btn-secondary btn-back" id="back-btn" data-i18n="back-home">⬅ 返回主頁</button>
     </header>
 
-    <!-- Stream URL Config -->
-    <div class="glass-panel stream-config" style="margin-bottom:1.5rem; display:flex; align-items:center; gap:1rem; flex-wrap:wrap; padding:1rem 1.5rem;">
-      <div class="stream-config-row" style="display:flex; align-items:center; gap:0.8rem; flex:1; min-width:280px;">
-        <span class="stream-config-label" style="font-size:1.4rem;">☁️</span>
-        <input type="text" id="stream-url-input" class="glass-input" 
-               style="flex:1;"
-               placeholder="雲端中繼站 WebSocket 網址 (例: wss://your-app.onrender.com)" 
-               value="${savedUrl}" />
-        <button class="btn-primary" id="connect-btn" data-i18n="stream-connect">連線</button>
-      </div>
+    <div class="glass-panel stream-config" style="display:none;">
+      <input type="text" id="stream-url-input" value="${savedUrl}" />
+      <button id="connect-btn">連線</button>
       <div id="connection-status" class="stream-status stream-status--offline">
         <span class="stream-status-dot"></span>
         <span class="stream-status-text" data-i18n="stream-not-connected">未連線</span>
@@ -33,8 +26,8 @@ export function renderStream(container) {
 
     <!-- History Media Selector -->
     <div id="media-selector" style="display:none; gap:1rem; margin-bottom:1rem; flex-wrap:wrap;">
-      <button class="btn-secondary history-media-btn" data-src="/footage/previous_videos/video1.mp4" data-type="video" data-i18n="clip-feeding">進食片段 1</button>
-      <button class="btn-secondary history-media-btn" data-src="/footage/previous_videos/IMAG0002.jpg" data-type="image" data-i18n="clip-snapshot">鳥屋快照</button>
+      <button class="btn-secondary history-media-btn" data-src="./footage/previous_videos/video1.mp4" data-type="video" data-i18n="clip-feeding">進食片段 1</button>
+      <button class="btn-secondary history-media-btn" data-src="./footage/previous_videos/IMAG0002.jpg" data-type="image" data-i18n="clip-snapshot">鳥屋快照</button>
     </div>
 
     <div class="mobile-stack" style="display:flex; gap:1.5rem; flex-wrap:wrap;">
@@ -44,7 +37,7 @@ export function renderStream(container) {
 
           <!-- === LIVE STATE: Idle === -->
           <div id="live-idle" style="text-align:center;">
-            <img src="/removedbg_gugugu.png" style="width:80px; margin-bottom:1rem; opacity:0.6;" />
+            <img src="./removedbg_gugugu.png" style="width:80px; margin-bottom:1rem; opacity:0.6;" />
             <h3 style="color:#eee;">準備連接雲端中繼站</h3>
             <p style="color:#666; font-size:0.9rem;">輸入 WebSocket 網址，然後按「連線」</p>
           </div>
@@ -62,15 +55,15 @@ export function renderStream(container) {
 
           <!-- === LIVE STATE: Error === -->
           <div id="live-error" class="hidden" style="text-align:center;">
-            <div style="font-size:3rem; margin-bottom:1rem;">⚠️</div>
-            <h3 style="color:#f87171;" data-i18n="stream-error">連線失敗/斷線</h3>
-            <p id="error-detail" style="color:#666; font-size:0.9rem; margin-bottom:1rem;"></p>
-            <button class="btn-primary" id="retry-btn" data-i18n="stream-retry">手動重試</button>
+            <img src="./gugugu_builder.png" style="width:180px; margin-bottom:1.5rem; filter: drop-shadow(0 0 20px rgba(0,0,0,0.5));" />
+            <h3 style="color:#f87171;" data-i18n="stream-error">中繼站正在忙碌或休眠中...</h3>
+            <p id="error-detail" style="color:#666; font-size:1rem; margin-bottom:1.5rem;">請嘗試重新整理網頁 (Reload) 喚醒伺服器</p>
+            <button class="btn-primary" id="retry-btn" onclick="window.location.reload();">重新整理網頁 Reload</button>
           </div>
 
           <!-- === HISTORY STATE === -->
           <video id="history-video" class="hidden" style="width:100%; height:100%; object-fit:cover;" controls>
-            <source src="/footage/previous_videos/video1.mp4" type="video/mp4" />
+            <source src="./footage/previous_videos/video1.mp4" type="video/mp4" />
           </video>
           <img id="history-image" class="hidden" style="width:100%; height:100%; object-fit:contain;" />
 
@@ -214,18 +207,20 @@ export function renderStream(container) {
     ws.onmessage = (event) => {
       if (currentTab !== 'live') return;
 
-      // Ensure we received a Blob (JPEG image)
+      // Check if data is a Blob (Image) or String (JSON count)
       if (event.data instanceof Blob) {
         framesThisSecond++;
-        
-        // Revoke the old URL to prevent memory leaks
-        if (lastObjectURL) {
-          URL.revokeObjectURL(lastObjectURL);
-        }
-        
-        // Create new object URL and set image
+        if (lastObjectURL) URL.revokeObjectURL(lastObjectURL);
         lastObjectURL = URL.createObjectURL(event.data);
         els.liveImg.src = lastObjectURL;
+      } 
+      else if (typeof event.data === 'string') {
+        try {
+          const msg = JSON.parse(event.data);
+          if (msg.type === 'viewer_count') {
+            document.getElementById('info-viewers').textContent = msg.count;
+          }
+        } catch (e) { /* Ignore non-JSON strings */ }
       }
     };
 

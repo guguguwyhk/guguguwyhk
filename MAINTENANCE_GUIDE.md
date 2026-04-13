@@ -1,59 +1,66 @@
-# 🛠️ Gu Gu Gu 系統維護與更新手冊
+# 🛠️ Gu Gu Gu 系統維護與上線手冊 (終極版)
 
-這份手冊將教你如何在更換環境（如到學校後）以及如何更新網頁內容。
-
----
-
-## 一、 更換 ESP32-CAM 的 WiFi (到學校後必做)
-
-當你從家裡換到學校網路時，必須重新燒錄程式：
-
-1.  用數據線將 ESP32-CAM 連接到電腦。
-2.  打開 Arduino IDE，載入 `esp32cam/esp32cam_push/esp32cam_push.ino`。
-3.  **修改 WiFi 設定**：
-    ```cpp
-    const char* ssid     = "你的學校WiFi名稱";
-    const char* password = "你的學校WiFi密碼";
-    ```
-4.  點擊 **Upload (燒錄)**。
+這份手冊是為了確保你在學校展覽時，能夠快速切換網路、更新內容並解決問題。
 
 ---
 
-## 二、 如何更新網頁內容 (Update Website)
+## 📡 第一部分：更換 WiFi (現場必做)
+當你把機器帶到學校時，必須更新 WiFi 帳號密碼：
 
-在終端機輸入這段指令，保證你的網頁同步到網路上：
-
-```bash
-cd C:\Users\astin\Downloads\gugugu
-git add .
-git commit -m "Update website content"
-git push
-```
-
----
-
-## 三、 常見疑難排解 (Troubleshooting)
-
-### 1. Netlify 部署報錯 (Submodule Error)
-如果你看到 "No url found for submodule path" 的錯誤，請執行這段：
-```bash
-del .gitmodules
-git rm -r --cached guguguwyhk
-git config --remove-section submodule.guguguwyhk
-git add .
-git commit -m "Fix submodule issues"
-git push
-```
-
-### 2. 影像出不來？
-*   檢查 ESP32 是否有插電？
-*   檢查 Render 的網址顏色是不是綠色的 (Live)？
-*   確保你在網頁輸入網址時開頭是 `wss://`。
-
-### 3. 我改了程式，但 GitHub 報錯？
-*   如果遇到衝突，可以用強行推送：
-    `git push origin main --force`
+1. 打開 `esp32cam/esp32cam_push/esp32cam_push.ino`。
+2. 修改這兩行：
+   ```cpp
+   const char* ssid     = "學校WiFi名稱";
+   const char* password = "學校WiFi密碼";
+   ```
+3. 確認 `host` 網址正確：
+   ```cpp
+   const char* host     = "gugugu-relay.onrender.com";
+   ```
+4. **燒錄程式** 並按一下 ESP32 上的 Reset 鍵。
+5. **確認**：Serial Monitor 看到 `✅ Connected!` 字樣代表影像已經開始上傳雲端。
 
 ---
 
-祝你的畢業展/作品展大獲成功！🐦✨
+## 💻 第二部分：更新網頁內容
+如果你在現場要修改網頁文字、圖片或 CSS，請在電腦上修改後執行：
+
+1. 開啟終端機 (Terminal)。
+2. 輸入這三行指令：
+   ```bash
+   cd C:\Users\astin\Downloads\gugugu
+   git add .
+   git commit -m "Update website"
+   git push
+   ```
+3. **等它生效**：去 GitHub 的 **Actions** 頁面看，等任務變綠色 ✅ 就代表網頁更新成功了。
+
+---
+
+## ☁️ 第三部分：雲端中繼站 (Render)
+中繼站負責把影像發給所有人看，不用每天去動它，但需要注意：
+
+- **喚醒服務**：Render 免費版如果一段時間沒人用會「打瞌睡」。當你早上剛開啟網頁時，可能會看到「連線失敗」，**這時請重新整理網頁**，等待約 30 秒讓雲端伺服器起床即可。
+- **連線數**：網頁右側的「連線數」如果跳動，代表伺服器運作正常。
+
+---
+
+## 🖼️ 第四部分：圖片與影片路徑 (重要！)
+為了讓 GitHub Pages 讀得到圖片，請遵守：
+
+- **正確路徑**：`./footage/xxx.jpg` (前面有個點)
+- **錯誤路徑**：`/footage/xxx.jpg` (少了一個點)
+- **大影片**：超過 100MB 的影片請不要放進資料夾，改用 YouTube 連結。
+
+---
+
+## 🆘 緊急檢查清單 (展覽當天)
+| 狀況 | 檢查項目 |
+| :--- | :--- |
+| **沒影像？** | 1. ESP32 電源有沒有插好？ <br> 2. 學校 WiFi 有沒有斷線？ <br> 3. 手動重整一次網頁。 |
+| **網頁 404？** | 1. 檢查 GitHub Actions 任務是否失敗？ <br> 2. 網址最後有沒有加 `/` (結尾要有斜槓)。 |
+| **畫面很卡？** | 1. 學校 WiFi 訊號太弱？ <br> 2. 嘗試重啟 ESP32。 |
+
+---
+
+祝你的畢業展/作品展大獲成功！你是這套系統的主人，加油！🐦✨

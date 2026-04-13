@@ -43,11 +43,11 @@ export function renderHome(container) {
         <h3 id="daily-title" style="color:#86efac; margin-bottom:0.5rem; font-size: 1.5rem;" data-i18n="daily-highlight">✨ 每日鳥事</h3>
         <p id="daily-fact" style="font-size:1.2rem; line-height:1.6; word-wrap: break-word;">${randomFact}</p>
       </div>
-      <img src="/footage/about_us/birdhouse2.jpeg" class="daily-img" style="width: 180px; height: 120px; flex-shrink:0; object-fit:cover; border-radius:16px; box-shadow:0 4px 15px rgba(0,0,0,0.3);" onerror="this.style.display='none'" />
+      <img src="./footage/about_us/birdhouse2.jpeg" class="daily-img" style="width: 180px; height: 120px; flex-shrink:0; object-fit:cover; border-radius:16px; box-shadow:0 4px 15px rgba(0,0,0,0.3);" onerror="this.style.display='none'" />
     </div>
 
     <!-- Grid Nav -->
-    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:2rem; margin-bottom:3rem;">
+    <div class="nav-grid" style="display:grid; margin-bottom:3rem;">
       <div class="glass-card nav-card liquid-btn" data-target="stream" style="padding:2rem; cursor:pointer; text-align:center;">
         <div style="font-size:3rem; margin-bottom:1rem;">🎥</div>
         <h3 data-i18n="card-stream-title" style="font-size: 1.5rem; color:#86efac;">直播鳥屋</h3>
