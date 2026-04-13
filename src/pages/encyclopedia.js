@@ -227,7 +227,7 @@ export function renderEncyclopedia(container) {
     const grid = document.getElementById('birds-grid');
     grid.innerHTML = filtered.map((b, i) => `
       <div class="bird-card" onclick="window.openBirdModal(${i})">
-        <img src="${b.img}" onerror="this.src='/favicon.svg';this.style.opacity='0.3';" />
+        <img src="${b.img}" loading="lazy" onerror="this.src='./favicon.svg';this.style.opacity='0.3';" />
         <div class="bird-card-info">
           <h3 style="margin:0; font-size:1.4rem; color:#86efac;">${b.name}</h3>
           <p style="margin:0.4rem 0 0; font-size:1rem; opacity:0.6; font-style:italic;">${b.enName}</p>

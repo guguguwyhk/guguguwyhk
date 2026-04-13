@@ -35,9 +35,16 @@ export class MascotController {
       this.resetIdle();
     });
 
+    let lastReset = 0;
     const resetEvents = ['mousemove', 'keydown', 'mousedown', 'touchstart', 'scroll', 'click'];
     resetEvents.forEach(evt => {
-      document.addEventListener(evt, () => this.resetIdle(), { passive: true });
+      document.addEventListener(evt, () => {
+        const now = Date.now();
+        if (now - lastReset > 500) { // Throttle to every 500ms
+          this.resetIdle();
+          lastReset = now;
+        }
+      }, { passive: true });
     });
     
     this.resetIdle();
