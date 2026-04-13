@@ -153,20 +153,20 @@ function renderVoteModal(container) {
   const scriptUrl = "https://script.google.com/macros/s/AKfycbwRknj4-6Lphd0sz-4rK-v-VhQ3X-PmKah55lFmaVpuPMe22eVZHqNNzlOvNiNUECeR/exec";
 
   const pollBirds = [
-    { name: '黑臉琵鷺', img: '/footage/encyclopedia/images/黑臉琵鷺.jpg' },
-    { name: '紅耳鵯', img: '/footage/encyclopedia/images/紅耳鵯.jpg' },
-    { name: '珠頸斑鳩', img: '/footage/encyclopedia/images/珠頸斑鳩.jpg' },
-    { name: '灰斑鳩', img: '/footage/encyclopedia/images/灰斑鳩.jpg' },
-    { name: '樹麻雀', img: '/footage/encyclopedia/images/樹麻雀.jpg' },
-    { name: '牛背鷺', img: '/footage/encyclopedia/images/牛背鷺.jpg' },
-    { name: '鵲鴝', img: '/footage/encyclopedia/images/鵲鴝.jpg' },
-    { name: '普通翠鳥', img: '/footage/encyclopedia/images/普通翠鳥.jpg' },
-    { name: '綠背姬鶲', img: '/footage/encyclopedia/images/綠背姬鶲.jpg' },
-    { name: '黃眉柳鶯', img: '/footage/encyclopedia/images/黃眉柳鶯.jpg' },
-    { name: '洋燕', img: '/footage/encyclopedia/images/洋燕.jpg' },
-    { name: '原鴿', img: '/footage/encyclopedia/images/原鴿.jpg' },
-    { name: '黑領椋鳥', img: '/footage/encyclopedia/images/黑領椋鳥.jpg' },
-    { name: '噪鵑', img: '/footage/encyclopedia/images/噪鵑.jpg' }
+    { name: '黑臉琵鷺', img: './footage/encyclopedia/images/黑臉琵鷺.jpg' },
+    { name: '紅耳鵯', img: './footage/encyclopedia/images/紅耳鵯.jpg' },
+    { name: '珠頸斑鳩', img: './footage/encyclopedia/images/珠頸斑鳩.jpg' },
+    { name: '灰斑鳩', img: './footage/encyclopedia/images/灰斑鳩.jpg' },
+    { name: '樹麻雀', img: './footage/encyclopedia/images/樹麻雀.jpg' },
+    { name: '牛背鷺', img: './footage/encyclopedia/images/牛背鷺.jpg' },
+    { name: '鵲鴝', img: './footage/encyclopedia/images/鵲鴝.jpg' },
+    { name: '普通翠鳥', img: './footage/encyclopedia/images/普通翠鳥.jpg' },
+    { name: '綠背姬鶲', img: './footage/encyclopedia/images/綠背姬鶲.jpg' },
+    { name: '黃眉柳鶯', img: './footage/encyclopedia/images/黃眉柳鶯.jpg' },
+    { name: '洋燕', img: './footage/encyclopedia/images/洋燕.jpg' },
+    { name: '原鴿', img: './footage/encyclopedia/images/原鴿.jpg' },
+    { name: '黑領椋鳥', img: './footage/encyclopedia/images/黑領椋鳥.jpg' },
+    { name: '噪鵑', img: './footage/encyclopedia/images/噪鵑.jpg' }
   ];
 
   const renderInitialState = () => {

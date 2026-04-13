@@ -161,11 +161,11 @@ export function renderShowOff(container) {
   const bubble = container.querySelector('#exhibit-mascot-bubble');
   
   let votingData = [
-    { bird: '黑臉琵鷺', votes: 0, img: '/footage/encyclopedia/images/黑臉琵鷺.jpg' },
-    { bird: '紅耳鵯', votes: 0, img: '/footage/encyclopedia/images/紅耳鵯.jpg' },
-    { bird: '珠頸斑鳩', votes: 0, img: '/footage/encyclopedia/images/珠頸斑鳩.jpg' },
-    { bird: '樹麻雀', votes: 0, img: '/footage/encyclopedia/images/樹麻雀.jpg' },
-    { bird: '噪鵑', votes: 0, img: '/footage/encyclopedia/images/噪鵑.jpg' }
+    { bird: '黑臉琵鷺', votes: 0, img: './footage/encyclopedia/images/黑臉琵鷺.jpg' },
+    { bird: '紅耳鵯', votes: 0, img: './footage/encyclopedia/images/紅耳鵯.jpg' },
+    { bird: '珠頸斑鳩', votes: 0, img: './footage/encyclopedia/images/珠頸斑鳩.jpg' },
+    { bird: '樹麻雀', votes: 0, img: './footage/encyclopedia/images/樹麻雀.jpg' },
+    { bird: '噪鵑', votes: 0, img: './footage/encyclopedia/images/噪鵑.jpg' }
   ];
   let lastProcessedVoteId = null;
 
@@ -177,13 +177,13 @@ export function renderShowOff(container) {
     lbContainer.innerHTML = sorted.map((item, idx) => {
       const percentage = (item.votes / maxVotes) * 100;
       const isTarget = item.bird === targetBird;
-      const birdImg = item.img || `/footage/encyclopedia/images/${item.bird}.jpg`;
+      const birdImg = item.img || `./footage/encyclopedia/images/${item.bird}.jpg`;
       return `
         <div class="chart-row" style="animation-delay: ${idx * 0.1}s">
           <div style="display:flex; justify-content:space-between; align-items:center; font-size:1.1rem; font-weight:800; color:#f8fafc; margin-bottom:4px;">
             <div style="display:flex; align-items:center; gap:12px;">
               <span style="color:#4ade80; width:20px;">${idx+1}</span>
-              <img src="${birdImg}" class="bird-thumb" onerror="this.src='/removedbg_gugugu.png'">
+              <img src="${birdImg}" class="bird-thumb" onerror="this.src='./removedbg_gugugu.png'">
               <span>${item.bird}</span>
             </div>
             <span style="color:#4ade80; font-size:1.4rem;">${item.votes} <small style="font-size:0.8rem; opacity:0.6;">票</small></span>

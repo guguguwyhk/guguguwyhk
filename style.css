@@ -6,7 +6,7 @@ html {
 }
 
 :root {
-  --bg-image: url('/footage/about_us/birdhouse3.jpeg');
+  --bg-image: url('./footage/about_us/birdhouse3.jpeg');
   
   --primary-color: #22c55e;
   --primary-hover: #16a34a;

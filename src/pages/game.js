@@ -55,7 +55,7 @@ export function renderGame(container) {
   resizeCanvas();
 
   // Assets
-  const birdImg = new Image(); birdImg.src = '/removedbg_gugugu.png';
+  const birdImg = new Image(); birdImg.src = './removedbg_gugugu.png';
   
   let birdY, birdVelocity, score, lives, isGameActive, animationFrame;
   let obstacles = [], enemies = [], particles = [];
