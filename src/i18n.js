@@ -124,8 +124,8 @@ export function applyTranslation(lang, silent = false) {
       : `哈囉，${name}！準備好今天的探索了嗎？`;
   }
 
-  // Update Bird Modal Details if open
-  if (modal && !modal.classList.contains('hidden') && window.refreshBirdModal) {
+  // Update Bird Modal Details if open (only for non-silent updates to prevent recursion)
+  if (!silent && modal && !modal.classList.contains('hidden') && window.refreshBirdModal) {
     window.refreshBirdModal();
   }
 

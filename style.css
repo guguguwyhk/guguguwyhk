@@ -29,7 +29,7 @@ html {
 body {
   font-family: var(--font-body);
   color: var(--text-main);
-  background: #050c08; /* Fallback color */
+  background: transparent; /* Changed back to transparent to see .fixed-bg */
   min-height: 100vh;
   overflow-x: hidden;
   transition: all 0.3s ease;
@@ -38,6 +38,7 @@ body {
 .fixed-bg {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #050c08; /* Fallback on the bg layer itself */
   background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), var(--bg-image);
   background-size: cover;
   background-position: center;
