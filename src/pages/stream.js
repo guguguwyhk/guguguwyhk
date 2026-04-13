@@ -1,6 +1,6 @@
 export function renderStream(container) {
-  // 這裡預設將會是你部署到 Render 後的 URL (或本機測試用 localhost:3000)
-  const savedUrl = localStorage.getItem('esp32_relay_url') || 'ws://localhost:3000';
+  // 這裡預設將會是你部署到 Render 後的 URL
+  const savedUrl = localStorage.getItem('esp32_relay_url') || 'wss://gugugu-relay.onrender.com';
 
   container.innerHTML = `
     <div class="page-container">
