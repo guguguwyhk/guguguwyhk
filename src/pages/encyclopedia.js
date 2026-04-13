@@ -203,7 +203,7 @@ export function renderEncyclopedia(container) {
         </select>
       </div>
 
-      <div id="birds-grid" class="grid-responsive" style="display:grid; grid-template-columns: repeat(4, 1fr); gap:1.5rem;"></div>
+      <div id="birds-grid" class="grid-responsive"></div>
     </div>
 
     <style>
@@ -349,6 +349,10 @@ export function renderEncyclopedia(container) {
   };
   document.getElementById('close-modal').onclick = () => {
     document.getElementById('bird-modal').classList.add('hidden');
-    audioPlayer.pause();
+    try {
+      if (audioPlayer && audioPlayer.src) {
+        audioPlayer.pause();
+      }
+    } catch(e) {}
   };
 }

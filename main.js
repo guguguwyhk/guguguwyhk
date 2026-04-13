@@ -20,6 +20,17 @@ window.navigate = (path) => {
   router.navigate(path);
 };
 
+// Global click handler to close bird-modal when clicking outside
+document.addEventListener('click', (e) => {
+  const modal = document.getElementById('bird-modal');
+  if (modal && !modal.classList.contains('hidden')) {
+    if (e.target === modal) {
+      modal.classList.add('hidden');
+      if (window.audioPlayer) window.audioPlayer.pause();
+    }
+  }
+});
+
 // Global Language Toggle
 import { applyTranslation } from './src/i18n.js';
 

@@ -20,7 +20,11 @@ export const router = {
     if (modal) modal.classList.add('hidden');
     
     // Safety: Stop any active Bird call audio
-    if (window.audioPlayer) window.audioPlayer.pause();
+    try {
+      if (window.audioPlayer && window.audioPlayer.src) {
+        window.audioPlayer.pause();
+      }
+    } catch(e) {}
 
     if (this.appContainer.innerHTML !== '') {
       this.appContainer.className = 'page page-exit-active';
