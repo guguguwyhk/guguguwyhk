@@ -47,7 +47,7 @@ export function renderHome(container) {
     </div>
 
     <!-- Grid Nav -->
-    <div class="nav-grid" style="display:grid; margin-bottom:3rem;">
+    <div class="nav-grid">
       <div class="glass-card nav-card liquid-btn" data-target="stream" style="padding:2rem; cursor:pointer; text-align:center;">
         <div style="font-size:3rem; margin-bottom:1rem;">🎥</div>
         <h3 data-i18n="card-stream-title" style="font-size: 1.5rem; color:#86efac;">直播鳥屋</h3>
