@@ -25,6 +25,7 @@ export class MascotController {
       "你有在直播中看到什麼嗎？🎥",
     ];
 
+    this.bubbleTimer = null;
     this.init();
   }
 
@@ -40,7 +41,7 @@ export class MascotController {
     resetEvents.forEach(evt => {
       document.addEventListener(evt, () => {
         const now = Date.now();
-        if (now - lastReset > 500) { // Throttle to every 500ms
+        if (now - lastReset > 5000) { // Large throttle: every 5 seconds
           this.resetIdle();
           lastReset = now;
         }
@@ -57,9 +58,8 @@ export class MascotController {
       const msg = this.attentionMessages[Math.floor(Math.random() * this.attentionMessages.length)];
       this.say(msg, 6000);
       
-      // Auto-restart idle loop after saying it (so it keeps nagging if still idle)
       this.resetIdle();
-    }, 85000); // 85 Seconds as requested
+    }, 85000); 
   }
 
   say(msg, duration = 5000) {

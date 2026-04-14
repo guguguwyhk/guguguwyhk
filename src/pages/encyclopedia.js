@@ -194,9 +194,9 @@ export function renderEncyclopedia(container) {
         <button class="btn-secondary btn-back" id="back-btn" data-i18n="back-home">⬅ 返回主頁</button>
       </header>
 
-      <div class="glass-panel" style="margin-bottom:2.5rem; display:flex; gap:1.5rem; flex-wrap:wrap; align-items:center; padding:1.5rem;">
-        <input type="text" id="search-input" class="glass-input" data-i18n-placeholder="ency-search-placeholder" placeholder="搜尋鳥類 Name Search..." style="flex:1; min-width:300px; font-size:1.2rem; padding:18px;">
-        <select id="sort-select" class="glass-input" style="width:250px; font-size:1.2rem; padding:18px;">
+      <div class="glass-panel" style="margin-bottom:2.5rem; display:flex; gap:1rem; flex-wrap:wrap; align-items:center; padding:1.2rem;">
+        <input type="text" id="search-input" class="glass-input" data-i18n-placeholder="ency-search-placeholder" placeholder="搜尋鳥類 Name Search..." style="flex:2; min-width:200px; font-size:1.1rem; padding:15px;">
+        <select id="sort-select" class="glass-input" style="flex:1; min-width:180px; font-size:1.1rem; padding:15px;">
           <option value="default" data-i18n="ency-sort-default">預設排序 Default</option>
           <option value="size" data-i18n="ency-sort-size">按體型 Size</option>
           <option value="prob" data-i18n="ency-sort-prob">按機率 Probability</option>
@@ -207,11 +207,10 @@ export function renderEncyclopedia(container) {
     </div>
 
     <style>
-      .stat-row { display:flex; align-items:center; gap:1.5rem; font-size:1.1rem; }
-      .stat-row span:first-child { width:140px; color:#94a3b8; font-weight:600; }
+      .stat-row span:first-child { width: clamp(80px, 20vw, 140px); color:#94a3b8; font-weight:600; font-size: 0.9rem; }
       .stat-bar-bg { flex:1; height:16px; background:rgba(255,255,255,0.08); border-radius:8px; overflow:hidden; }
       .stat-bar { height:100%; border-radius:8px; transition: width 0.8s cubic-bezier(0.165, 0.84, 0.44, 1); }
-      .stat-val { width:70px; text-align:right; font-weight:900; color:#fff; }
+      .stat-val { width: 60px; text-align:right; font-weight:900; color:#fff; font-size: 0.9rem; }
       
       .bird-card { border-radius:24px; overflow:hidden; cursor:pointer; background:rgba(255,255,255,0.04); border:1px solid var(--glass-border); transition:all 0.35s ease; position:relative; }
       .bird-card::after { content:"查看詳情 View Details"; position:absolute; bottom:0; left:0; width:100%; padding:15px; background:var(--primary-color); color:white; text-align:center; transform:translateY(100%); transition:transform 0.3s; font-weight:bold; }
@@ -305,7 +304,7 @@ export function renderEncyclopedia(container) {
     updateBar('rare', bird.stats.rare);
 
     document.getElementById('btn-play-audio').onclick = () => {
-       if (!bird.audio) { window.mascot.say('此鳥類暫無音檔'); return; }
+       if (!bird.audio) { window.mascot.say(isEn ? 'No audio for this bird' : '此鳥類暫無音檔'); return; }
        audioPlayer.src = bird.audio;
        audioPlayer.play();
     };
@@ -313,8 +312,9 @@ export function renderEncyclopedia(container) {
     document.getElementById('btn-read-aloud').onclick = () => {
        if ('speechSynthesis' in window) {
          window.speechSynthesis.cancel();
-         const utter = new SpeechSynthesisUtterance(`${bird.name}。${bird.details}`);
-         utter.lang = 'zh-HK';
+         const detailText = isEn ? bird.enDetails : bird.details;
+         const utter = new SpeechSynthesisUtterance(`${isEn ? bird.enName : bird.name}。${detailText}`);
+         utter.lang = isEn ? 'en-GB' : 'zh-HK';
          window.speechSynthesis.speak(utter);
        }
     };

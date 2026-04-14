@@ -7,11 +7,11 @@ export function renderLogin(container) {
   window.mascot.hide();
 
   container.innerHTML = `
-    <div class="login-wrapper" style="display:flex; justify-content:center; align-items:center; height:100vh;">
-      <div class="glass-panel fade-in" style="padding: 4rem; text-align: center; max-width: 650px; width: 100%; position: relative;">
-        <img src="./removedbg_gugugu.png" alt="Gu Gu Gu" style="width: 220px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); margin-bottom: 1.5rem; animation: mascotBounce 2s infinite ease-in-out;" />
-        <h1 style="font-size: 3rem; margin-bottom: 0.5rem; color:var(--primary-color);">Gu Gu Gu</h1>
-        <h2 style="font-size: 1.5rem; font-weight:500; color:var(--text-muted); margin-bottom: 2.5rem;">Campus Ecology Portal</h2>
+    <div class="login-wrapper" style="display:flex; justify-content:center; align-items:center; height:100vh; padding: 1rem;">
+      <div class="glass-panel fade-in" style="padding: clamp(1.5rem, 5vw, 4rem); text-align: center; max-width: 650px; width: 100%; position: relative;">
+        <img src="./removedbg_gugugu.png" alt="Gu Gu Gu" style="width: clamp(120px, 35vw, 220px); filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); margin-bottom: 1.5rem; animation: mascotBounce 2s infinite ease-in-out;" />
+        <h1 style="font-size: clamp(2rem, 10vw, 3rem); margin-bottom: 0.5rem; color:var(--primary-color);">Gu Gu Gu</h1>
+        <h2 style="font-size: clamp(1.1rem, 5vw, 1.5rem); font-weight:500; color:var(--text-muted); margin-bottom: 2.5rem;">Campus Ecology Portal</h2>
         
         <form id="login-form">
           <input type="text" id="username" class="glass-input" placeholder="請輸入你的名字/暱稱" data-i18n-placeholder="login-enter-name" style="margin-bottom: 2rem; padding: 20px; font-size: 1.2rem;" autocomplete="off" />

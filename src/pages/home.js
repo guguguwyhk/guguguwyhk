@@ -38,12 +38,12 @@ export function renderHome(container) {
     <h2 id="home-greeting" style="margin-bottom:1.5rem; font-weight:600; font-size: 1.8rem;"></h2>
 
     <!-- Daily Highlight -->
-    <div class="glass-panel daily-highlight" style="padding:2rem; margin-bottom:2.5rem; display:flex; gap:1.5rem; align-items:center;">
+    <div class="glass-panel daily-highlight">
       <div style="flex:1; min-width: 0;">
-        <h3 id="daily-title" style="color:#86efac; margin-bottom:0.5rem; font-size: 1.5rem;" data-i18n="daily-highlight">✨ 每日鳥事</h3>
-        <p id="daily-fact" style="font-size:1.2rem; line-height:1.6; word-wrap: break-word;">${randomFact}</p>
+        <h3 id="daily-title" style="color:#86efac; margin-bottom:0.5rem;" data-i18n="daily-highlight">✨ 每日鳥事</h3>
+        <p id="daily-fact" style="font-size:1.1rem; line-height:1.6; word-wrap: break-word;">${randomFact}</p>
       </div>
-      <img src="./footage/about_us/birdhouse2.jpeg" class="daily-img" style="width: 180px; height: 120px; flex-shrink:0; object-fit:cover; border-radius:16px; box-shadow:0 4px 15px rgba(0,0,0,0.3);" onerror="this.style.display='none'" />
+      <img src="./footage/about_us/birdhouse2.jpeg" class="daily-img" onerror="this.style.display='none'" />
     </div>
 
     <!-- Grid Nav -->
@@ -121,11 +121,15 @@ export function renderHome(container) {
     });
   }
 
-  // Show vote modal after login
-  if (sessionStorage.getItem('show_vote_modal') === 'true') {
-    sessionStorage.removeItem('show_vote_modal');
-    setTimeout(() => renderVoteModal(container), 800);
-  }
+  // Sync UI with current lang
+  import('../i18n.js').then(m => m.applyTranslation(lang, true));
+
+  // Returning cleanup for the router
+  return () => {
+    // Remove any lingering modals from the body
+    const lingeringModal = document.querySelector('.centered-modal-overlay');
+    if (lingeringModal) lingeringModal.remove();
+  };
 }
 
 function renderVoteModal(container) {
@@ -138,9 +142,7 @@ function renderVoteModal(container) {
   const modalContent = document.createElement('div');
   modalContent.className = 'centered-modal-content glass-panel animate-poll-in';
   modalContent.style.cssText = `
-    width: 95%;
     max-width: 1000px;
-    padding: 3rem;
     position: relative;
     border: 2px solid #86efac;
     box-shadow: 0 0 60px rgba(134, 239, 172, 0.2);
@@ -173,12 +175,12 @@ function renderVoteModal(container) {
     modalContent.innerHTML = `
       <div style="text-align:center; margin-bottom:2.5rem;">
         <div style="background:var(--primary-color); color:black; display:inline-block; padding:6px 20px; border-radius:30px; font-size:0.8rem; font-weight:900; margin-bottom:1rem; letter-spacing:2px;">CAMPUS LIVE POLL</div>
-        <h2 style="font-size:3rem; color:#86efac; margin-bottom:0.5rem;" data-i18n="vote-manual">${lang === 'en' ? 'Favourite Bird Vote 🗳️' : '心水鳥類投票 🗳️'}</h2>
-        <p style="font-size:1.2rem; color:var(--text-muted);" data-i18n="vote-subtitle">${lang === 'en' ? 'Select the bird you hope to see on campus today!' : '選出你今天最想在校園見到的鳥類！'}</p>
+        <h2 class="modal-title-fluid" style="color:#86efac; margin-bottom:0.5rem;" data-i18n="vote-manual">${lang === 'en' ? 'Favourite Bird Vote 🗳️' : '心水鳥類投票 🗳️'}</h2>
+        <p style="font-size:1.1rem; color:var(--text-muted);" data-i18n="vote-subtitle">${lang === 'en' ? 'Select the bird you hope to see on campus today!' : '選出你今天最想在校園見到的鳥類！'}</p>
         <button id="close-vote" style="position:absolute; top:20px; right:20px; background:rgba(255,255,255,0.05); border:none; color:white; font-size:2rem; cursor:pointer; width:50px; height:50px; border-radius:50%;">&times;</button>
       </div>
 
-      <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap:1.2rem; margin-bottom:2rem;">
+      <div class="poll-grid" style="display:grid;">
         ${pollBirds.map(b => `
           <div class="poll-card" data-bird="${b.name}">
             <img src="${b.img}" loading="lazy" />
@@ -215,9 +217,9 @@ function renderVoteModal(container) {
     }
   };
 
-  const renderResults = async () => {
-    window.mascot.say("投票成功！我們一起來看看人氣排名吧！Gu Gu!");
-    modalContent.innerHTML = `<div style="text-align:center;"><h3 style="color:#86efac;">載入排行榜中...</h3></div>`;
+  const renderResults = async (retries = 3) => {
+    window.mascot.say(lang === 'en' ? "Vote recorded! Let's check the rank! Gu!" : "投票成功！我們一起來看看人氣排名吧！Gu Gu!");
+    modalContent.innerHTML = `<div style="text-align:center; padding: 4rem 0;"><div class="loading-spinner"></div><h3 style="color:#86efac; margin-top:2rem;">載入排行榜中...</h3><p style="opacity:0.6; margin-top:10px;">${retries < 3 ? '正在重新連接伺服器...' : '連線中...'}</p></div>`;
 
     try {
       const res = await fetch(`${scriptUrl}?action=get&cb=${Date.now()}`);
@@ -234,26 +236,26 @@ function renderVoteModal(container) {
 
       modalContent.innerHTML = `
         <div style="text-align:center; margin-bottom:2rem;">
-          <h2 style="font-size:2.5rem; color:#86efac;">📊 即時投票排行</h2>
+          <h2 style="font-size:clamp(1.8rem, 5vw, 2.5rem); color:#86efac;" data-i18n="poll-live-rank">📊 即時投票排行</h2>
           <p style="color:var(--text-muted);">目前共有 ${total} 位探險家參與投票</p>
         </div>
         
-        <div style="max-width:800px; margin:0 auto; display:flex; flex-direction:column; gap:1.5rem;">
+        <div style="max-width:800px; margin:0 auto; display:flex; flex-direction:column; gap:1.2rem; padding: 0 1rem;">
           ${sorted.slice(0, 6).map((b, idx) => `
-            <div>
-              <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-weight:800;">
+            <div class="result-row">
+              <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-weight:800; font-size:1.1rem;">
                 <span>${idx + 1}. ${b.name}</span>
                 <span style="color:#86efac;">${b.votes} 票</span>
               </div>
-              <div class="chart-bar-container">
-                <div class="chart-bar-fill" style="width: ${(b.votes / sorted[0].votes * 100)}%"></div>
+              <div class="chart-bar-container" style="height:12px; background:rgba(255,255,255,0.05); border-radius:10px; overflow:hidden;">
+                <div class="chart-bar-fill" style="width: ${(sorted[0].votes > 0 ? (b.votes / sorted[0].votes * 100) : 0)}%; height:100%; background:linear-gradient(45deg, #3b82f6, #4ade80); border-radius:10px; transition: width 1s ease-out;"></div>
               </div>
             </div>
           `).join('')}
         </div>
 
         <div style="text-align:center; margin-top:3rem;">
-          <button class="btn-primary" id="finish-vote" style="padding:15px 40px; font-size:1.2rem;">進入門戶探索 ✨</button>
+          <button class="btn-primary" id="finish-vote" style="padding:15px 40px; font-size:1.2rem;">進入校園探索 ✨</button>
         </div>
       `;
 
@@ -262,8 +264,18 @@ function renderVoteModal(container) {
         setTimeout(() => modal.remove(), 400);
       };
     } catch (e) {
-      modalContent.innerHTML = `<div style="text-align:center;"><p>無法載入即時榜單，但你的投票已記錄！</p><button class="btn-primary" id="err-close">關閉</button></div>`;
-      modalContent.querySelector('#err-close').onclick = () => modal.remove();
+      if (retries > 0) {
+        console.warn(`Polling failed, retrying... (${retries} left)`);
+        setTimeout(() => renderResults(retries - 1), 1500);
+      } else {
+        modalContent.innerHTML = `
+          <div style="text-align:center; padding: 4rem 0;">
+            <p style="color:#f87171; font-size:1.2rem; margin-bottom:1.5rem;">連線逾時，但你的投票已成功記錄！</p>
+            <button class="btn-primary" id="err-close">直接進入主頁 ✨</button>
+          </div>
+        `;
+        modalContent.querySelector('#err-close').onclick = () => modal.remove();
+      }
     }
   };
 

@@ -11,34 +11,39 @@ import { renderAbout } from './pages/about.js';
 export const router = {
   appContainer: document.getElementById('app'),
   currentPath: null,
+  currentCleanup: null,
   
-  navigate(path) {
+  navigate(path, push = true) {
+    if (this.currentPath === path) return;
+    
+    // Call cleanup for previous page
+    if (this.currentCleanup && typeof this.currentCleanup === 'function') {
+      try { this.currentCleanup(); } catch(e) { console.error('Cleanup error:', e); }
+      this.currentCleanup = null;
+    }
+
     this.currentPath = path;
     
+    if (push) {
+      const url = new URL(window.location);
+      url.searchParams.set('page', path);
+      window.history.pushState({ page: path }, '', url);
+    }
+
     // Safety: Close any open global modals when navigating
     const modal = document.getElementById('bird-modal');
     if (modal) modal.classList.add('hidden');
     
     // Safety: Stop any active Bird call audio
-    try {
-      if (window.audioPlayer && window.audioPlayer.src) {
-        window.audioPlayer.pause();
-      }
-    } catch(e) {}
+    this.stopAllAudio();
 
     if (this.appContainer.innerHTML !== '') {
       this.appContainer.className = 'page page-exit-active';
       setTimeout(() => {
-        this._renderPage(path);
+        this.currentCleanup = this._renderPage(path);
       }, 300);
     } else {
-      this._renderPage(path);
-    }
-  },
-
-  refresh() {
-    if (this.currentPath) {
-      this._renderPage(this.currentPath);
+      this.currentCleanup = this._renderPage(path);
     }
   },
 
@@ -51,44 +56,47 @@ export const router = {
       applyTranslation(store.getLanguage(), true);
     };
 
+    let cleanup = null;
     switch(path) {
       case 'login':
-        renderLogin(this.appContainer);
+        cleanup = renderLogin(this.appContainer);
         finalize();
         break;
       case 'home':
-        renderHome(this.appContainer);
+        cleanup = renderHome(this.appContainer);
         finalize();
         break;
       case 'encyclopedia':
-        renderEncyclopedia(this.appContainer);
+        cleanup = renderEncyclopedia(this.appContainer);
         finalize();
         break;
       case 'stream':
-        renderStream(this.appContainer);
+        cleanup = renderStream(this.appContainer);
         finalize();
         break;
       case 'map':
-        renderMap(this.appContainer);
+        cleanup = renderMap(this.appContainer);
         finalize();
         break;
       case 'game':
-        renderGame(this.appContainer);
+        cleanup = renderGame(this.appContainer);
         finalize();
         break;
       case 'about':
-        renderAbout(this.appContainer);
+        cleanup = renderAbout(this.appContainer);
         finalize();
         break;
       case 'showoff':
+        // Handle dynamic import case
         import('./pages/showoff.js').then(module => {
-          module.renderShowOff(this.appContainer);
+          this.currentCleanup = module.renderShowOff(this.appContainer);
           finalize();
         });
         break;
       default:
-        renderLogin(this.appContainer);
+        cleanup = renderLogin(this.appContainer);
         finalize();
     }
+    return cleanup;
   }
 };

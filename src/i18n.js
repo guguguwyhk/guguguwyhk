@@ -73,6 +73,26 @@ export const translations = {
   'login-start':      { zh: '開始探索校園 🌿',     en: 'Start Exploring 🌿' },
   'login-skip':       { zh: '略過',                en: 'Skip' },
   'showoff-subtitle': { zh: '展覽數據互動中心 EXHIBITION HUB', en: 'EXHIBITION INTERACTIVE DATA HUB' },
+
+  // =================== About Us ===================
+  'about-hero-title': { zh: '我們是華仁 3K 第四組', en: 'We are group 4 from 3K' },
+  'about-hero-sub':   { zh: 'IDEEA 項目 — 香港華仁書院', en: 'IDEEA Project — Wah Yan College, Hong Kong' },
+  'about-q1': { zh: '是什麼觸發你們開展這個項目？', en: 'What leads you to make this project?' },
+  'about-a1': { zh: '我們觀察到同學對大自然的興趣相對較少。因此，我們希望製作一些東西，讓同學多留意校園的自然生態。', en: 'We observed that our schoolmates have less attraction to nature. So, we wanted to let them pay more attention to campus ecology.' },
+  'about-q2': { zh: '為什麼選擇製作鳥屋？', en: 'Why did you choose to make a bird house?' },
+  'about-a2': { zh: '我們發現同學對鳥類的資訊掌握得相對較少。因此，我們製作了一個結合互聯網攝影機的鳥屋，讓大家能輕鬆獲取鳥類資訊。', en: 'We found that students have relatively little information about birds. A bird house with an IoT camera lets students stay informed easily.' },
+  'about-q3': { zh: '介紹一下你們的產品', en: 'Introduce your product' },
+  'about-a3': { zh: '我們製作了一個供鳥類休息的鳥屋，並在裡面裝設了攝影機。攝影機會連接到這個網站，你可以觀看直播並獲取相關資訊。', en: 'We made a bird house for resting, equipped with a camera connected to our website for live viewing and information.' },
+  'about-ig-nag': { zh: '你可以追蹤我們的 IG @gugugu_wyhk 獲取最新消息', en: 'Follow our IG @gugugu_wyhk for the newest information.' },
+  'about-q4': { zh: '這個項目何時開始？', en: 'How did it start?' },
+  'about-a4': { zh: '我們自本學年初開始，這是我們 IDEEA 項目的一部分。', en: 'We started at the beginning of this school year as part of our IDEEA Project.' },
+  'about-q5': { zh: '為什麼叫 Gu Gu Gu？', en: 'Why "Gu Gu Gu"?' },
+  'about-a5': { zh: '「GU GU GU」是鴿子鳴叫聲的擬聲詞，我們覺得很有代表性，所以用了它作為名字。', en: 'The word "GU GU GU" is an onomatopoeia for pigeon cooing, which we used as our name.' },
+  'about-q6': { zh: '最困難的部分是什麼？', en: 'The most difficult part?' },
+  'about-a6': { zh: '最難的是如何在鳥屋內安裝能夠連接互聯網並傳輸實時影像的攝影機。', en: 'Implementing an IoT camera inside a bird house for live stream transfer was the biggest challenge.' },
+  'about-follow': { zh: '追蹤我們以獲取更新！', en: 'Follow us for updates!' },
+  'about-team-title': { zh: 'IDEEA Project 3K 第四組', en: 'IDEEA Project 3K Group 4' },
+  'about-team-names': { zh: '林子舜 · 陳柏霖 · 陳樂天 · 劉晉廷', en: 'Astin Lam · Brayden Chan · Cyrus Chan · Justin Lau' },
 };
 
 export function applyTranslation(lang, silent = false) {

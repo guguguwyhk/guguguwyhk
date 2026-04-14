@@ -32,12 +32,12 @@ export function renderStream(container) {
 
     <div class="mobile-stack" style="display:flex; gap:1.5rem; flex-wrap:wrap;">
       <!-- Feed Area -->
-      <div class="glass-panel" style="flex:3; min-width:300px; padding:1.2rem; background:rgba(0,0,0,0.3);">
+      <div class="glass-panel" style="flex:3; min-width:280px; padding:1rem; background:rgba(0,0,0,0.3);">
         <div id="video-container" class="stream-viewport">
 
           <!-- === LIVE STATE: Idle === -->
           <div id="live-idle" style="text-align:center;">
-            <img src="./removedbg_gugugu.png" style="width:80px; margin-bottom:1rem; opacity:0.6;" />
+            <img src="./removedbg_gugugu.png" style="width:clamp(60px, 15vw, 80px); margin-bottom:1rem; opacity:0.6;" />
             <h3 style="color:#eee;">準備連接雲端中繼站</h3>
             <p style="color:#666; font-size:0.9rem;">輸入 WebSocket 網址，然後按「連線」</p>
           </div>
@@ -55,7 +55,7 @@ export function renderStream(container) {
 
           <!-- === LIVE STATE: Error === -->
           <div id="live-error" class="hidden" style="text-align:center;">
-            <img src="./gugugu_builder.png" style="width:180px; margin-bottom:1.5rem; filter: drop-shadow(0 0 20px rgba(0,0,0,0.5));" />
+            <img src="./gugugu_builder.png" style="width:clamp(120px, 40vw, 180px); margin-bottom:1.5rem; filter: drop-shadow(0 0 20px rgba(0,0,0,0.5));" />
             <h3 style="color:#f87171;" data-i18n="stream-error">中繼站正在忙碌或休眠中...</h3>
             <p id="error-detail" style="color:#666; font-size:1rem; margin-bottom:1.5rem;">請嘗試重新整理網頁 (Reload) 喚醒伺服器</p>
             <button class="btn-primary" id="retry-btn" onclick="window.location.reload();">重新整理網頁 Reload</button>
@@ -79,21 +79,21 @@ export function renderStream(container) {
       </div>
 
       <!-- Env Data -->
-      <div style="flex:1; min-width:220px; display:flex; flex-direction:column; gap:1.5rem;">
-        <div class="glass-panel" style="text-align:center; padding:1.5rem;">
-          <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.5rem; text-transform:uppercase;" data-i18n="env-condition">校園環境</p>
-          <div style="font-size:2.2rem; margin-bottom:0.2rem;">☁️ 25°C</div>
+      <div style="flex:1; min-width:200px; display:flex; flex-direction:column; gap:1rem;">
+        <div class="glass-panel" style="text-align:center; padding:1.2rem;">
+          <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.5rem; text-transform:uppercase;" data-i18n="env-condition">校園環境</p>
+          <div style="font-size:1.8rem; margin-bottom:0.2rem;">☁️ 25°C</div>
           <p style="font-weight:bold; color:var(--primary-color);" data-i18n="cond-good">良好 (Good)</p>
         </div>
-        <div class="glass-panel" style="text-align:center; padding:1.5rem;">
-          <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.5rem; text-transform:uppercase;" data-i18n="local-time">本地時間</p>
-          <h4 id="live-time" style="font-size:1.5rem; font-family:'Outfit';">--:--:--</h4>
+        <div class="glass-panel" style="text-align:center; padding:1.2rem;">
+          <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.5rem; text-transform:uppercase;" data-i18n="local-time">本地時間</p>
+          <h4 id="live-time" style="font-size:1.4rem; font-family:'Outfit';">--:--:--</h4>
         </div>
 
         <!-- Stream Info Panel -->
-        <div id="stream-info-panel" class="glass-panel hidden" style="padding:1.5rem;">
-          <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.8rem; text-transform:uppercase;">📡 串流資訊</p>
-          <div style="display:flex; flex-direction:column; gap:0.6rem; font-size:0.9rem;">
+        <div id="stream-info-panel" class="glass-panel hidden" style="padding:1.2rem;">
+          <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.8rem; text-transform:uppercase;">📡 串流資訊</p>
+          <div style="display:flex; flex-direction:column; gap:0.5rem; font-size:0.85rem;">
             <div><span style="color:#86efac;">來源：</span><span id="info-source" style="word-break:break-all;">-</span></div>
             <div><span style="color:#86efac;">連線數：</span><span id="info-viewers">?</span> 人</div>
             <div><span style="color:#86efac;">幀數：</span><span id="info-fps">0</span> FPS</div>
@@ -300,7 +300,7 @@ export function renderStream(container) {
     const el = document.getElementById('live-time');
     if (el) el.textContent = new Date().toLocaleTimeString();
   };
-  setInterval(updateClock, 1000);
+  const clockInterval = setInterval(updateClock, 1000);
   updateClock();
 
   els.connectBtn.onclick = connectWebSocket;
@@ -361,14 +361,20 @@ export function renderStream(container) {
 
   els.fullscreen.onclick = () => {
     const viewport = document.getElementById('video-container');
-    if (viewport.requestFullscreen) {
-      viewport.requestFullscreen();
-    } else if (viewport.webkitRequestFullscreen) {
-      viewport.webkitRequestFullscreen();
-    }
+    if (viewport.requestFullscreen) { viewport.requestFullscreen(); } 
+    else if (viewport.webkitRequestFullscreen) { viewport.webkitRequestFullscreen(); }
   };
 
   if (savedUrl) {
     setTimeout(connectWebSocket, 300);
   }
+
+  // Returning cleanup for the router
+  return () => {
+    disconnect();
+    clearInterval(clockInterval);
+    stopUptimeCounter();
+    stopFpsCounter();
+    if (els.histVideo) els.histVideo.pause();
+  };
 }

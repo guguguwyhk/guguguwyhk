@@ -13,25 +13,25 @@ export function renderGame(container) {
         <canvas id="gameCanvas" style="width:100%; height:75vh; display:block;"></canvas>
         
         <!-- HUD -->
-        <div id="game-ui" style="position:absolute; top:16px; left:16px; pointer-events:none; font-family:var(--font-heading); background:rgba(0,0,0,0.55); backdrop-filter: blur(12px); padding:12px 20px; border-radius:14px; border:1px solid rgba(74,222,128,0.3); display:flex; gap: 2rem;">
-          <div style="font-size:1.3rem; color:#4ade80; font-weight: 800;"><span data-i18n="game-score">SCORE</span> <span id="score-val" style="color:white; margin-left:8px;">0</span></div>
-          <div style="font-size:1.3rem; color:#f87171; font-weight: 800;"><span data-i18n="game-lives">LIVES</span> <span id="life-val" style="letter-spacing: 4px; margin-left:8px;">❤️❤️❤️</span></div>
-          <div style="font-size:1.3rem; color:#fbbf24; font-weight: 800;"><span data-i18n="game-level">LEVEL</span> <span id="level-val" style="color:white; margin-left:8px;">1</span></div>
+        <div id="game-ui" style="position:absolute; top:16px; left:16px; pointer-events:none; font-family:var(--font-heading); background:rgba(0,0,0,0.55); backdrop-filter: blur(12px); padding:12px 20px; border-radius:14px; border:1px solid rgba(74,222,128,0.3); display:flex; flex-wrap:wrap; gap: 1rem 2rem;">
+          <div style="font-size:clamp(1rem, 4vw, 1.3rem); color:#4ade80; font-weight: 800;"><span data-i18n="game-score">SCORE</span> <span id="score-val" style="color:white; margin-left:8px;">0</span></div>
+          <div style="font-size:clamp(1rem, 4vw, 1.3rem); color:#f87171; font-weight: 800;"><span data-i18n="game-lives">LIVES</span> <span id="life-val" style="letter-spacing: 4px; margin-left:8px;">❤️❤️❤️</span></div>
+          <div style="font-size:clamp(1rem, 4vw, 1.3rem); color:#fbbf24; font-weight: 800;"><span data-i18n="game-level">LEVEL</span> <span id="level-val" style="color:white; margin-left:8px;">1</span></div>
         </div>
 
         <!-- Start/End Overlay -->
         <div id="start-overlay" style="position:absolute; top:0; left:0; width:100%; height:100%; background:linear-gradient(135deg, rgba(0,10,5,0.85) 0%, rgba(0,20,10,0.9) 100%); backdrop-filter: blur(10px); display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:100; text-align:center; padding:2rem;">
            <div style="margin-bottom:1.5rem; animation:mascotBounce 1.5s ease infinite;">
-             <img src="./removedbg_gugugu.png" style="width:120px; filter: drop-shadow(0 0 20px rgba(74,222,128,0.6));" />
+             <img src="./removedbg_gugugu.png" style="width:clamp(80px, 20vw, 120px); filter: drop-shadow(0 0 20px rgba(74,222,128,0.6));" />
            </div>
-           <h2 id="overlay-title" style="color:#4ade80; font-size: 2.8rem; margin-bottom: 0.8rem; text-shadow: 0 0 30px rgba(74,222,128,0.5);" data-i18n="game-start-title">GUARDIAN FLIGHT</h2>
-           <p id="overlay-desc" style="color:#94a3b8; margin-bottom:2rem; font-size:1.1rem; max-width: 480px; line-height: 1.7;" data-i18n="game-start-desc">守護校園!飛行躲避石柱，收集果實，擊退入侵的烏鴉！</p>
-           <div style="display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; margin-bottom:2rem;">
-             <div style="background:rgba(74,222,128,0.1); border:1px solid rgba(74,222,128,0.3); padding:10px 16px; border-radius:10px; font-size:0.9rem; color:#a3e635;">🖱️ Click / Space: Fly Up</div>
-             <div style="background:rgba(251,191,36,0.1); border:1px solid rgba(251,191,36,0.3); padding:10px 16px; border-radius:10px; font-size:0.9rem; color:#fde68a;">✨ Catch fruits: +10pts</div>
-             <div style="background:rgba(248,113,113,0.1); border:1px solid rgba(248,113,113,0.3); padding:10px 16px; border-radius:10px; font-size:0.9rem; color:#fca5a5;">🐦‍⬛ Avoid crows: -1 life</div>
+           <h2 id="overlay-title" style="color:#4ade80; font-size: clamp(2rem, 10vw, 3.5rem); margin-bottom: 0.8rem; text-shadow: 0 0 30px rgba(74,222,128,0.5); line-height: 1.1;" data-i18n="game-start-title">GUARDIAN FLIGHT</h2>
+           <p id="overlay-desc" style="color:#94a3b8; margin-bottom:2rem; font-size:clamp(0.9rem, 3vw, 1.1rem); max-width: 480px; line-height: 1.7;" data-i18n="game-start-desc">守護校園!飛行躲避石柱，收集果實，擊退入侵的烏鴉！</p>
+           <div style="display:flex; gap:0.5rem; flex-wrap:wrap; justify-content:center; margin-bottom:2rem;">
+             <div style="background:rgba(74,222,128,0.1); border:1px solid rgba(74,222,128,0.3); padding:8px 12px; border-radius:10px; font-size:0.85rem; color:#a3e635;">🖱️ Click / Space: Fly Up</div>
+             <div style="background:rgba(251,191,36,0.1); border:1px solid rgba(251,191,36,0.3); padding:8px 12px; border-radius:10px; font-size:0.85rem; color:#fde68a;">✨ Catch: +10pts</div>
+             <div style="background:rgba(248,113,113,0.1); border:1px solid rgba(248,113,113,0.3); padding:8px 12px; border-radius:10px; font-size:0.85rem; color:#fca5a5;">🐦‍⬛ Crows: -1 life</div>
            </div>
-           <button id="start-btn" class="btn-primary liquid-btn" style="padding:1rem 3rem; font-size: 1.4rem; box-shadow: 0 0 30px rgba(46, 125, 50, 0.6); letter-spacing:2px;" data-i18n="game-start-btn">START GAME</button>
+           <button id="start-btn" class="btn-primary liquid-btn" style="padding:clamp(0.8rem, 3vw, 1rem) clamp(2rem, 6vw, 3rem); font-size: clamp(1.2rem, 4vw, 1.4rem); box-shadow: 0 0 30px rgba(46, 125, 50, 0.6); letter-spacing:2px;" data-i18n="game-start-btn">START GAME</button>
         </div>
       </div>
     </div>
@@ -364,8 +364,17 @@ export function renderGame(container) {
   }
 
   const jump = () => { if (isGameActive) birdVelocity = -8; };
+  const onKeyDown = (e) => { if (e.code === 'Space' && isGameActive) { e.preventDefault(); jump(); } };
+
   canvas.addEventListener('mousedown', jump);
   canvas.addEventListener('touchstart', (e) => { e.preventDefault(); jump(); }, { passive: false });
-  window.addEventListener('keydown', (e) => { if (e.code === 'Space' && isGameActive) { e.preventDefault(); jump(); } });
+  window.addEventListener('keydown', onKeyDown);
   document.getElementById('start-btn').onclick = startGame;
+
+  // Returning cleanup function to the router
+  return () => {
+    isGameActive = false;
+    cancelAnimationFrame(animationFrame);
+    window.removeEventListener('keydown', onKeyDown);
+  };
 }

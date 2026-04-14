@@ -3,6 +3,8 @@
    ========================================================================== */
 html {
   font-size: 18px;
+  /* Fix scroll glitch on some mobile browsers */
+  scroll-behavior: smooth;
 }
 
 :root {
@@ -29,20 +31,39 @@ html {
 body {
   font-family: var(--font-body);
   color: var(--text-main);
-  background: transparent; /* Changed back to transparent to see .fixed-bg */
+  background: #050c08; 
   min-height: 100vh;
+  min-height: 100dvh;
   overflow-x: hidden;
   transition: all 0.3s ease;
+  /* Mobile scrolling performance */
+  -webkit-overflow-scrolling: touch;
+}
+
+.page-container {
+  padding: 2rem 1.5rem 8rem 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  transform: translateZ(0); /* Hardware acceleration */
+  will-change: transform;
 }
 
 .fixed-bg {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
+  height: 100vh;
+  height: 100dvh;
   background-color: #050c08; /* Fallback on the bg layer itself */
   background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), var(--bg-image);
   background-size: cover;
   background-position: center;
   z-index: -10;
+  transform: translateZ(0); /* Hardware acceleration for smooth scrolling */
+  will-change: transform;
 }
 
 /* =================== Glassmorphism =================== */
@@ -78,9 +99,9 @@ h1, h2, h3, h4 {
   letter-spacing: -0.02em;
 }
 
-h1 { font-size: 2.2rem; margin-bottom: 1rem; }
-h2 { font-size: 1.8rem; margin-bottom: 0.75rem; }
-h3 { font-size: 1.4rem; margin-bottom: 0.5rem; }
+h1 { font-size: clamp(2rem, 8vw, 2.5rem); margin-bottom: 1rem; }
+h2 { font-size: clamp(1.5rem, 6vw, 2rem); margin-bottom: 0.75rem; }
+h3 { font-size: clamp(1.2rem, 5vw, 1.5rem); margin-bottom: 0.5rem; }
 
 /* =================== Buttons =================== */
 .btn-primary {
@@ -742,6 +763,75 @@ select.glass-input option {
 .stat-val { width:60px; text-align:right; font-weight:900; color:#fff; font-size: 0.9rem; }
 
 /* =================== Bird Cards =================== */
+/* =================== Map Layout =================== */
+.map-layout {
+  display: flex;
+  height: 75vh;
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: var(--glass-shadow);
+  border: 1px solid var(--glass-border);
+  background: #8cdba9; /* fallback map bg */
+}
+
+.map-info-panel {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 320px;
+  padding: 1.5rem;
+  z-index: 5;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(10px);
+}
+
+.map-interactive-area {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  position: relative;
+}
+
+@media (max-width: 850px) {
+  .map-layout {
+    flex-direction: column;
+    height: auto;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    background: transparent;
+  }
+  .map-info-panel {
+    position: relative;
+    top: 0; left: 0;
+    width: 100%;
+    margin-bottom: 1rem;
+    border-radius: 20px;
+    box-shadow: var(--glass-shadow);
+    border: 1px solid var(--glass-border);
+  }
+  .map-interactive-area {
+    height: 60vh;
+    border-radius: 24px;
+    box-shadow: var(--glass-shadow);
+    border: 1px solid var(--glass-border);
+    background: #8cdba9;
+  }
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 850px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .grid-responsive {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -955,6 +1045,45 @@ select.glass-input option {
     z-index: 1000001; /* Ensure above bubble */
   }
   
+  /* Daily Highlight Refinement */
+  .daily-highlight {
+    flex-direction: column;
+    padding: 1.5rem !important;
+    text-align: center;
+    gap: 1rem !important;
+  }
+  .daily-img {
+    width: 100% !important;
+    height: 180px !important;
+    margin-top: 0.5rem;
+  }
+
+  /* Poll/Vote Modal Scaling */
+  .poll-grid {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)) !important;
+    gap: 0.8rem !important;
+  }
+  .poll-card {
+    height: 140px !important;
+  }
+  .modal-title-fluid {
+    font-size: clamp(1.5rem, 7vw, 2.5rem) !important;
+  }
+  .centered-modal-content {
+    padding: 1.5rem !important;
+    width: 94% !important;
+  }
+
+  /* Mascot positioning with Safe Areas */
+  #mascot-widget {
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    left: calc(12px + env(safe-area-inset-left));
+  }
+  #global-lang-btn {
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    right: calc(12px + env(safe-area-inset-right));
+  }
+
   #global-lang-btn {
     bottom: 12px;
     right: 12px;

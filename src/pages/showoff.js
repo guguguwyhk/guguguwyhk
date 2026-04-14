@@ -281,6 +281,6 @@ export function renderShowOff(container) {
     window.navigate('login');
   };
 
-  window.addEventListener('popstate', cleanup, { once: true });
+  return cleanup;
 }
 

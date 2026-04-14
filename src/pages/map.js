@@ -6,10 +6,23 @@ export function renderMap(container) {
       <button class="btn-secondary btn-back" id="back-btn" data-i18n="back-home">⬅ 返回主頁</button>
     </header>
 
-    <div style="position:relative; width:100%; height:75vh; border-radius:24px; overflow:hidden; box-shadow:var(--glass-shadow); border:1px solid var(--glass-border);">
+    <div class="map-layout">
       
+      <!-- Left Panel (Explorer Guide) -->
+      <div class="glass-panel map-info-panel">
+        <h3 style="margin-bottom:1rem; color:var(--primary-color);">🗺️ 地圖導覽指南</h3>
+        <p style="font-size:0.95rem; line-height:1.6; margin-bottom:1rem; color: #4b5563;">拖拉地圖並點擊數字光點，即可開啟對應的 <strong>生態介紹簡報</strong>，探索華仁校園各處的鳥類生態！紅色圖示為鳥屋實時攝影機位置。</p>
+        
+        <!-- Target popup content -->
+        <div id="hotspot-info" class="hidden" style="background:var(--primary-color); padding:1rem; border-radius:12px; color:white;">
+           <h4 id="h-loc" style="margin-bottom:0.5rem; font-size:1.2rem;"></h4>
+           <p id="h-desc" style="font-size:1rem; margin-bottom:0.5rem;"></p>
+           <strong id="h-bird" style="display:block; padding:8px; background:rgba(255,255,255,0.2); border-radius:8px; text-align:center;"></strong>
+        </div>
+      </div>
+
       <!-- Interactive Map Image -->
-      <div id="map-container" style="width:100%; height:100%; overflow:auto; position:relative; background:#8cdba9;">
+      <div id="map-container" class="map-interactive-area">
         <!-- Placeholder map image, normally using zoom/pan library, but CSS works for mockup -->
         <img src="./footage/wy_map/plan_view_of_wy.png" style="min-width:1200px; height:auto; display:block;" />
         
@@ -24,43 +37,42 @@ export function renderMap(container) {
         </div>
       </div>
 
-      <!-- Left Panel (Explorer Guide) -->
-      <div class="glass-panel" style="position:absolute; top:20px; left:20px; width:320px; padding:1.5rem; z-index:5; background:rgba(255,255,255,0.85); backdrop-filter:blur(10px);">
-        <h3 style="margin-bottom:1rem; color:var(--primary-color);">🗺️ 地圖導覽指南</h3>
-        <p style="font-size:1rem; line-height:1.6; margin-bottom:1rem;">拖拉地圖並點擊數字光點，即可開啟對應的 <strong>生態介紹簡報</strong>，探索華仁校園各處的鳥類生態！紅色圖示為鳥屋實時攝影機位置。</p>
-        
-        <!-- Target popup content -->
-        <div id="hotspot-info" class="hidden" style="background:var(--primary-color); padding:1rem; border-radius:12px; color:white;">
-           <h4 id="h-loc" style="margin-bottom:0.5rem; font-size:1.2rem;"></h4>
-           <p id="h-desc" style="font-size:1rem; margin-bottom:0.5rem;"></p>
-           <strong id="h-bird" style="display:block; padding:8px; background:rgba(255,255,255,0.2); border-radius:8px; text-align:center;"></strong>
-        </div>
-      </div>
     </div>
     
     <style>
       .hotspot {
-        position:absolute; width:60px; height:60px; background:white; border:4px solid var(--primary-color);
+        position:absolute; 
+        width: clamp(40px, 12vw, 60px); 
+        height: clamp(40px, 12vw, 60px); 
+        background:white; border:3px solid var(--primary-color);
         border-radius:50%; cursor:pointer; transform:translate(-50%, -50%);
         box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         display:flex; justify-content:center; align-items:center;
-        font-size:1.8rem; font-weight:900; color:var(--primary-color);
+        font-size: clamp(1.2rem, 5vw, 1.8rem); font-weight:900; color:var(--primary-color);
         text-decoration:none;
         transition: transform 0.2s, background 0.2s;
+        z-index: 10;
       }
       .hotspot:hover {
-        transform:translate(-50%, -50%) scale(1.2);
+        transform:translate(-50%, -50%) scale(1.1);
         background:var(--primary-color);
         color:white;
         z-index:100;
       }
       .cam-pin {
-        width: 70px; height: 70px; border:4px solid white; animation: pulseCam 1.5s infinite; font-size:2rem;
+        width: clamp(45px, 15vw, 70px); 
+        height: clamp(45px, 15vw, 70px); 
+        border:4px solid white; animation: pulseCam 1.5s infinite; 
+        font-size: clamp(1.4rem, 6vw, 2rem);
       }
       @keyframes pulseCam {
         0% { box-shadow: 0 0 0 0 rgba(186, 26, 26, 0.7); }
-        70% { box-shadow: 0 0 0 25px rgba(186, 26, 26, 0); }
+        70% { box-shadow: 0 0 0 20px rgba(186, 26, 26, 0); }
         100% { box-shadow: 0 0 0 0 rgba(186, 26, 26, 0); }
+      }
+      @media (max-width: 600px) {
+        .hotspot { border-width: 2px; }
+        .cam-pin { border-width: 2px; }
       }
     </style>
   `;
@@ -92,6 +104,12 @@ export function renderMap(container) {
 
     // Make map center on scroll a bit initially
     const map = document.getElementById('map-container');
-    map.scrollLeft = 200;
+    if (map) {
+      setTimeout(() => { map.scrollLeft = 250; }, 100);
+    }
   });
+
+  return () => {
+    // Basic cleanup
+  };
 }
