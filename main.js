@@ -50,4 +50,4 @@ window.addEventListener('popstate', (e) => {
 });
 
 // Let's go
-document.addEventListener('DOMContentLoaded', initApp);
+initApp();

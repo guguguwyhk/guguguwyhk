@@ -9,7 +9,7 @@ import { renderGame } from './pages/game.js';
 import { renderAbout } from './pages/about.js';
 
 export const router = {
-  appContainer: document.getElementById('app'),
+  get appContainer() { return document.getElementById('app'); },
   currentPath: null,
   currentCleanup: null,
   
@@ -98,5 +98,16 @@ export const router = {
         finalize();
     }
     return cleanup;
+  },
+
+  stopAllAudio() {
+    try {
+      if (window.audioPlayer) {
+        window.audioPlayer.pause();
+        window.audioPlayer.currentTime = 0;
+      }
+      const audios = document.querySelectorAll('audio');
+      audios.forEach(a => a.pause());
+    } catch(e) {}
   }
 };
