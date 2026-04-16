@@ -361,9 +361,28 @@ export function renderStream(container) {
 
   els.fullscreen.onclick = () => {
     const viewport = document.getElementById('video-container');
-    if (viewport.requestFullscreen) { viewport.requestFullscreen(); } 
-    else if (viewport.webkitRequestFullscreen) { viewport.webkitRequestFullscreen(); }
+    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+      if (viewport.requestFullscreen) { viewport.requestFullscreen(); } 
+      else if (viewport.webkitRequestFullscreen) { viewport.webkitRequestFullscreen(); }
+      els.fullscreen.textContent = '✕'; // Exit icon
+    } else {
+      if (document.exitFullscreen) { document.exitFullscreen(); }
+      else if (document.webkitExitFullscreen) { document.webkitExitFullscreen(); }
+      els.fullscreen.textContent = '⛶'; // Fullscreen icon
+    }
   };
+
+  // Listen for ESC key or browser-native exit
+  document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+      els.fullscreen.textContent = '⛶';
+    }
+  });
+  document.addEventListener('webkitfullscreenchange', () => {
+    if (!document.webkitFullscreenElement) {
+      els.fullscreen.textContent = '⛶';
+    }
+  });
 
   if (savedUrl) {
     setTimeout(connectWebSocket, 300);

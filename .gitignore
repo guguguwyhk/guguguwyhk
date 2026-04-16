@@ -6,3 +6,6 @@ dist/
 # *.mp4
 # *.MOV
 # public/footage/previous_videos/
+
+# Remotion Related
+remotion-ad/

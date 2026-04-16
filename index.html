@@ -4,12 +4,12 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="./removedbg_gugugu.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gu Gu Gu: Campus Ecology</title>
+    <title>Gu Gu Gu: 24/7 Smart Monitoring</title>
     <!-- Google Fonts: Inter and Outfit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./src/style.css">
   </head>
   <body class="theme-light">
     <!-- Fixed Background for Mobile Compatibility -->
@@ -20,21 +20,21 @@
 
     <!-- Global Bird Detail Modal (Outside App to avoid transform conflicts) -->
     <div id="bird-modal" class="centered-modal-overlay hidden">
-      <div class="centered-modal-content" id="bird-modal-content">
+      <div class="centered-modal-content glass-panel modal-pop-anim" id="bird-modal-content" style="padding:0; overflow:hidden;">
         <!-- Navigation -->
-        <button id="prev-bird-btn" class="modal-nav-btn" style="left:12px;">&larr;</button>
-        <button id="next-bird-btn" class="modal-nav-btn" style="right:12px;">&rarr;</button>
+        <button id="prev-bird-btn" class="modal-nav-btn" style="left:12px;" aria-label="Previous Bird">&larr;</button>
+        <button id="next-bird-btn" class="modal-nav-btn" style="right:12px;" aria-label="Next Bird">&rarr;</button>
 
         <div class="modal-body-flex">
           <div class="modal-img-container">
-            <img id="modal-img" src="" />
-            <button id="close-modal" class="modal-close-btn">&times;</button>
+            <img id="modal-img" src="" alt="Bird Image" />
+            <button id="close-modal" class="modal-close-btn" aria-label="Close Modal">&times;</button>
           </div>
           <div class="modal-info-scroll">
              <h2 id="modal-name"></h2>
-             <p id="modal-enName"></p>
-             <div class="glass-panel" style="margin-bottom:2rem; padding:1.5rem; background:rgba(0,0,0,0.4);">
-                <h3 style="font-size:0.9rem; color:#86efac; margin-bottom:1.2rem;" data-i18n="eco-data">📊 生態數據</h3>
+             <p id="modal-enName" style="opacity:0.6; font-style:italic; margin-top:0.2rem;"></p>
+             <div class="glass-panel" style="margin-bottom:2rem; padding:1.5rem; background:rgba(0,0,0,0.4); border-radius:18px; border:1px solid rgba(255,255,255,0.05);">
+                <h3 style="font-size:0.9rem; color:#86efac; margin-bottom:1.2rem; letter-spacing:1px; text-transform:uppercase;" data-i18n="eco-data">📊 生態數據</h3>
                 <div style="display:flex; flex-direction:column; gap:1.2rem;">
                    <div class="stat-row">
                       <span data-i18n="stat-size">體型</span>
@@ -57,7 +57,7 @@
                 <h3 style="font-size:1rem; color:#86efac; margin-bottom:0.8rem;" data-i18n="learn-more">🌿 深入了解</h3>
                 <p id="modal-details" style="color:#e2e8f0; font-size:1.15rem; line-height:1.8;"></p>
              </div>
-             <div style="margin-bottom:2rem; padding:1.2rem 1.5rem; border-radius:12px; background:rgba(134,239,172,0.05); border:1px solid rgba(134,239,172,0.2);">
+             <div style="margin-bottom:2rem; padding:1.2rem 1.5rem; border-radius:18px; background:rgba(134,239,172,0.05); border:1px solid rgba(134,239,172,0.2);">
                 <h3 style="font-size:0.9rem; color:#86efac; margin-bottom:1rem;" data-i18n="similar-birds">🔍 你看到的可能也是...</h3>
                 <div id="modal-similar-icons" style="display:flex; gap:12px; flex-wrap:wrap;"></div>
              </div>
@@ -84,6 +84,6 @@
     </div>
 
     <!-- Scripts -->
-    <script type="module" src="./main.js"></script>
+    <script type="module" src="./src/main.js"></script>
   </body>
 </html>

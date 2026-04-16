@@ -55,7 +55,7 @@ export const BIRDS = [
     id: '5', 
     name: '普通翠鳥', 
     enName: 'Common Kingfisher', 
-    img: './footage/encyclopedia/images/普通翠鳥.jpg', 
+    img: './footage/encyclopedia/images/普通翠鳥.png', 
     audio: './footage/encyclopedia/audio/普通翠鳥.mp3', 
     stats: { size: 17, prob: 30, activity: 20, rare: 75 }, 
     details: '華麗的捕魚高手。全身佈滿閃亮的藍綠色羽毛，腹部為棕橘色。牠們常靜靜停在水邊的細枝上，一旦發現獵物便如箭般衝入水中。在校園的小噴池或水池邊偶爾能見到。',
@@ -190,13 +190,17 @@ export function renderEncyclopedia(container) {
   container.innerHTML = `
     <div class="page-container">
       <header class="page-header">
-        <h1 class="page-title" data-i18n="ency-title">校園鳥類百科 📖</h1>
+        <h1 class="page-title" data-i18n="ency-title">校園鳥類百科</h1>
         <button class="btn-secondary btn-back" id="back-btn" data-i18n="back-home">⬅ 返回主頁</button>
       </header>
 
-      <div class="glass-panel" style="margin-bottom:2.5rem; display:flex; gap:1rem; flex-wrap:wrap; align-items:center; padding:1.2rem;">
-        <input type="text" id="search-input" class="glass-input" data-i18n-placeholder="ency-search-placeholder" placeholder="搜尋鳥類 Name Search..." style="flex:2; min-width:200px; font-size:1.1rem; padding:15px;">
-        <select id="sort-select" class="glass-input" style="flex:1; min-width:180px; font-size:1.1rem; padding:15px;">
+      <div class="glass-panel" style="margin-bottom:2.5rem; display:flex; gap:1rem; flex-wrap:wrap; align-items:center; padding:1.2rem; position:relative;">
+        <div style="flex:2; position:relative; min-width:260px;">
+          <input type="text" id="search-input" class="glass-input" data-i18n-placeholder="ency-search-placeholder" placeholder="搜尋鳥類 Name Search..." style="width:100%; font-size:1.1rem; padding:15px; border-radius:15px;">
+          <div id="search-suggestions" class="glass-panel hidden" style="position:absolute; top:calc(100% + 10px); left:0; width:100%; z-index:100; padding:10px; border-radius:15px; box-shadow:0 10px 40px rgba(0,0,0,0.5); max-height:400px; overflow-y:auto; border:2px solid #86efac; backdrop-filter:blur(25px);">
+          </div>
+        </div>
+        <select id="sort-select" class="glass-input" style="flex:1; min-width:180px; font-size:1.1rem; padding:15px; border-radius:15px;">
           <option value="default" data-i18n="ency-sort-default">預設排序 Default</option>
           <option value="size" data-i18n="ency-sort-size">按體型 Size</option>
           <option value="prob" data-i18n="ency-sort-prob">按機率 Probability</option>
@@ -210,149 +214,115 @@ export function renderEncyclopedia(container) {
       .stat-row span:first-child { width: clamp(80px, 20vw, 140px); color:#94a3b8; font-weight:600; font-size: 0.9rem; }
       .stat-bar-bg { flex:1; height:16px; background:rgba(255,255,255,0.08); border-radius:8px; overflow:hidden; }
       .stat-bar { height:100%; border-radius:8px; transition: width 0.8s cubic-bezier(0.165, 0.84, 0.44, 1); }
-      .stat-val { width: 60px; text-align:right; font-weight:900; color:#fff; font-size: 0.9rem; }
+      .bird-card-info { 
+        padding: 2.5rem 1.5rem 1.5rem; 
+        text-align: center; 
+        background: rgba(0, 0, 0, 0.85); 
+        backdrop-filter: blur(12px);
+        width: 100%;
+        position: relative;
+        z-index: 5;
+      }
       
-      .bird-card { border-radius:24px; overflow:hidden; cursor:pointer; background:rgba(255,255,255,0.04); border:1px solid var(--glass-border); transition:all 0.35s ease; position:relative; }
-      .bird-card::after { content:"查看詳情 View Details"; position:absolute; bottom:0; left:0; width:100%; padding:15px; background:var(--primary-color); color:white; text-align:center; transform:translateY(100%); transition:transform 0.3s; font-weight:bold; }
-      .bird-card:hover { border-color:var(--primary-color); transform:translateY(-12px) scale(1.02); box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
-      .bird-card:hover::after { transform:translateY(0); }
-      .bird-card img { width:100%; height:260px; object-fit:cover; transition: transform 0.5s; }
+      .bird-card img { width:100%; height:280px; object-fit:cover; transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); display:block; }
       .bird-card:hover img { transform: scale(1.1); }
-      .bird-card-info { padding:2rem; text-align:center; }
+
+      .bird-card::after { 
+        content: "查看詳情 View Details"; 
+        position: absolute; 
+        bottom: 0; 
+        left: 0; 
+        width: 100%; 
+        padding: 14px; 
+        background: var(--primary-color); 
+        color: white; 
+        text-align: center; 
+        transform: translateY(100%); 
+        transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1); 
+        font-weight: 800; 
+        font-size: 0.9rem; 
+        z-index: 10;
+        letter-spacing: 1px;
+      }
+      .bird-card:hover::after { transform: translateY(0); }
+      .bird-card:hover { border-color: #4ade80; box-shadow: 0 25px 50px rgba(0,0,0,0.7); transform: translateY(-10px); }
     </style>
   `;
 
   const renderGrid = () => {
     const grid = document.getElementById('birds-grid');
-    grid.innerHTML = filtered.map((b, i) => `
-      <div class="bird-card" onclick="window.openBirdModal(${i})">
-        <img src="${b.img}" loading="lazy" onerror="this.src='./favicon.svg';this.style.opacity='0.3';" />
+    if (!grid) return;
+    
+    grid.innerHTML = filtered.map(b => `
+      <div class="bird-card" onclick="window.gugugu_bird_modal.open('${b.id}', window.gugugu_app_birds)">
+        <img src="${b.img}" loading="lazy" />
         <div class="bird-card-info">
           <h3 style="margin:0; font-size:1.4rem; color:#86efac;">${b.name}</h3>
-          <p style="margin:0.4rem 0 0; font-size:1rem; opacity:0.6; font-style:italic;">${b.enName}</p>
+          <p style="margin:0.4rem 0 0; font-size:1.1rem; opacity:0.6; font-style:italic;">${b.enName}</p>
         </div>
       </div>
     `).join('');
   };
 
+  // Set global shared list for the modal to use (passed by reference)
+  window.gugugu_app_birds = filtered;
+
   renderGrid();
 
   document.getElementById('search-input').oninput = (e) => {
     const q = e.target.value.toLowerCase();
+    const suggestions = document.getElementById('search-suggestions');
+    
+    if (q.length < 1) {
+      suggestions.classList.add('hidden');
+    } else {
+      const matched = BIRDS.filter(b => b.name.includes(q) || b.enName.toLowerCase().includes(q)).slice(0, 5);
+      if (matched.length > 0) {
+        suggestions.classList.remove('hidden');
+        suggestions.innerHTML = matched.map(b => `
+          <div class="suggestion-item" data-id="${b.id}" style="display:flex; align-items:center; gap:12px; padding:10px; cursor:pointer; border-bottom:1px solid rgba(255,255,255,0.05); transition: background 0.2s;">
+            <img src="${b.img}" style="width:45px; height:45px; border-radius:8px; object-fit:cover;">
+            <div>
+              <div style="font-weight:bold; color:#86efac;">${b.name}</div>
+              <div style="font-size:0.8rem; opacity:0.6;">${b.enName}</div>
+            </div>
+          </div>
+        `).join('');
+        
+        suggestions.querySelectorAll('.suggestion-item').forEach(item => {
+          item.onclick = () => {
+            const sid = item.dataset.id;
+            window.gugugu_bird_modal.open(sid, BIRDS);
+            suggestions.classList.add('hidden');
+            document.getElementById('search-input').value = '';
+          };
+        });
+      } else {
+        suggestions.classList.add('hidden');
+      }
+    }
+
     filtered = BIRDS.filter(b => b.name.includes(q) || b.enName.toLowerCase().includes(q));
+    window.gugugu_app_birds = filtered;
     renderGrid();
   };
+
+  // Close suggestions on outside click
+  document.addEventListener('click', (e) => {
+    const s = document.getElementById('search-suggestions');
+    if (s && !s.contains(e.target) && e.target.id !== 'search-input') {
+      s.classList.add('hidden');
+    }
+  });
 
   document.getElementById('sort-select').onchange = (e) => {
     const val = e.target.value;
     if (val === 'size') filtered.sort((a,b) => b.stats.size - a.stats.size);
     else if (val === 'prob') filtered.sort((a,b) => b.stats.prob - a.stats.prob);
     else filtered = [...BIRDS];
+    window.gugugu_app_birds = filtered;
     renderGrid();
   };
 
   document.getElementById('back-btn').onclick = () => window.navigate('home');
-
-  if (!window.audioPlayer) window.audioPlayer = new Audio();
-  const audioPlayer = window.audioPlayer;
-
-  window.openBirdModal = (index, silent = false) => {
-    if (index < 0 || index >= filtered.length) return;
-    currentBirdIndex = index;
-    window.currentBirdIndex = index; // Expose globally for i18n
-    const bird = filtered[currentBirdIndex];
-    const isEn = (localStorage.getItem('gugugu_lang') || 'zh') === 'en';
-
-    document.getElementById('modal-img').src = bird.img;
-    document.getElementById('modal-name').innerText = bird.name;
-    document.getElementById('modal-enName').innerText = bird.enName;
-    document.getElementById('modal-details').innerText = isEn ? bird.enDetails : bird.details;
-
-    const similarContainer = document.getElementById('modal-similar-icons');
-    similarContainer.innerHTML = '';
-    if (bird.similarIds) {
-      bird.similarIds.forEach(sid => {
-        const sBird = BIRDS.find(b => b.id === sid);
-        if (sBird) {
-          const icon = document.createElement('div');
-          icon.style.cssText = `cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:6px; transition:transform 0.2s;`;
-          icon.innerHTML = `
-            <img src="${sBird.img}" style="width:55px; height:55px; border-radius:50%; object-fit:cover; border:2px solid rgba(134,239,172,0.3);" />
-            <span style="font-size:0.75rem; color:#86efac; font-weight:600;">${isEn ? (sBird.enName.split(' ').pop()) : sBird.name}</span>
-          `;
-          icon.onclick = () => {
-             const newIdx = filtered.findIndex(b => b.id === sid);
-             window.openBirdModal(newIdx !== -1 ? newIdx : BIRDS.findIndex(b => b.id === sid));
-          };
-          icon.onmouseover = () => icon.style.transform = 'scale(1.1)';
-          icon.onmouseout = () => icon.style.transform = 'scale(1)';
-          similarContainer.appendChild(icon);
-        }
-      });
-    }
-
-    const updateBar = (id, val, max=100) => {
-      const el = document.getElementById('bar-' + id);
-      const label = document.getElementById('label-' + id);
-      if (!silent) el.style.width = '0%';
-      setTimeout(() => { el.style.width = (val/max*100) + '%'; }, silent ? 0 : 100);
-      label.innerText = (id === 'size' ? val + 'cm' : val + '%');
-    };
-
-    updateBar('size', bird.stats.size, 100);
-    updateBar('prob', bird.stats.prob);
-    updateBar('rare', bird.stats.rare);
-
-    document.getElementById('btn-play-audio').onclick = () => {
-       if (!bird.audio) { window.mascot.say(isEn ? 'No audio for this bird' : '此鳥類暫無音檔'); return; }
-       audioPlayer.src = bird.audio;
-       audioPlayer.play();
-    };
-
-    document.getElementById('btn-read-aloud').onclick = () => {
-       if ('speechSynthesis' in window) {
-         window.speechSynthesis.cancel();
-         const detailText = isEn ? bird.enDetails : bird.details;
-         const utter = new SpeechSynthesisUtterance(`${isEn ? bird.enName : bird.name}。${detailText}`);
-         utter.lang = isEn ? 'en-GB' : 'zh-HK';
-         window.speechSynthesis.speak(utter);
-       }
-    };
-
-    const modal = document.getElementById('bird-modal');
-    modal.classList.remove('hidden');
-    
-    const modalInner = modal.querySelector('.centered-modal-content');
-    if (modalInner && !silent) {
-      modalInner.classList.remove('modal-pop-anim');
-      void modalInner.offsetWidth;
-      modalInner.classList.add('modal-pop-anim');
-    }
-    
-    // Ensure labels and other content in modal are translated silently
-    import('../i18n.js').then(m => m.applyTranslation(localStorage.getItem('gugugu_lang') || 'zh', true));
-  };
-
-  window.refreshBirdModal = () => {
-    if (window.currentBirdIndex !== undefined && window.currentBirdIndex !== -1) {
-      window.openBirdModal(window.currentBirdIndex, true);
-    }
-  };
-
-  document.getElementById('prev-bird-btn').onclick = () => {
-    const idx = (currentBirdIndex > 0) ? currentBirdIndex - 1 : filtered.length - 1;
-    window.openBirdModal(idx);
-  };
-  document.getElementById('next-bird-btn').onclick = () => {
-    const idx = (currentBirdIndex < filtered.length - 1) ? currentBirdIndex + 1 : 0;
-    window.openBirdModal(idx);
-  };
-  document.getElementById('close-modal').onclick = () => {
-    document.getElementById('bird-modal').classList.add('hidden');
-    try {
-      if (audioPlayer && audioPlayer.src) {
-        audioPlayer.pause();
-      }
-    } catch(e) {}
-  };
 }

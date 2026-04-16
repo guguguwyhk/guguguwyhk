@@ -5,7 +5,7 @@ export const translations = {
   'nav-about':        { zh: '了解我們',        en: 'About Us' },
   'nav-stream':       { zh: '直播鳥屋',        en: 'Live Birdhouse' },
   'nav-encyclopedia': { zh: '校園鳥類百科',    en: 'Encyclopedia' },
-  'nav-map':          { zh: '生態地圖導覽',    en: 'Eco Map' },
+  'nav-map':          { zh: '華仁生態地圖',    en: 'WYC Eco Map' },
   'nav-game':         { zh: '守護者挑戰',      en: 'Guardian Challenge' },
   'nav-showoff':      { zh: '展覽模式',        en: 'Exhibition Mode' },
   'back-home':        { zh: '← 返回主頁',      en: '← Back Home' },
@@ -68,7 +68,7 @@ export const translations = {
   'game-try-again':   { zh: 'TRY AGAIN',           en: 'TRY AGAIN' },
 
   // =================== Login ===================
-  'login-welcome':    { zh: '華仁校園生態門戶',    en: 'Campus Eco Portal' },
+  'login-welcome':    { zh: '24/7 實時監測智慧網站',    en: '24/7 Monitoring Smart Website' },
   'login-enter-name': { zh: '請輸入你的名字/暱稱', en: 'Enter your name / nickname' },
   'login-start':      { zh: '開始探索校園 🌿',     en: 'Start Exploring 🌿' },
   'login-skip':       { zh: '略過',                en: 'Skip' },
@@ -93,6 +93,22 @@ export const translations = {
   'about-follow': { zh: '追蹤我們以獲取更新！', en: 'Follow us for updates!' },
   'about-team-title': { zh: 'IDEEA Project 3K 第四組', en: 'IDEEA Project 3K Group 4' },
   'about-team-names': { zh: '林子舜 · 陳柏霖 · 陳樂天 · 劉晉廷', en: 'Astin Lam · Brayden Chan · Cyrus Chan · Justin Lau' },
+
+  // =================== Bird Names ===================
+  'bird-spoonbill':   { zh: '黑臉琵鷺', en: 'Black-faced Spoonbill' },
+  'bird-bulbul':      { zh: '紅耳鵯', en: 'Red-whiskered Bulbul' },
+  'bird-dove-spotted':{ zh: '珠頸斑鳩', en: 'Spotted Dove' },
+  'bird-dove-collared':{ zh: '灰斑鳩', en: 'Collared Dove' },
+  'bird-sparrow':     { zh: '樹麻雀', en: 'Tree Sparrow' },
+  'bird-egret':       { zh: '牛背鷺', en: 'Cattle Egret' },
+  'bird-magpie':      { zh: '鵲鴝', en: 'Magpie Robin' },
+  'bird-kingfisher':  { zh: '普通翠鳥', en: 'Common Kingfisher' },
+  'bird-flycatcher':  { zh: '綠背姬鶲', en: 'Green-back Flycatcher' },
+  'bird-warbler':     { zh: '黃眉柳鶯', en: 'Yellow-browed Warbler' },
+  'bird-swallow':     { zh: '洋燕', en: 'Pacific Swallow' },
+  'bird-pigeon':      { zh: '原鴿', en: 'Rock Pigeon' },
+  'bird-starling':    { zh: '黑領椋鳥', en: 'Black-collared Starling' },
+  'bird-koel':        { zh: '噪鵑', en: 'Asian Koel' },
 };
 
 export function applyTranslation(lang, silent = false) {
@@ -145,8 +161,8 @@ export function applyTranslation(lang, silent = false) {
   }
 
   // Update Bird Modal Details if open (only for non-silent updates to prevent recursion)
-  if (!silent && modal && !modal.classList.contains('hidden') && window.refreshBirdModal) {
-    window.refreshBirdModal();
+  if (!silent && modal && !modal.classList.contains('hidden') && window.gugugu_bird_modal) {
+    window.gugugu_bird_modal.refreshI18n();
   }
 
   // Mascot confirms switch

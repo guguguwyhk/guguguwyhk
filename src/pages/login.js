@@ -11,7 +11,7 @@ export function renderLogin(container) {
       <div class="glass-panel fade-in" style="padding: clamp(1.5rem, 5vw, 4rem); text-align: center; max-width: 650px; width: 100%; position: relative;">
         <img src="./removedbg_gugugu.png" alt="Gu Gu Gu" style="width: clamp(120px, 35vw, 220px); filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); margin-bottom: 1.5rem; animation: mascotBounce 2s infinite ease-in-out;" />
         <h1 style="font-size: clamp(2rem, 10vw, 3rem); margin-bottom: 0.5rem; color:var(--primary-color);">Gu Gu Gu</h1>
-        <h2 style="font-size: clamp(1.1rem, 5vw, 1.5rem); font-weight:500; color:var(--text-muted); margin-bottom: 2.5rem;">Campus Ecology Portal</h2>
+        <h2 style="font-size: clamp(1.1rem, 5vw, 1.5rem); font-weight:500; color:var(--text-muted); margin-bottom: 2.5rem;" data-i18n="login-welcome">24/7 Monitoring Smart Website</h2>
         
         <form id="login-form">
           <input type="text" id="username" class="glass-input" placeholder="請輸入你的名字/暱稱" data-i18n-placeholder="login-enter-name" style="margin-bottom: 2rem; padding: 20px; font-size: 1.2rem;" autocomplete="off" />
@@ -25,17 +25,32 @@ export function renderLogin(container) {
 
 
 
+  const BAD_WORDS = [
+    'fuck', 'shit', 'bitch', 'asshole', 'dick', 'pussy', 'nigga', 'nigger', 'bastard',
+    '屌', '戇', '仆街', '鹹濕', '臭嗨', '收皮', '屌你', '死全家'
+  ];
+
   const form = document.getElementById('login-form');
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const name = document.getElementById('username').value.trim();
     
+    // Developer Secret Door
     if (name === "justinisblacknigga") {
       router.navigate('showoff');
       return;
     }
 
-    if(name) {
+    if (name) {
+      // Profanity Filter
+      const hasBadWord = BAD_WORDS.some(word => name.toLowerCase().includes(word));
+      if (hasBadWord) {
+        window.mascot.show();
+        window.mascot.say("哎呀！這個名字不太禮貌喔，換一個吧！Gu Gu!", 5000);
+        document.getElementById('username').value = '';
+        return;
+      }
+
       store.setUserName(name);
       window.mascot.show();
       window.mascot.say(`Gu Gu Gu! 歡迎你，${name}！`, 5000);

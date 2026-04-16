@@ -15,119 +15,19 @@ export function renderShowOff(container) {
 
   container.innerHTML = `
     <style>
-      #showoff-wrapper {
+      #showoff-main {
         width: 100vw; height: 100vh;
         background: radial-gradient(circle at center, #050b18 0%, #010409 100%);
         color: white; font-family: 'Outfit', sans-serif;
         display: flex; flex-direction: column; overflow: hidden;
         position: relative;
       }
-      .exhibit-h1 { font-size: 5rem; font-weight: 900; margin: 0; background: linear-gradient(45deg, #4ade80, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-      .exhibit-panel { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 40px; padding: 2rem; }
-      #live-notification { 
-        position: fixed; top: 120px; right: 40px; 
-        background: var(--primary-color); color: black; 
-        padding: 1.5rem 3rem; border-radius: 100px;
-        font-size: 2rem; font-weight: 900; opacity: 0; transform: translateX(50px);
-        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        z-index: 1000; box-shadow: 0 10px 40px rgba(74, 222, 128, 0.4);
+      .neon-title { 
+        background: linear-gradient(90deg, #4ade80, #3b82f6, #a855f7, #4ade80); 
+        background-size: 200% auto; -webkit-background-clip: text; 
+        -webkit-text-fill-color: transparent; animation: shine 12s linear infinite; 
+        filter: drop-shadow(0 0 20px rgba(74, 222, 128, 0.4)); 
       }
-      .show-notif { opacity: 1 !important; transform: translateX(0) !important; }
-    </style>
-    <div id="showoff-main" style="width:100vw; height:100vh; background:radial-gradient(circle at center, #050b18 0%, #010409 100%); color:white; font-family:'Outfit', sans-serif; display:flex; flex-direction:column; overflow:hidden; position:relative;">
-      
-      <!-- Particles and decorative background -->
-      <div style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; opacity:0.3;">
-        <div style="position:absolute; bottom:0; left:0; width:100%; height:60%; background:linear-gradient(to top, rgba(74, 222, 128, 0.1), transparent); filter:blur(100px);"></div>
-        <div id="bg-glow" style="position:absolute; top:40%; left:50%; transform:translate(-50%, -50%); width:800px; height:800px; background:radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%); filter:blur(50px);"></div>
-      </div>
-
-      <!-- Controls -->
-
-      <!-- Status Indicator -->
-      <div id="conn-status" style="position:fixed; bottom:20px; left:20px; z-index:100; font-size:0.8rem; color:#4ade80; display:flex; align-items:center; gap:8px; opacity:0.6;">
-        <span style="width:8px; height:8px; background:#4ade80; border-radius:50%; display:inline-block; box-shadow:0 0 10px #4ade80;"></span>
-        數據連線中 (LIVE)
-      </div>
-
-      <!-- Main Content Layout -->
-      <div style="flex:1; display:flex; flex-direction:column; padding:2vh 4vw; z-index:1; min-height:0;">
-        
-        <header class="page-header" style="padding-top: 10vh; margin-bottom: 3vh; flex-shrink:0;">
-          <div style="display:flex; flex-direction:column; align-items:flex-start;">
-            <h1 class="page-title neon-title" style="font-size:clamp(4rem, 10vh, 7rem) !important; line-height:1; margin-bottom: 0.5rem;">Gu Gu Gu 🌿</h1>
-            <p style="font-size:clamp(1rem, 2vh, 1.4rem); color:#94a3b8; letter-spacing:4px; text-transform:uppercase; margin-top:0.4rem; opacity:0.8;">Master IDEEA Project Group 4-- 24/7 Monitoring Smart Website</p>
-          </div>
-          <button id="dev-exit" class="btn-secondary btn-back" style="position: fixed; top: 15px; right: 20px; padding: 8px 16px; font-size: 0.9rem; z-index: 1000; transform: scale(0.85); min-width: auto; opacity: 0.7;">← 退出 Exit</button>
-        </header>
-
-        <div style="display:flex; gap:3vw; flex:1; min-height:0; margin-bottom:1vh;">
-          
-          <!-- Left: Video Panel -->
-          <div style="flex:1.5; display:flex; flex-direction:column; gap:1.5vh; min-width:0;">
-            <div class="glass-panel" style="flex:1; display:flex; flex-direction:column; padding:1.5rem; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.1); border-radius:40px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); min-height:0;">
-              <h2 style="font-size:1.5rem; margin-bottom:1.5rem; color:#4ade80; display:flex; align-items:center; gap:12px; flex-shrink:0; font-weight:700;">
-                <span class="rec-dot"></span> 專案宣傳影片
-              </h2>
-              <div style="width:100%; flex:1; background:#000; border-radius:25px; overflow:hidden; position:relative; min-height:0; border:1px solid rgba(255,255,255,0.1);">
-                  <video id="leaderboard-video" style="width:100%; height:100%; border-radius:24px; object-fit:cover; display:block;" autoplay loop muted playsinline>
-                    <source src="./footage/previous_videos/video1.mp4" type="video/mp4" />
-                  </video>
-                <div style="position:absolute; bottom:20px; left:20px; background:rgba(0,0,0,0.6); padding:8px 15px; border-radius:10px; font-size:0.9rem; font-weight:bold; backdrop-filter:blur(5px); transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">Auto-Loop Active</div>
-              </div>
-            </div>
-
-            <!-- Ticker -->
-            <div class="glass-panel" style="height:7vh; min-height:50px; display:flex; align-items:center; overflow:hidden; background:rgba(74, 222, 128, 0.05); border-radius:25px; border:1px solid rgba(74,222,128,0.2); padding:0 2rem;">
-              <div id="ticker" style="white-space:nowrap; font-size:1.4rem; color:#fbbf24; font-weight:800; animation:scrollLeft 20s linear infinite;">
-                ⚡ 本地生態監測中 &nbsp;&nbsp;|&nbsp;&nbsp; 🌲 校園目前的鳥類活動頻率：高 &nbsp;&nbsp;|&nbsp;&nbsp; 🕊️ 感謝參與投票！ &nbsp;&nbsp;|&nbsp;&nbsp; 🌡️ 濕度：65% &nbsp;&nbsp;|&nbsp;&nbsp;
-              </div>
-            </div>
-          </div>
-
-          <!-- Right: Leaderboard & Mascot -->
-          <div style="flex:1; display:flex; flex-direction:column; gap:2vh; min-width:0; margin-top: -3vh;">
-            
-            <div class="glass-panel" style="flex:1.8; display:flex; flex-direction:column; padding:2rem; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.1); border-radius:40px; min-height:0;">
-              <h2 style="font-size:1.6rem; color:#3b82f6; display:flex; align-items:center; gap:15px; margin-bottom:2rem; flex-shrink:0; font-weight:800;">
-                <span style="font-size:2rem; animation:rotate 10s linear infinite;">🏆</span> 即時人氣榜
-              </h2>
-              
-              <div id="lb-container" style="flex:1; display:flex; flex-direction:column; gap:1.2rem; overflow:hidden; padding-right:0; margin-bottom:1rem; pointer-events:none;">
-                <!-- Bird bars injected here - interaction disabled -->
-              </div>
-
-              <div id="live-notif" style="height:40px; margin-top:1rem; text-align:center; font-weight:900; color:#4ade80; font-size:1.2rem; opacity:0; transition:all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); flex-shrink:0;">
-                🚀 收到新投票！
-              </div>
-            </div>
-
-            <!-- Bottom UI Area -->
-            <div style="flex:1; display:flex; justify-content:space-between; align-items:flex-end; min-height:0;">
-              <!-- Mini QR Zone - Scaled up with real image -->
-              <div class="glass-panel" style="width:200px; height:240px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:15px; background:rgba(255,255,255,0.05); border-radius:30px; box-shadow:0 15px 40px rgba(0,0,0,0.4); flex-shrink:0;">
-                <div style="width:160px; height:160px; background:white; padding:10px; border-radius:15px; display:flex; align-items:center; justify-content:center; border: 4px solid #4ade80;">
-                  <img src="./gugugu_qrcode.png" style="width:100%; height:100%; object-fit:contain;" />
-                </div>
-                <span style="font-size:1rem; font-weight:900; color:#4ade80; text-align:center;">手機掃碼投票</span>
-              </div>
-
-              <!-- Mascot area scaled for PC - Unique IDs and adjusted padding -->
-              <div style="position:relative; flex:1; display:flex; justify-content:flex-end; align-items:flex-end; padding-right: 40px;">
-                <div id="exhibit-mascot-bubble" style="position:absolute; bottom:220px; right:80px; background:white; color:#111; padding:12px 20px; border-radius:20px; font-weight:900; font-size:1.1rem; opacity:0; transform:scale(0.8) translateY(20px); transition:all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); white-space:nowrap; z-index:10; box-shadow: 0 10px 40px rgba(0,0,0,0.4); border: 2px solid #4ade80;">
-                  投票中... Gu!
-                </div>
-                <img src="./removedbg_gugugu.png" id="exhibit-mascot-img" style="height:clamp(200px, 30vh, 320px); filter:drop-shadow(0 15px 30px rgba(0,0,0,0.5)); cursor:pointer; animation:mascotSway 5s ease-in-out infinite; transform-origin: bottom center;" />
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <style>
-      .neon-title { background: linear-gradient(90deg, #4ade80, #3b82f6, #a855f7, #4ade80); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shine 12s linear infinite; filter: drop-shadow(0 0 20px rgba(74, 222, 128, 0.4)); }
       @keyframes shine { to { background-position: 200% center; } }
       @keyframes scrollLeft { from { transform: translateX(100%); } to { transform: translateX(-120%); } }
       @keyframes mascotSway { 0%, 100% { transform: rotate(-2deg) scale(1); } 50% { transform: rotate(2deg) scale(1.05) translateY(-5px); } }
@@ -136,60 +36,168 @@ export function renderShowOff(container) {
       @keyframes blink { 0%, 100% { opacity:1; } 50% { opacity:0.3; } }
       
       .chart-row { 
-        display: flex; flex-direction: column; gap: 0.5rem; 
+        display: flex; flex-direction: column; 
         opacity: 0; transform: translateX(-30px);
         animation: rowEntrance 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
       }
-      @keyframes rowEntrance {
-        to { opacity: 1; transform: translateX(0); }
-      }
-      .bar-fill { height: 18px; background: linear-gradient(90deg, #3b82f6, #4ade80); border-radius: 10px; transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; overflow: hidden; box-shadow: 0 0 15px rgba(74, 222, 128, 0.2); }
-      .bar-fill::after { content:""; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); animation: stream 2s infinite; }
-      @keyframes stream { 0% { left: -100%; } 100% { left: 100%; } }
-      .bar-pulse { animation: barGrow 0.6s ease-out; }
-      @keyframes barGrow { 0%, 100% { transform: scale(1); filter: brightness(1); } 50% { transform: scale(1.02); filter: brightness(1.3); } }
+      @keyframes rowEntrance { to { opacity: 1; transform: translateX(0); } }
       
-      .bird-thumb { width: 44px; height: 44px; border-radius: 50%; border: 2px solid #4ade80; object-fit: cover; }
+      .bar-fill { height: 100%; border-radius: 12px; transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; overflow: hidden; }
+      .bar-fill::after { 
+        content:""; position:absolute; top:0; left:-100%; width:100%; height:100%; 
+        background:linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); 
+        animation: stream 2s infinite; 
+      }
+      @keyframes stream { 0% { left: -100%; } 100% { left: 100%; } }
+      .bar-pulse { animation: barGrow 0.8s ease-out; }
+      @keyframes barGrow { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); filter: brightness(1.5); } }
+
+      /* Cool Animations */
+      .floating-bird { animation: float 3s ease-in-out infinite; }
+      @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+      
+      .shimmer-text {
+        background: linear-gradient(90deg, #fff, #4ade80, #3b82f6, #fff);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: shimmer 5s linear infinite;
+      }
+      @keyframes shimmer { to { background-position: 200% center; } }
+      
+      .mascot-jump { animation: mascotJump 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important; }
+      @keyframes mascotJump {
+        0%, 100% { transform: scale(1) translateY(0); }
+        50% { transform: scale(1.1) translateY(-30px); }
+      }
     </style>
+
+    <div id="showoff-main" style="width:100vw; height:100vh; background:radial-gradient(circle at center, #050b18 0%, #010409 100%); color:white; font-family:'Outfit', sans-serif; display:flex; flex-direction:column; overflow:hidden; position:relative;">
+      
+      <div id="showoff-content" style="flex:1; display:flex; flex-direction:column; padding:2vh 5vw; z-index:1; min-height:0; justify-content: flex-start;">
+        
+        <header class="page-header" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2vh; flex-shrink:0; width: 100%;">
+          <h1 class="page-title neon-title" style="font-size: clamp(3rem, 5vw, 5rem) !important; line-height:1; margin: 0;">Gu Gu Gu 🌿</h1>
+          <p style="font-size: clamp(0.8rem, 1.1vw, 1.1rem); color:#94a3b8; letter-spacing: 2px; text-transform:uppercase; font-weight:700; margin: 0; opacity: 0.8; white-space: nowrap;">Master IDEEA Project Group 4 -- 24/7 Monitoring Smart Website</p>
+          <button id="dev-exit" class="btn-secondary btn-back" style="position: fixed; top: 20px; right: 25px; min-width: auto; opacity: 0.3;">← Exit</button>
+        </header>
+
+        <div id="main-grid" style="display:flex; gap:4vw; flex:1; min-height:0; align-items: stretch;">
+          
+          <div style="flex:1.4; display:flex; flex-direction:column; gap:3vh; min-width:0;">
+            <div class="glass-panel" style="flex:1; display:flex; flex-direction:column; padding:2rem; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.1); border-radius:40px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); min-height:0;">
+              <h2 style="font-size:1.8rem; margin-bottom:1.5rem; color:#4ade80; display:flex; align-items:center; gap:15px; flex-shrink:0; font-weight:800;">
+                <span class="rec-dot"></span> 專案宣傳影片 LIVE
+              </h2>
+              <div style="width:100%; flex:1; background:#000; border-radius:30px; overflow:hidden; position:relative; border:1px solid rgba(255,255,255,0.15);">
+                  <video id="leaderboard-video" style="width:100%; height:100%; border-radius:30px; object-fit:cover;" autoplay loop muted playsinline>
+                    <source src="./footage/previous_videos/video1.mp4" type="video/mp4" />
+                  </video>
+              </div>
+            </div>
+            <div class="glass-panel" style="height:10vh; min-height:80px; display:flex; align-items:center; overflow:hidden; background:rgba(74, 222, 128, 0.05); border-radius:30px; border:1px solid rgba(74,222,128,0.2); padding:0 3rem;">
+              <div id="ticker" style="white-space:nowrap; font-size:1.6rem; color:#fbbf24; font-weight:800; animation:scrollLeft 25s linear infinite;">
+                ⚡ 本地生態監測中 &nbsp;&nbsp;|&nbsp;&nbsp; 🌲 校園目前的鳥類活動頻率：高 &nbsp;&nbsp;|&nbsp;&nbsp; 🕊️ 感謝參與投票！ &nbsp;&nbsp;|&nbsp;&nbsp; ⛅ 天氣：晴 &nbsp;&nbsp;|&nbsp;&nbsp;
+              </div>
+            </div>
+          </div>
+
+          <div style="flex:1; display:flex; flex-direction:column; gap:3vh; min-width:0;">
+            <div class="glass-panel" style="flex:1; display:flex; flex-direction:column; padding:2rem; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.1); border-radius:40px; min-height:0; box-shadow: 0 20px 50px rgba(0,0,0,0.4);">
+              <h2 style="font-size:1.8rem; color:#3b82f6; display:flex; align-items:center; gap:12px; margin-bottom:1rem; flex-shrink:0; font-weight:800;">
+                <span style="font-size:2rem; animation:rotate 15s linear infinite;">🏆</span> 即時人氣榜 (TOP 3)
+              </h2>
+              <div id="lb-container" style="flex:1; display:flex; flex-direction:column; pointer-events:none;">
+                <!-- Bird bars injected here -->
+              </div>
+            </div>
+
+            <div style="height: 30vh; max-height: 300px; display:flex; gap:2vw; align-items: stretch; min-height:0; flex-shrink:0;">
+              <div class="glass-panel" style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; background:rgba(255,255,255,0.03); border-radius:30px; border:1px solid rgba(255,255,255,0.1); box-shadow:0 15px 40px rgba(0,0,0,0.4);">
+                <div style="width:20vh; height:20vh; max-width:180px; max-height:180px; background:white; padding:12px; border-radius:25px; display:flex; align-items:center; justify-content:center; border: 5px solid #4ade80;">
+                  <img src="./gugugu_qrcode.png" style="width:100%; height:100%; object-fit:contain;" />
+                </div>
+                <span style="font-size:1.1rem; font-weight:900; color:#4ade80; letter-spacing:1px;">掃碼投票</span>
+              </div>
+              <div class="glass-panel" style="flex:1.2; position:relative; display:flex; justify-content:center; align-items:flex-end; background:rgba(255,255,255,0.03); border-radius:30px; border:1px solid rgba(255,255,255,0.1); overflow:visible;">
+                <div id="exhibit-mascot-bubble" style="position:absolute; top:-75px; right:50%; transform: translateX(50%) scale(0.8); background:white; color:#111; padding:10px 20px; border-radius:25px; font-weight:900; font-size:1rem; opacity:0; transition:all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); white-space:nowrap; z-index:10; box-shadow: 0 15px 45px rgba(0,0,0,0.5); border: 3px solid #4ade80; min-width: 150px; text-align: center;">
+                  投票中... Gu!
+                </div>
+                <img src="./removedbg_gugugu.png" id="exhibit-mascot-img" style="height:28vh; max-height:280px; filter:drop-shadow(0 20px 40px rgba(0,0,0,0.5)); cursor:pointer; animation:mascotSway 5s ease-in-out infinite; transform-origin: bottom center;" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   `;
 
-  // Logic & Polling
   const scriptUrl = "https://script.google.com/macros/s/AKfycbwRknj4-6Lphd0sz-4rK-v-VhQ3X-PmKah55lFmaVpuPMe22eVZHqNNzlOvNiNUECeR/exec";
   const lbContainer = container.querySelector('#lb-container');
-  const notif = container.querySelector('#live-notif');
   const mascot = container.querySelector('#exhibit-mascot-img');
   const bubble = container.querySelector('#exhibit-mascot-bubble');
   
   let votingData = [
     { bird: '黑臉琵鷺', votes: 0, img: './footage/encyclopedia/images/黑臉琵鷺.jpg' },
     { bird: '紅耳鵯', votes: 0, img: './footage/encyclopedia/images/紅耳鵯.jpg' },
-    { bird: '珠頸斑鳩', votes: 0, img: './footage/encyclopedia/images/珠頸斑鳩.jpg' },
-    { bird: '樹麻雀', votes: 0, img: './footage/encyclopedia/images/樹麻雀.jpg' },
-    { bird: '噪鵑', votes: 0, img: './footage/encyclopedia/images/噪鵑.jpg' }
+    { bird: '珠頸斑鳩', votes: 0, img: './footage/encyclopedia/images/珠頸斑鳩.jpg' }
   ];
   let lastProcessedVoteId = null;
 
   function renderLeaderboard(targetBird = null) {
     if (!lbContainer) return;
-    const sorted = [...votingData].sort((a, b) => b.votes - a.votes).slice(0, 6);
+    const sorted = [...votingData].sort((a, b) => b.votes - a.votes).slice(0, 3);
     const maxVotes = Math.max(...sorted.map(b => b.votes)) || 1;
+
+    lbContainer.style.display = 'flex';
+    lbContainer.style.flexDirection = 'column';
+    lbContainer.style.justifyContent = 'space-around';
+    lbContainer.style.height = '100%';
+
+    const colors = [
+      { main: '#fbbf24', secondary: '#f59e0b', shadow: 'rgba(251, 191, 36, 0.4)' },
+      { main: '#e2e8f0', secondary: '#94a3b8', shadow: 'rgba(226, 232, 240, 0.4)' },
+      { main: '#cd7f32', secondary: '#b87333', shadow: 'rgba(205, 127, 50, 0.4)' }
+    ];
 
     lbContainer.innerHTML = sorted.map((item, idx) => {
       const percentage = (item.votes / maxVotes) * 100;
       const isTarget = item.bird === targetBird;
       const birdImg = item.img || `./footage/encyclopedia/images/${item.bird}.jpg`;
+      const theme = colors[idx] || colors[2];
+
       return `
-        <div class="chart-row" style="animation-delay: ${idx * 0.1}s">
-          <div style="display:flex; justify-content:space-between; align-items:center; font-size:1.1rem; font-weight:800; color:#f8fafc; margin-bottom:4px;">
-            <div style="display:flex; align-items:center; gap:12px;">
-              <span style="color:#4ade80; width:20px;">${idx+1}</span>
-              <img src="${birdImg}" class="bird-thumb" onerror="this.src='./removedbg_gugugu.png'">
-              <span>${item.bird}</span>
+        <div class="chart-row premium-row" style="animation-delay: ${idx * 0.2}s; flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0;">
+          <!-- Top Row Grid -->
+          <div style="display:grid; grid-template-columns: clamp(50px, 5vw, 80px) clamp(80px, 8vw, 120px) 1fr clamp(100px, 10vw, 150px); align-items:center; margin-bottom:10px; width:100%;">
+            
+            <!-- Rank Column -->
+            <div style="display:flex; justify-content:center;">
+              <span style="color:${theme.main}; font-size: clamp(2.5rem, 3.8vw, 4.5rem); font-weight: 950; text-shadow: 0 0 15px ${theme.shadow}; line-height:1;">${idx+1}</span>
             </div>
-            <span style="color:#4ade80; font-size:1.4rem;">${item.votes} <small style="font-size:0.8rem; opacity:0.6;">票</small></span>
+
+            <!-- Image Column -->
+            <div style="display:flex; justify-content:center;">
+              <div style="width: clamp(65px, 6.5vw, 95px); height: clamp(65px, 6.5vw, 95px); border: 3px solid ${theme.main}; box-shadow: 0 0 25px ${theme.shadow}; border-radius: 22px; overflow:hidden;">
+                <img src="${birdImg}" style="width: 100%; height: 100%; object-fit: cover;">
+              </div>
+            </div>
+
+            <!-- Name Column -->
+            <div style="padding-left: 10px;">
+              <span class="shimmer-text" style="font-size: clamp(1.6rem, 2.2vw, 2.8rem); font-weight: 900; letter-spacing: 1px; white-space: nowrap;">${item.bird}</span>
+            </div>
+
+            <!-- Votes Column -->
+            <div style="text-align: right; background: rgba(0,0,0,0.3); padding: 8px 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05);">
+              <div style="color:${theme.main}; font-size: clamp(1.8rem, 2.8vw, 3.2rem); font-weight: 950; line-height: 1;">${item.votes}</div>
+              <small style="font-size:0.75rem; color:#4ade80; font-weight:800; opacity:0.8; letter-spacing: 2px;">VOTES</small>
+            </div>
           </div>
-          <div style="width:100%; height:18px; background:rgba(255,255,255,0.05); border-radius:10px; overflow:hidden; border:1px solid rgba(255,255,255,0.05);">
-            <div id="bar-${item.bird}" class="bar-fill ${isTarget ? 'bar-pulse' : ''}" style="width:${percentage}%;"></div>
+
+          <!-- Bottom Bar Full Width within row padding -->
+          <div style="width:100%; height:16px; background:rgba(255,255,255,0.03); border-radius:8px; overflow:hidden; border:1px solid rgba(255,255,255,0.1); box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);">
+            <div id="bar-${item.bird}" class="bar-fill ${isTarget ? 'bar-pulse' : ''}" style="width:${percentage}%; background: linear-gradient(90deg, ${theme.secondary}, ${theme.main}, ${theme.secondary}); background-size: 200% 100%;"></div>
           </div>
         </div>
       `;
@@ -197,36 +205,32 @@ export function renderShowOff(container) {
   }
 
   const triggerMascotNews = (text) => {
-    if (!bubble) return;
+    if (!bubble || !mascot) return;
+    mascot.classList.remove('mascot-jump');
+    void mascot.offsetWidth;
+    mascot.classList.add('mascot-jump');
     bubble.textContent = text;
     bubble.style.opacity = '1';
-    bubble.style.transform = 'scale(1) translateY(0)';
+    bubble.style.transform = 'translateX(50%) scale(1) translateY(0)';
     setTimeout(() => {
-      // Use the same bubble if another notification hasn't replaced the text
       if (bubble && bubble.textContent === text) {
         bubble.style.opacity = '0';
-        bubble.style.transform = 'scale(0.8) translateY(20px)';
+        bubble.style.transform = 'translateX(50%) scale(0.8) translateY(20px)';
       }
-    }, 5000); // 5 seconds duration
+    }, 6000);
   };
 
   mascot.onclick = () => triggerMascotNews("我是展覽限定版的 Gu Gu！✨");
 
-  let isFetching = false;
   async function fetchLiveResults() {
-    if (isFetching) return;
-    isFetching = true;
-
     try {
       const res = await fetch(`${scriptUrl}?cb=${Date.now()}&action=get`);
-      
       if (res.ok) {
         const json = await res.json();
         const counts = json.results || {};
         const lastVote = json.lastVote;
         let changedBird = null;
 
-        // 1. Update Vote Counts
         Object.keys(counts).forEach(birdName => {
           let b = votingData.find(v => v.bird === birdName);
           if (b) {
@@ -234,32 +238,19 @@ export function renderShowOff(container) {
               b.votes = counts[birdName];
               changedBird = birdName;
             }
-          } else {
-            // New bird discovered
-            votingData.push({ bird: birdName, votes: counts[birdName] });
-            changedBird = birdName;
           }
         });
 
-        // 2. Trigger Mascot Notification if new vote detected
         if (lastVote && lastVote.id !== lastProcessedVoteId) {
-          // If it's not the first load, announce it
           if (lastProcessedVoteId !== null) {
-            triggerMascotNews(`${lastVote.user} 剛剛投給了 ${lastVote.bird}！Gu!`);
-            
-            notif.textContent = `⚡ 實時更新：${lastVote.user} 投票成功！`;
-            notif.style.opacity = '1';
-            setTimeout(() => notif.style.opacity = '0', 3000);
+            triggerMascotNews(`${lastVote.user} 投給了 ${lastVote.bird}！Gu!`);
           }
           lastProcessedVoteId = lastVote.id;
         }
-
         renderLeaderboard(changedBird);
       }
     } catch (e) {
       console.log("Polling error:", e);
-    } finally {
-      isFetching = false;
     }
   }
 
@@ -270,8 +261,6 @@ export function renderShowOff(container) {
     clearInterval(pollInterval);
     container.style.padding = originalPadding;
     document.body.style.overflow = originalOverflow;
-    
-    // Restore global elements
     if (langBtn) langBtn.style.display = 'flex';
     if (globalMascot) globalMascot.style.display = 'flex';
   };
@@ -283,4 +272,3 @@ export function renderShowOff(container) {
 
   return cleanup;
 }
-

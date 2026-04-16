@@ -48,9 +48,9 @@ export const router = {
   },
 
   _renderPage(path) {
-    // simple routing
-    this.appContainer.innerHTML = ''; // clear current
-    this.appContainer.className = 'page page-enter-active';
+    // Clear and reset state
+    this.appContainer.innerHTML = ''; 
+    this.appContainer.className = 'page page-transition-enter';
     
     const finalize = () => {
       applyTranslation(store.getLanguage(), true);

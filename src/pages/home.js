@@ -1,4 +1,5 @@
 import { store } from '../store.js';
+import { translations, applyTranslation } from '../i18n.js';
 
 const HIGHLIGHTS_ZH = [
   "紅耳鵯最喜歡在校園的榕樹上聚集！",
@@ -43,7 +44,7 @@ export function renderHome(container) {
         <h3 id="daily-title" style="color:#86efac; margin-bottom:0.5rem;" data-i18n="daily-highlight">✨ 每日鳥事</h3>
         <p id="daily-fact" style="font-size:1.1rem; line-height:1.6; word-wrap: break-word;">${randomFact}</p>
       </div>
-      <img src="./footage/about_us/birdhouse2.jpeg" class="daily-img" onerror="this.style.display='none'" />
+      <img src="/footage/about_us/birdhouse2.jpeg" class="daily-img" onerror="this.style.display='none'" />
     </div>
 
     <!-- Grid Nav -->
@@ -122,13 +123,24 @@ export function renderHome(container) {
   }
 
   // Sync UI with current lang
-  import('../i18n.js').then(m => m.applyTranslation(lang, true));
+  applyTranslation(lang, true);
+
+  // Trigger Vote Modal only once after login
+  if (sessionStorage.getItem('show_vote_modal') === 'true') {
+    setTimeout(() => {
+      renderVoteModal(container);
+      sessionStorage.removeItem('show_vote_modal');
+    }, 600); // Slight delay for smooth entrance after login
+  }
 
   // Returning cleanup for the router
   return () => {
-    // Remove any lingering modals from the body
-    const lingeringModal = document.querySelector('.centered-modal-overlay');
-    if (lingeringModal) lingeringModal.remove();
+    // ONLY remove the vote modal, NOT the global bird-modal!
+    const lingeringModals = document.querySelectorAll('.centered-modal-overlay');
+    lingeringModals.forEach(m => {
+      // If it doesn't have the global ID, it's a temporary one
+      if (m.id !== 'bird-modal') m.remove();
+    });
   };
 }
 
@@ -155,40 +167,61 @@ function renderVoteModal(container) {
   const scriptUrl = "https://script.google.com/macros/s/AKfycbwRknj4-6Lphd0sz-4rK-v-VhQ3X-PmKah55lFmaVpuPMe22eVZHqNNzlOvNiNUECeR/exec";
 
   const pollBirds = [
-    { name: '黑臉琵鷺', img: './footage/encyclopedia/images/黑臉琵鷺.jpg' },
-    { name: '紅耳鵯', img: './footage/encyclopedia/images/紅耳鵯.jpg' },
-    { name: '珠頸斑鳩', img: './footage/encyclopedia/images/珠頸斑鳩.jpg' },
-    { name: '灰斑鳩', img: './footage/encyclopedia/images/灰斑鳩.jpg' },
-    { name: '樹麻雀', img: './footage/encyclopedia/images/樹麻雀.jpg' },
-    { name: '牛背鷺', img: './footage/encyclopedia/images/牛背鷺.jpg' },
-    { name: '鵲鴝', img: './footage/encyclopedia/images/鵲鴝.jpg' },
-    { name: '普通翠鳥', img: './footage/encyclopedia/images/普通翠鳥.jpg' },
-    { name: '綠背姬鶲', img: './footage/encyclopedia/images/綠背姬鶲.jpg' },
-    { name: '黃眉柳鶯', img: './footage/encyclopedia/images/黃眉柳鶯.jpg' },
-    { name: '洋燕', img: './footage/encyclopedia/images/洋燕.jpg' },
-    { name: '原鴿', img: './footage/encyclopedia/images/原鴿.jpg' },
-    { name: '黑領椋鳥', img: './footage/encyclopedia/images/黑領椋鳥.jpg' },
-    { name: '噪鵑', img: './footage/encyclopedia/images/噪鵑.jpg' }
+    { name: '黑臉琵鷺', key: 'bird-spoonbill', img: './footage/encyclopedia/images/黑臉琵鷺.jpg' },
+    { name: '紅耳鵯', key: 'bird-bulbul', img: './footage/encyclopedia/images/紅耳鵯.jpg' },
+    { name: '珠頸斑鳩', key: 'bird-dove-spotted', img: './footage/encyclopedia/images/珠頸斑鳩.jpg' },
+    { name: '灰斑鳩', key: 'bird-dove-collared', img: './footage/encyclopedia/images/灰斑鳩.jpg' },
+    { name: '樹麻雀', key: 'bird-sparrow', img: './footage/encyclopedia/images/樹麻雀.jpg' },
+    { name: '牛背鷺', key: 'bird-egret', img: './footage/encyclopedia/images/牛背鷺.jpg' },
+    { name: '鵲鴝', key: 'bird-magpie', img: './footage/encyclopedia/images/鵲鴝.jpg' },
+    { name: '普通翠鳥', key: 'bird-kingfisher', img: './footage/encyclopedia/images/普通翠鳥.jpg' },
+    { name: '綠背姬鶲', key: 'bird-flycatcher', img: './footage/encyclopedia/images/綠背姬鶲.jpg' },
+    { name: '黃眉柳鶯', key: 'bird-warbler', img: './footage/encyclopedia/images/黃眉柳鶯.jpg' },
+    { name: '洋燕', key: 'bird-swallow', img: './footage/encyclopedia/images/洋燕.jpg' },
+    { name: '原鴿', key: 'bird-pigeon', img: './footage/encyclopedia/images/原鴿.jpg' },
+    { name: '黑領椋鳥', key: 'bird-starling', img: './footage/encyclopedia/images/黑領椋鳥.jpg' },
+    { name: '噪鵑', key: 'bird-koel', img: './footage/encyclopedia/images/噪鵑.jpg' }
   ];
 
   const renderInitialState = () => {
     modalContent.innerHTML = `
-      <div style="text-align:center; margin-bottom:2.5rem;">
-        <div style="background:var(--primary-color); color:black; display:inline-block; padding:6px 20px; border-radius:30px; font-size:0.8rem; font-weight:900; margin-bottom:1rem; letter-spacing:2px;">CAMPUS LIVE POLL</div>
-        <h2 class="modal-title-fluid" style="color:#86efac; margin-bottom:0.5rem;" data-i18n="vote-manual">${lang === 'en' ? 'Favourite Bird Vote 🗳️' : '心水鳥類投票 🗳️'}</h2>
-        <p style="font-size:1.1rem; color:var(--text-muted);" data-i18n="vote-subtitle">${lang === 'en' ? 'Select the bird you hope to see on campus today!' : '選出你今天最想在校園見到的鳥類！'}</p>
-        <button id="close-vote" style="position:absolute; top:20px; right:20px; background:rgba(255,255,255,0.05); border:none; color:white; font-size:2rem; cursor:pointer; width:50px; height:50px; border-radius:50%;">&times;</button>
+      <style>
+        .poll-card {
+          opacity: 0;
+          transform: translateY(20px);
+          animation: cardAppear 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+        @keyframes cardAppear {
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .poll-card:hover {
+          border-color: #4ade80 !important;
+          box-shadow: 0 0 25px rgba(74, 222, 128, 0.2) !important;
+        }
+        /* Custom scrollbar for better orderliness */
+        .poll-grid-container::-webkit-scrollbar { width: 8px; }
+        .poll-grid-container::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); border-radius: 10px; }
+        .poll-grid-container::-webkit-scrollbar-thumb { background: rgba(134, 239, 172, 0.3); border-radius: 10px; }
+      </style>
+
+      <div style="text-align:center; margin-bottom:2.5rem; position: relative; padding-top: 2rem;">
+        <div style="background:var(--primary-color); color:black; display:inline-block; padding:10px 35px; border-radius:30px; font-size:0.95rem; font-weight:950; margin-bottom:1.5rem; letter-spacing:4px; box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4); text-transform: uppercase;">CAMPUS LIVE POLL</div>
+        <h2 class="modal-title-fluid" style="color:#86efac; margin-bottom:0.8rem; font-size: 2.8rem; letter-spacing: -0.5px; font-family: 'Outfit', sans-serif;" data-i18n="vote-manual">${translations['vote-manual'][lang]}</h2>
+        <p style="font-size:1.35rem; color:var(--text-muted); max-width: 650px; margin: 0 auto;" data-i18n="vote-subtitle">${translations['vote-subtitle'][lang]}</p>
+        <button id="close-vote" style="position:absolute; top: 10px; right: 0; background:rgba(255,255,255,0.08); border:none; color:white; font-size:2.8rem; cursor:pointer; width:70px; height:70px; border-radius:50%; display:flex; align-items:center; justify-content:center; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index:10;">&times;</button>
       </div>
 
-      <div class="poll-grid" style="display:grid;">
-        ${pollBirds.map(b => `
-          <div class="poll-card" data-bird="${b.name}">
-            <img src="${b.img}" loading="lazy" />
-            <div class="poll-card-overlay">
-              <span style="font-weight:900; font-size:1rem; text-shadow:0 2px 4px rgba(0,0,0,0.8);">${b.name}</span>
+      <div class="poll-grid-container" style="max-height: 580px; overflow-y: auto; padding: 20px; margin: 0;">
+        <div class="poll-grid" style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 2rem;">
+          ${pollBirds.map((b, idx) => `
+            <div class="poll-card" data-bird="${b.name}" style="aspect-ratio: 1/1; position: relative; border-radius: 24px; overflow: hidden; border: 2px solid rgba(255,255,255,0.08); cursor: pointer; transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); animation-delay: ${idx * 0.05}s; background: rgba(255,255,255,0.02);">
+              <img src="${b.img}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;" onerror="this.src='./removedbg_gugugu.png'" />
+              <div class="poll-card-overlay" style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 40%, transparent 100%); display: flex; align-items: flex-end; justify-content: center; padding: 20px; transition: all 0.4s ease;">
+                <span data-i18n="${b.key}" style="font-weight: 900; font-size: 1.15rem; text-align: center; line-height: 1.1; color: #fff; text-shadow: 0 4px 8px rgba(0,0,0,0.5); word-break: break-word;">${translations[b.key][lang]}</span>
+              </div>
             </div>
-          </div>
-        `).join('')}
+          `).join('')}
+        </div>
       </div>
     `;
 
@@ -235,29 +268,42 @@ function renderVoteModal(container) {
       const total = sorted.reduce((sum, b) => sum + b.votes, 0);
 
       modalContent.innerHTML = `
-        <div style="text-align:center; margin-bottom:2rem;">
-          <h2 style="font-size:clamp(1.8rem, 5vw, 2.5rem); color:#86efac;" data-i18n="poll-live-rank">📊 即時投票排行</h2>
-          <p style="color:var(--text-muted);">目前共有 ${total} 位探險家參與投票</p>
+        <div style="text-align:center; margin-bottom:2rem; animation: slideInRight 0.8s cubic-bezier(0.19, 1, 0.22, 1);">
+          <h2 style="font-size:clamp(1.8rem, 5vw, 2.5rem); color:#86efac; margin-bottom:0.5rem;" data-i18n="poll-live-rank">📊 即時投票排行</h2>
+          <p style="color:var(--text-muted); font-size:1.1rem;">目前共有 <span style="color:#86efac; font-weight:900; font-size:1.4rem;">${total}</span> 位探險家參與投票</p>
         </div>
         
-        <div style="max-width:800px; margin:0 auto; display:flex; flex-direction:column; gap:1.2rem; padding: 0 1rem;">
+        <div class="animate-ready" style="max-width:800px; margin:0 auto; display:flex; flex-direction:column; gap:1.4rem; padding: 0 1rem;">
           ${sorted.slice(0, 6).map((b, idx) => `
-            <div class="result-row">
-              <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-weight:800; font-size:1.1rem;">
-                <span>${idx + 1}. ${b.name}</span>
-                <span style="color:#86efac;">${b.votes} 票</span>
+            <div class="result-row stagger-item" style="animation-delay: ${idx * 0.15}s">
+              <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-weight:800; font-size:1.1rem; align-items:center;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                  <span style="color:rgba(255,255,255,0.3); font-size:0.9rem;">#${idx + 1}</span>
+                  <span style="letter-spacing:1px;">${b.name}</span>
+                </div>
+                <span style="color:#86efac; font-size:1.2rem; filter: drop-shadow(0 0 10px rgba(134,239,172,0.3));">${b.votes} <small style="font-size:0.7rem; opacity:0.6;">VOTES</small></span>
               </div>
-              <div class="chart-bar-container" style="height:12px; background:rgba(255,255,255,0.05); border-radius:10px; overflow:hidden;">
-                <div class="chart-bar-fill" style="width: ${(sorted[0].votes > 0 ? (b.votes / sorted[0].votes * 100) : 0)}%; height:100%; background:linear-gradient(45deg, #3b82f6, #4ade80); border-radius:10px; transition: width 1s ease-out;"></div>
+              <div class="chart-bar-container glint-effect" style="height:14px; background:rgba(255,255,255,0.05); border-radius:10px; overflow:hidden; border:1px solid rgba(255,255,255,0.05);">
+                <div class="chart-bar-fill" style="width: 0%; height:100%; background:linear-gradient(90deg, #3b82f6, #4ade80, #86efac); border-radius:10px; transition: width 1.5s cubic-bezier(0.19, 1, 0.22, 1); transition-delay: ${0.4 + idx * 0.1}s;"></div>
               </div>
             </div>
           `).join('')}
         </div>
 
-        <div style="text-align:center; margin-top:3rem;">
-          <button class="btn-primary" id="finish-vote" style="padding:15px 40px; font-size:1.2rem;">進入校園探索 ✨</button>
+        <div style="text-align:center; margin-top:3.5rem; animation: fadeInUp 0.8s ease backwards; animation-delay: 1.2s;">
+          <button class="btn-primary liquid-btn glint-effect" id="finish-vote" style="padding:18px 50px; font-size:1.2rem; border-radius:30px; box-shadow: 0 10px 30px rgba(34, 197, 94, 0.4);">
+             進入校園探索 ✨
+          </button>
         </div>
       `;
+
+      // Trigger bar animations after content is set
+      setTimeout(() => {
+        sorted.slice(0, 6).forEach((b, idx) => {
+          const fill = modalContent.querySelectorAll('.chart-bar-fill')[idx];
+          if (fill) fill.style.width = (sorted[0].votes > 0 ? (b.votes / sorted[0].votes * 100) : 0) + '%';
+        });
+      }, 100);
 
       modalContent.querySelector('#finish-vote').onclick = () => {
         modal.style.opacity = '0';
