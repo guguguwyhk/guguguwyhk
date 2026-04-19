@@ -50,52 +50,70 @@ export const router = {
   _renderPage(path) {
     // Clear and reset state
     this.appContainer.innerHTML = ''; 
-    this.appContainer.className = 'page page-transition-enter';
+    this.appContainer.className = 'page page-enter-active';
     
     const finalize = () => {
-      applyTranslation(store.getLanguage(), true);
+      try {
+        applyTranslation(store.getLanguage(), true);
+      } catch(e) {
+        console.error('Translation error:', e);
+      }
     };
 
     let cleanup = null;
-    switch(path) {
-      case 'login':
-        cleanup = renderLogin(this.appContainer);
-        finalize();
-        break;
-      case 'home':
-        cleanup = renderHome(this.appContainer);
-        finalize();
-        break;
-      case 'encyclopedia':
-        cleanup = renderEncyclopedia(this.appContainer);
-        finalize();
-        break;
-      case 'stream':
-        cleanup = renderStream(this.appContainer);
-        finalize();
-        break;
-      case 'map':
-        cleanup = renderMap(this.appContainer);
-        finalize();
-        break;
-      case 'game':
-        cleanup = renderGame(this.appContainer);
-        finalize();
-        break;
-      case 'about':
-        cleanup = renderAbout(this.appContainer);
-        finalize();
-        break;
-      case 'showoff':
-        // Handle dynamic import case
-        import('./pages/showoff.js').then(module => {
-          this.currentCleanup = module.renderShowOff(this.appContainer);
+    try {
+      switch(path) {
+        case 'login':
+          cleanup = renderLogin(this.appContainer);
           finalize();
-        });
-        break;
-      default:
-        cleanup = renderLogin(this.appContainer);
-        finalize();
+          break;
+        case 'home':
+          cleanup = renderHome(this.appContainer);
+          finalize();
+          break;
+        case 'encyclopedia':
+          cleanup = renderEncyclopedia(this.appContainer);
+          finalize();
+          break;
+        case 'stream':
+          cleanup = renderStream(this.appContainer);
+          finalize();
+          break;
+        case 'map':
+          cleanup = renderMap(this.appContainer);
+          finalize();
+          break;
+        case 'game':
+          cleanup = renderGame(this.appContainer);
+          finalize();
+          break;
+        case 'about':
+          cleanup = renderAbout(this.appContainer);
+          finalize();
+          break;
+        case 'showoff':
+          import('./pages/showoff.js').then(module => {
+            if (this.currentPath === 'showoff') {
+              this.currentCleanup = module.renderShowOff(this.appContainer);
+              finalize();
+            }
+          }).catch(err => {
+            console.error('Failed to load ShowOff page:', err);
+            this.navigate('home');
+          });
+          break;
+        default:
+          cleanup = renderLogin(this.appContainer);
+          finalize();
+      }
+    } catch (err) {
+      console.error(`CRITICAL: Failed to render page "${path}":`, err);
+      // Fallback to home if something crashed
+      if (path !== 'home') {
+        this.navigate('home');
+      } else {
+        this.appContainer.innerHTML = `<div class="glass-panel" style="margin:2rem; padding:2rem; text-align:center;"><h2>Oops! Something went wrong.</h2><button class="btn-primary" onclick="location.reload()">Reload Page</button></div>`;
+      }
     }
     return cleanup;
   },

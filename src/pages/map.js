@@ -15,6 +15,7 @@ export function renderMap(container) {
         </div>
 
         <!-- Embedded Google Slides Presentation -->
+        <!-- We use pointer-events: none to prevent mobile app redirects and PC arrow key navigation -->
         <iframe 
           id="slides-iframe"
           src="https://docs.google.com/presentation/d/1VSy2uOezuxn5Yt3TwVZJix5QXO6nm9RgnlIfarfubPE/embed?start=false&loop=false&delayms=3000&rm=minimal&slide=id.gc5ddde5fd9_2_124" 
@@ -24,8 +25,11 @@ export function renderMap(container) {
           allowfullscreen="true" 
           mozallowfullscreen="true" 
           webkitallowfullscreen="true"
-          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; opacity: 0; transition: opacity 0.8s ease;">
+          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; opacity: 0; transition: opacity 0.8s ease; pointer-events: none; user-select: none;">
         </iframe>
+        
+        <!-- Optional: A clear overlay to catch clicks if needed, though pointer-events:none on iframe is usually enough -->
+        <div style="position: absolute; inset: 0; z-index: 10;"></div>
       </div>
     </div>
   `;
@@ -47,7 +51,14 @@ export function renderMap(container) {
     window.mascot.say("正在為你準備校園地圖！Gu Gu!");
   }
 
-  iframe.onload = () => {
+  // SNAPPY LOAD LOGIC: 
+  // 1. Hide as soon as iframe triggers onload
+  // 2. BUT also force-hide after 1.5s if it's taking too long (Google Slides can be slow)
+  let loadFinished = false;
+  const finishLoading = () => {
+    if (loadFinished) return;
+    loadFinished = true;
+    
     loader.style.opacity = '0';
     setTimeout(() => {
       loader.classList.add('hidden');
@@ -58,11 +69,16 @@ export function renderMap(container) {
         window.mascot.img.src = './removedbg_gugugu.png';
         window.mascot.say("這裡是華仁生態地圖！Gu!");
       }
-    }, 500);
+    }, 300); // Snappier 300ms instead of 500ms
   };
 
+  iframe.onload = finishLoading;
+  
+  // Hard timeout: 1.5 seconds max wait
+  setTimeout(finishLoading, 1500);
+
   return () => {
-    // Basic cleanup
+    loadFinished = true; // prevent late triggers after navigation
   };
 }
 

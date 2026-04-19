@@ -6,7 +6,7 @@ export const translations = {
   'nav-stream':       { zh: '直播鳥屋',        en: 'Live Birdhouse' },
   'nav-encyclopedia': { zh: '校園鳥類百科',    en: 'Encyclopedia' },
   'nav-map':          { zh: '華仁生態地圖',    en: 'WYC Eco Map' },
-  'nav-game':         { zh: '守護者挑戰',      en: 'Guardian Challenge' },
+  'nav-game':         { zh: '羽翼守護大冒險',    en: 'Guardian Adventure' },
   'nav-showoff':      { zh: '展覽模式',        en: 'Exhibition Mode' },
   'back-home':        { zh: '← 返回主頁',      en: '← Back Home' },
   'logout':           { zh: '登出帳號',        en: 'Logout' },
@@ -20,8 +20,8 @@ export const translations = {
   'card-ency-desc':   { zh: '探索校園野生動物', en: 'Discover campus wildlife' },
   'card-map-title':   { zh: '華仁生態地圖',    en: 'WYC Eco Map' },
   'card-map-desc':    { zh: '校園互動探索',    en: 'Campus explore' },
-  'card-game-title':  { zh: '守護者挑戰',      en: 'Guardian Challenge' },
-  'card-game-desc':   { zh: '雀仔食蟲小遊戲',  en: 'Bird flight mini-game' },
+  'card-game-title':  { zh: '羽翼守護大冒險',    en: 'Guardian Adventure' },
+  'card-game-desc':   { zh: '化身守護者，翱翔天空',  en: 'Fly high as a campus guardian' },
   'card-about-title': { zh: '關於我們',        en: 'About Us' },
   'card-about-desc':  { zh: 'The IDEEA Team', en: 'The IDEEA Team' },
 
@@ -53,13 +53,13 @@ export const translations = {
   'env-condition':    { zh: '校園環境',            en: 'Campus Conditions' },
   'local-time':       { zh: '本地時間',            en: 'Local Time' },
   'cond-good':        { zh: '良好',                en: 'Good' },
-  'clip-feeding':     { zh: '進食片段 1',          en: 'Feeding Clip 1' },
+  'clip-feeding':     { zh: '鳥屋片段 1',          en: 'Birdhouse Clip 1' },
   'clip-snapshot':    { zh: '鳥屋快照',            en: 'Birdhouse Snapshot' },
 
   // =================== Game Page ===================
-  'nav-game':         { zh: '守護者挑戰',          en: 'Guardian Challenge' },
-  'game-start-title': { zh: 'GUARDIAN FLIGHT',     en: 'GUARDIAN FLIGHT' },
-  'game-start-desc':  { zh: '守護校園！飛行躲避石柱，收集果實，擊退入侵的烏鴉！', en: 'Protect the campus! Fly past pillars, collect fruits, repel crow invaders!' },
+  'nav-game':         { zh: '羽翼守護大冒險',          en: 'Guardian Adventure' },
+  'game-start-title': { zh: 'WINGED GUARDIAN',     en: 'WINGED GUARDIAN' },
+  'game-start-desc':  { zh: '化身校園守護者！在天空中飛翔、收集果實並巧妙避開礙物。', en: 'Become a guardian! Fly high, collect fruits, and dodge obstacles.' },
   'game-start-btn':   { zh: 'START GAME',          en: 'START GAME' },
   'game-score':       { zh: 'SCORE',               en: 'SCORE' },
   'game-lives':       { zh: 'LIVES',               en: 'LIVES' },
@@ -92,7 +92,7 @@ export const translations = {
   'about-a6': { zh: '最難的是如何在鳥屋內安裝能夠連接互聯網並傳輸實時影像的攝影機。', en: 'Implementing an IoT camera inside a bird house for live stream transfer was the biggest challenge.' },
   'about-follow': { zh: '追蹤我們以獲取更新！', en: 'Follow us for updates!' },
   'about-team-title': { zh: 'IDEEA Project 3K 第四組', en: 'IDEEA Project 3K Group 4' },
-  'about-team-names': { zh: '林子舜 · 陳柏霖 · 陳樂天 · 劉晉廷', en: 'Astin Lam · Brayden Chan · Cyrus Chan · Justin Lau' },
+  'about-team-names': { zh: '林澔廷 · 陳柏顥 · 陳躍霆 · 劉曜綸', en: 'Astin Lam · Brayden Chan · Cyrus Chan · Justin Lau' },
 
   // =================== Bird Names ===================
   'bird-spoonbill':   { zh: '黑臉琵鷺', en: 'Black-faced Spoonbill' },
@@ -109,6 +109,13 @@ export const translations = {
   'bird-pigeon':      { zh: '原鴿', en: 'Rock Pigeon' },
   'bird-starling':    { zh: '黑領椋鳥', en: 'Black-collared Starling' },
   'bird-koel':        { zh: '噪鵑', en: 'Asian Koel' },
+  // =================== Daily Facts ===================
+  'fact-1': { zh: '紅耳鵯最喜歡在校園的榕樹上聚集！', en: 'Light-vented Bulbuls love gathering on the banyan trees!' },
+  'fact-2': { zh: '黑臉琵鷺是瀕危物種，偶爾能在香港的濕地見到。', en: 'The Black-faced Spoonbill is an endangered species seen in HK wetlands.' },
+  'fact-3': { zh: '如果幸運的話，你可以在操場邊看到珠頸斑鳩吃蟲子。', en: 'If you\'re lucky, spot a Spotted Dove eating insects by the pitch!' },
+  'fact-4': { zh: '華仁的生態池裡有多種水生植物，吸引了許多鳥類停駐。', en: 'The eco-pond supports diverse plants, attracting many birds.' },
+  'fact-5': { zh: '樹麻雀最喜歡在草叢中跳躍找尋種子。', en: 'Tree Sparrows love hopping through shrubs to find seeds.' },
+  'fact-6': { zh: '有些鳥類會記住曾經餵過牠們的人喔！', en: 'Some birds can actually remember the humans who have fed them!' },
 };
 
 export function applyTranslation(lang, silent = false) {
@@ -158,6 +165,15 @@ export function applyTranslation(lang, silent = false) {
     greetingEl.textContent = lang === 'en'
       ? `Hello, ${name}! Ready to explore today?`
       : `哈囉，${name}！準備好今天的探索了嗎？`;
+  }
+
+  // Update Daily Fact
+  const factEl = document.getElementById('daily-fact');
+  if (factEl && factEl.dataset.factIndex) {
+    const key = `fact-${factEl.dataset.factIndex}`;
+    if (translations[key] && translations[key][lang]) {
+      factEl.textContent = translations[key][lang];
+    }
   }
 
   // Update Bird Modal Details if open (only for non-silent updates to prevent recursion)

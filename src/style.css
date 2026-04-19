@@ -1,10 +1,11 @@
-/* ==========================================================================
-   Base Theme & Glassmorphism System for Gu Gu Gu
-   ========================================================================== */
 html {
-  font-size: 18px;
-  /* Fix scroll glitch on some mobile browsers */
+  /* Restored to a more robust, readable scale for PC */
+  font-size: clamp(16px, 1.05vw, 20px);
   scroll-behavior: smooth;
+  /* Smoother image rendering */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  -webkit-text-size-adjust: 100%;
 }
 
 :root {
@@ -14,19 +15,25 @@ html {
   --primary-hover: #16a34a;
   --secondary-color: #60a5fa;
   
-  --glass-bg: rgba(5, 12, 8, 0.80);
-  --glass-card-bg: rgba(5, 12, 8, 0.60);
-  --glass-border: rgba(134, 239, 172, 0.12);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.7);
+  --glass-bg: rgba(5, 12, 8, 0.82);
+  --glass-card-bg: rgba(5, 12, 8, 0.65);
+  --glass-border: rgba(134, 239, 172, 0.15);
+  --glass-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.8);
   
   --text-main: #f0fdf4;
-  --text-muted: #86a498;
+  --text-muted: #94a3b8;
   
   --font-heading: 'Outfit', sans-serif;
   --font-body: 'Inter', sans-serif;
+  
+  /* Restored Space Sizing for better presence */
+  --space-unit: clamp(2rem, 3vw, 3.5rem);
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* { 
+  box-sizing: border-box; 
+  margin: 0; padding: 0; 
+}
 
 body {
   font-family: var(--font-body);
@@ -38,18 +45,20 @@ body {
   transition: all 0.3s ease;
   /* Mobile scrolling performance */
   -webkit-overflow-scrolling: touch;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
 .page-container {
-  padding: 2rem 1.5rem 8rem 1.5rem;
-  max-width: 1400px;
+  padding: 1.2rem clamp(1rem, 3.5vw, 4rem) 8rem;
+  max-width: 1600px; /* Slightly wider for 4K */
   margin: 0 auto;
   min-height: 100vh;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  transform: translateZ(0); /* Hardware acceleration */
-  will-change: transform;
+  transform: translateZ(0);
+  will-change: transform, opacity;
 }
 
 .fixed-bg {
@@ -64,6 +73,7 @@ body {
   z-index: -10;
   transform: translateZ(0); /* Hardware acceleration for smooth scrolling */
   will-change: transform;
+  backface-visibility: hidden;
 }
 
 /* =================== Glassmorphism =================== */
@@ -148,11 +158,11 @@ h3 { font-size: clamp(1.2rem, 5vw, 1.5rem); margin-bottom: 0.5rem; }
   display: inline-block;
   background: linear-gradient(135deg, #22c55e, #16a34a);
   color: #fff;
-  padding: 11px 22px;
+  padding: 10px 24px;
   border-radius: 100px;
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 0.95rem;
   text-decoration: none;
   cursor: pointer;
   border: none;
@@ -170,11 +180,11 @@ h3 { font-size: clamp(1.2rem, 5vw, 1.5rem); margin-bottom: 0.5rem; }
   display: inline-block;
   background: rgba(255, 255, 255, 0.05);
   color: #fff;
-  padding: 11px 22px;
+  padding: clamp(10px, 1.2vh, 16px) clamp(20px, 2vw, 32px);
   border-radius: 100px;
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 1rem;
+  font-size: clamp(0.9rem, 1rem, 1.2rem);
   text-decoration: none;
   cursor: pointer;
   border: 1px solid rgba(255, 255, 255, 0.15);
@@ -551,16 +561,17 @@ select.glass-input option {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.5rem;
   padding: 0 0.5rem;
 }
 
 .page-title {
   margin: 0 !important;
-  font-size: 2.4rem !important;
+  font-size: clamp(1.8rem, 3.5vw, 3rem) !important;
   color: #86efac !important;
   font-weight: 800;
   white-space: nowrap;
+  letter-spacing: -0.02em;
 }
 
 /* =================== Bottom Controls =================== */
@@ -759,7 +770,7 @@ select.glass-input option {
 
 .modal-info-scroll {
   flex: 1;
-  padding: 2.5rem 3rem;
+  padding: clamp(1.5rem, 3vw, 3rem);
   background: transparent;
   overflow-y: auto;
 }
@@ -787,8 +798,8 @@ select.glass-input option {
 /* =================== Layout Grids =================== */
 .nav-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(clamp(260px, 25vw, 400px), 1fr));
+  gap: clamp(1rem, 2vw, 2.5rem);
 }
 
 .mobile-stack {
@@ -874,8 +885,8 @@ select.glass-input option {
 
 .grid-responsive {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(clamp(200px, 15vw, 300px), 1fr));
+  gap: clamp(0.8rem, 1.2vw, 1.5rem);
 }
 
 .bird-card {
@@ -1065,7 +1076,7 @@ select.glass-input option {
   }
   #mascot-img {
     width: 110px !important;
-    pointer-events: auto; /* Re-enable for the image itself */
+    pointer-events: auto;
   }
   #mascot-bubble {
     font-size: 0.75rem !important;

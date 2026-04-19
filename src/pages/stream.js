@@ -26,7 +26,7 @@ export function renderStream(container) {
 
     <!-- History Media Selector -->
     <div id="media-selector" style="display:none; gap:1rem; margin-bottom:1rem; flex-wrap:wrap;">
-      <button class="btn-secondary history-media-btn" data-src="./footage/previous_videos/video1.mp4" data-type="video" data-i18n="clip-feeding">進食片段 1</button>
+      <button class="btn-secondary history-media-btn" data-src="./footage/previous_videos/video1.mp4" data-type="video" data-i18n="clip-feeding">鳥屋片段 1</button>
       <button class="btn-secondary history-media-btn" data-src="./footage/previous_videos/IMAG0002.jpg" data-type="image" data-i18n="clip-snapshot">鳥屋快照</button>
     </div>
 
@@ -325,6 +325,7 @@ export function renderStream(container) {
       showOnly(els.liveImg);
       els.fullscreen.classList.remove('hidden');
       els.liveBadge.classList.remove('hidden');
+      els.infoPanel.classList.remove('hidden');
     } else {
       showOnly(els.liveIdle);
     }
@@ -335,10 +336,19 @@ export function renderStream(container) {
     document.getElementById('tab-history').className = 'btn-primary';
     document.getElementById('tab-live').className = 'btn-secondary';
     els.mediaSel.style.display = 'flex';
+    
+    // Explicitly hide ALL live related overlays
     els.fullscreen.classList.add('hidden');
     els.liveBadge.classList.add('hidden');
+    els.infoPanel.classList.add('hidden');
 
-    showOnly(null); // hide live states
+    // Hide live segments
+    els.liveImg.classList.add('hidden');
+    els.liveImg.src = ''; 
+    if (lastObjectURL) URL.revokeObjectURL(lastObjectURL);
+    lastObjectURL = null;
+
+    showOnly(null); // Clear live states
 
     const firstMedia = document.querySelector('.history-media-btn');
     if (firstMedia) firstMedia.click();

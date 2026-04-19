@@ -80,11 +80,11 @@ void setup() {
   config.fb_location  = CAMERA_FB_IN_PSRAM;
 
   if (psramFound()) {
-    config.frame_size  = FRAMESIZE_VGA;  // 不要設太高，雲端傳輸 640x480 最適合
-    config.jpeg_quality = 12;
+    config.frame_size  = FRAMESIZE_QVGA;  // QVGA (320x240) ensures stable 10+ FPS over Wi-Fi
+    config.jpeg_quality = 12;             // Lower number = higher quality (10-15 is good)
     config.fb_count    = 2;
   } else {
-    config.frame_size  = FRAMESIZE_QVGA; 
+    config.frame_size  = FRAMESIZE_QQVGA; 
     config.jpeg_quality = 15;
     config.fb_count    = 1;
   }
@@ -145,10 +145,6 @@ void loop() {
   }
 
   // 2. Send HTTP POST manually (Keep-Alive)
-  String head = "-- Boundary string that separates headers from body --\n";
-  String tail = "\r\n";
-  
-  // We send the raw JPEG bytes directly to keep it incredibly fast.
   String httpRequest = String("POST ") + path + " HTTP/1.1\r\n" +
                        "Host: " + host + "\r\n" +
                        "Connection: keep-alive\r\n" +
@@ -174,13 +170,20 @@ void loop() {
     bytesSent += written;
   }
 
-  // Read response quickly to clear buffer
+  // 3. Read response to maintain stable pipeline
+  unsigned long timeout = millis();
+  while (!client.available() && (millis() - timeout < 2000)) {
+    delay(5);
+  }
+  
+  // Clear the response buffer completely
   while (client.available()) {
-    client.read(); // throw away response to keep latency low
+    client.read();
+    delay(1); // Small delay allows remaining packet bytes to arrive
   }
 
   esp_camera_fb_return(fb);
 
-  // 一個極短的 delay，避免塞爆 Render (約莫每秒推 10 張)
-  delay(100); 
+  // 短暫延遲，穩定維持大約 10~15 FPS
+  delay(30); 
 }

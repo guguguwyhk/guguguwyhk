@@ -73,6 +73,7 @@ window.gugugu_bird_modal = {
     const isEn = (localStorage.getItem('gugugu_lang') || 'zh') === 'en';
     
     document.getElementById('modal-img').src = bird.img;
+    document.getElementById('modal-img').onerror = function() { this.src = './removedbg_gugugu.png'; };
     document.getElementById('modal-name').innerText = bird.name;
     document.getElementById('modal-enName').innerText = bird.enName;
     document.getElementById('modal-details').innerText = isEn ? bird.enDetails : bird.details;

@@ -24,85 +24,105 @@ export function renderHome(container) {
 
   const lang = store.getLanguage();
   const facts = lang === 'en' ? HIGHLIGHTS_EN : HIGHLIGHTS_ZH;
-  const randomFact = facts[Math.floor(Math.random() * facts.length)];
+  const factIndex = Math.floor(Math.random() * 6) + 1;
   const name = store.getUserName() || '探險家';
 
   container.innerHTML = `
     <div class="page-container">
-    <header class="page-header">
-      <div style="display:flex; align-items:center; gap:1.5rem;">
-        <h1 class="page-title" data-i18n="home-title">Gu Gu Gu 🌿</h1>
-        <span style="background:var(--primary-color); color:black; padding:6px 14px; border-radius:14px; font-size:0.85rem; font-weight:900; letter-spacing:1px; box-shadow:0 4px 15px rgba(134,239,172,0.3);">24/7 MONITORING</span>
+    <header class="page-header" style="flex-direction: row; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.8rem;">
+      <div style="display:flex; align-items:center; gap: 1rem; flex-wrap: wrap;">
+        <h1 class="page-title" data-i18n="home-title" style="font-size: 1.5rem;">Gu Gu Gu 🌿</h1>
+        <span style="background:var(--primary-color); color:black; padding:4px 10px; border-radius:10px; font-size: 0.75rem; font-weight:900; letter-spacing:1px; box-shadow:0 4px 15px rgba(134,239,172,0.3); white-space: nowrap;">24/7 MONITORING</span>
       </div>
     </header>
 
-    <h2 id="home-greeting" style="margin-bottom:1.5rem; font-weight:600; font-size: 1.8rem;"></h2>
+    <h2 id="home-greeting" style="margin-bottom:0.8rem; font-weight:600; font-size: 1.25rem; opacity: 0.9;"></h2>
 
-    <!-- Daily Highlight -->
-    <div class="glass-panel daily-highlight">
+    <!-- Daily Highlight (Responsive with Visible Image) -->
+    <div class="glass-panel daily-highlight" style="padding: 1.2rem 1.8rem; display: flex; align-items: center; border-radius: 25px; margin-bottom: 1.5rem; gap: 1.5rem; overflow: hidden;">
       <div style="flex:1; min-width: 0;">
-        <h3 id="daily-title" style="color:#86efac; margin-bottom:0.5rem;" data-i18n="daily-highlight">✨ 每日鳥事</h3>
-        <p id="daily-fact" style="font-size:1.1rem; line-height:1.6; word-wrap: break-word;">${randomFact}</p>
+        <h3 id="daily-title" style="color:#86efac; margin-bottom:0.4rem; font-size: 1.15rem;" data-i18n="daily-highlight">✨ 每日鳥事</h3>
+        <p id="daily-fact" data-fact-index="${factIndex}" style="font-size: 1.05rem; line-height:1.4; color:rgba(255,255,255,0.95); word-wrap: break-word; font-weight: 500;"></p>
       </div>
-      <img src="/footage/about_us/birdhouse2.jpeg" class="daily-img" onerror="this.style.display='none'" />
+      <!-- Desktop/Mobile Image -->
+      <img src="./footage/about_us/birdhouse2.jpeg" class="daily-img-responsive" style="width: 220px; height: 140px; object-fit: cover; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; box-shadow: 0 8px 20px rgba(0,0,0,0.3);" onerror="this.style.display='none'" />
     </div>
 
-    <!-- Grid Nav -->
-    <div class="nav-grid">
-      <div class="glass-card nav-card liquid-btn" data-target="stream" style="padding:2rem; cursor:pointer; text-align:center;">
-        <div style="font-size:3rem; margin-bottom:1rem;">🎥</div>
-        <h3 data-i18n="card-stream-title" style="font-size: 1.5rem; color:#86efac;">直播鳥屋</h3>
-        <p data-i18n="card-stream-desc" style="color:var(--text-muted); font-size:1rem; margin-top:0.5rem;">實時觀察生態狀態</p>
+    <style>
+      @media (max-width: 768px) {
+        .daily-highlight { padding: 1.2rem !important; gap: 1rem !important; }
+        .daily-img-responsive { width: 100px !important; height: 75px !important; border-radius: 10px !important; }
+        #daily-title { font-size: 1.05rem !important; }
+        #daily-fact { font-size: 0.95rem !important; }
+      }
+    </style>
+
+    <!-- Grid Nav (Compact Cards for visibility) -->
+    <div class="nav-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+      <div class="glass-card nav-card liquid-btn" data-target="stream" style="padding: 1.5rem 1.2rem; cursor:pointer; text-align:center;">
+        <div style="font-size: 2.2rem; margin-bottom:0.5rem;">🎥</div>
+        <h3 data-i18n="card-stream-title" style="font-size: 1.2rem; color:#86efac; font-weight: 800;">直播鳥屋</h3>
+        <p data-i18n="card-stream-desc" style="color:var(--text-muted); font-size: 0.85rem; margin-top:0.3rem; line-height: 1.3;">實時觀察生態狀態</p>
       </div>
       
-      <div class="glass-card nav-card liquid-btn" data-target="encyclopedia" style="padding:2rem; cursor:pointer; text-align:center;">
-        <div style="font-size:3rem; margin-bottom:1rem;">📖</div>
-        <h3 data-i18n="card-ency-title" style="font-size: 1.5rem; color:#86efac;">華仁鳥類百科</h3>
-        <p data-i18n="card-ency-desc" style="color:var(--text-muted); font-size:1rem; margin-top:0.5rem;">探索校園野生動物</p>
+      <div class="glass-card nav-card liquid-btn" data-target="encyclopedia" style="padding: 1.5rem 1.2rem; cursor:pointer; text-align:center;">
+        <div style="font-size: 2.2rem; margin-bottom:0.5rem;">📖</div>
+        <h3 data-i18n="card-ency-title" style="font-size: 1.2rem; color:#86efac; font-weight: 800;">華仁鳥類百科</h3>
+        <p data-i18n="card-ency-desc" style="color:var(--text-muted); font-size: 0.85rem; margin-top:0.3rem; line-height: 1.3;">探索校園野生動物</p>
+      </div>
+      
+      <div class="glass-card nav-card liquid-btn" data-target="map" style="padding: 1.5rem 1.2rem; cursor:pointer; text-align:center;">
+        <div style="font-size: 2.2rem; margin-bottom:0.5rem;">🗺️</div>
+        <h3 data-i18n="card-map-title" style="font-size: 1.2rem; color:#86efac; font-weight: 800;">華仁生態地圖</h3>
+        <p data-i18n="card-map-desc" style="color:var(--text-muted); font-size: 0.85rem; margin-top:0.3rem; line-height: 1.3;">校園互動探索</p>
       </div>
 
-      <div class="glass-card nav-card liquid-btn" data-target="map" style="padding:2rem; cursor:pointer; text-align:center;">
-        <div style="font-size:3rem; margin-bottom:1rem;">🗺️</div>
-        <h3 data-i18n="card-map-title" style="font-size: 1.5rem; color:#86efac;">華仁生態地圖</h3>
-        <p data-i18n="card-map-desc" style="color:var(--text-muted); font-size:1rem; margin-top:0.5rem;">校園互動探索</p>
+      <div class="glass-card nav-card liquid-btn" data-target="game" style="padding: 1.5rem 1.2rem; cursor:pointer; text-align:center;">
+        <div style="font-size: 2.2rem; margin-bottom:0.5rem;">🎮</div>
+        <h3 data-i18n="card-game-title" style="font-size: 1.2rem; color:#86efac; font-weight: 800;">守護者挑戰</h3>
+        <p data-i18n="card-game-desc" style="color:var(--text-muted); font-size: 0.85rem; margin-top:0.3rem; line-height: 1.3;">邊玩邊學鳥類知識</p>
       </div>
 
-      <div class="glass-card nav-card liquid-btn" data-target="game" style="padding:2rem; cursor:pointer; text-align:center;">
-        <div style="font-size:3rem; margin-bottom:1rem;">🎮</div>
-        <h3 data-i18n="card-game-title" style="font-size: 1.5rem; color:#86efac;">守護者挑戰</h3>
-        <p data-i18n="card-game-desc" style="color:var(--text-muted); font-size:1rem; margin-top:0.5rem;">雀仔食蟲小遊戲</p>
-      </div>
-
-      <div class="glass-card nav-card liquid-btn" data-target="about" style="padding:2rem; cursor:pointer; text-align:center;">
-        <div style="font-size:3rem; margin-bottom:1rem;">👥</div>
-        <h3 data-i18n="card-about-title" style="font-size: 1.5rem; color:#86efac;">關於我們</h3>
-        <p data-i18n="card-about-desc" style="color:var(--text-muted); font-size:1rem; margin-top:0.5rem;">The IDEEA Team</p>
+      <div class="glass-card nav-card liquid-btn" data-target="about" style="padding: 1.5rem 1.2rem; cursor:pointer; text-align:center;">
+        <div style="font-size: 2.2rem; margin-bottom:0.5rem;">👥</div>
+        <h3 data-i18n="card-about-title" style="font-size: 1.2rem; color:#86efac; font-weight: 800;">關於我們</h3>
+        <p data-i18n="card-about-desc" style="color:var(--text-muted); font-size: 0.85rem; margin-top:0.3rem; line-height: 1.3;">The IDEEA Team</p>
       </div>
     </div>
 
     <!-- Footer -->
     <footer style="margin-top:auto; padding:2rem 0 8rem; border-top:1px solid var(--glass-border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
       <div>
-        <p style="font-size:1rem; font-weight:bold;">IDEEA Project 3K Group 4</p>
-        <p style="font-size:0.9rem; color:var(--text-muted);">Astin Lam, Brayden Chan, Cyrus Chan, Justin Lau</p>
+        <p style="font-size:0.95rem; font-weight:bold;">IDEEA Project 3K Group 4</p>
+        <p style="font-size:0.85rem; color:var(--text-muted);">Astin Lam, Brayden Chan, Cyrus Chan, Justin Lau</p>
       </div>
       <div style="display:flex; gap:1.5rem; align-items:center;">
         <a href="https://www.instagram.com/gugugu_wyhk/" target="_blank" id="ig-link" style="text-decoration:none; font-weight:bold; font-size:1.1rem; display:flex; align-items:center; gap:8px; color:#fb923c; filter: drop-shadow(0 0 8px rgba(251,146,60,0.7)); transition: filter 0.2s;">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
           @gugugu_wyhk
         </a>
-        <button id="logout-btn" class="btn-secondary liquid-btn" style="background:rgba(255,0,0,0.1); border-color:rgba(255,0,0,0.2); color:#f87171; font-size:0.9rem; padding:8px 16px;" data-i18n="logout">登出帳號</button>
+        <button id="logout-btn" class="btn-secondary liquid-btn" style="background:rgba(255,0,0,0.1); border-color:rgba(255,0,0,0.2); color:#f87171; font-size:0.85rem; padding:6px 14px;" data-i18n="logout">登出帳號</button>
       </div>
     </footer>
     </div>
   `;
 
-  // Set greeting
+  // Update home greeting
   const greetingEl = document.getElementById('home-greeting');
   if (greetingEl) {
+    const name = store.getUserName() || '探險家';
     greetingEl.textContent = lang === 'en'
       ? `Hello, ${name}! Ready to explore today?`
       : `哈囉，${name}！準備好今天的探索了嗎？`;
+  }
+
+  // Update Daily Fact
+  const factEl = document.getElementById('daily-fact');
+  if (factEl && factEl.dataset.factIndex) {
+    const key = `fact-${factEl.dataset.factIndex}`;
+    if (translations[key] && translations[key][lang]) {
+      factEl.textContent = translations[key][lang];
+    }
   }
 
   // Event Listeners

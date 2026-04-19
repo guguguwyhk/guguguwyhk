@@ -194,13 +194,13 @@ export function renderEncyclopedia(container) {
         <button class="btn-secondary btn-back" id="back-btn" data-i18n="back-home">⬅ 返回主頁</button>
       </header>
 
-      <div class="glass-panel" style="margin-bottom:2.5rem; display:flex; gap:1rem; flex-wrap:wrap; align-items:center; padding:1.2rem; position:relative;">
+      <div class="glass-panel" style="margin-bottom:var(--space-unit); display:flex; gap:1rem; flex-wrap:wrap; align-items:stretch; padding:1.2rem; position:relative;">
         <div style="flex:2; position:relative; min-width:260px;">
-          <input type="text" id="search-input" class="glass-input" data-i18n-placeholder="ency-search-placeholder" placeholder="搜尋鳥類 Name Search..." style="width:100%; font-size:1.1rem; padding:15px; border-radius:15px;">
+          <input type="text" id="search-input" class="glass-input" data-i18n-placeholder="ency-search-placeholder" placeholder="搜尋鳥類 Name Search..." style="width:100%; font-size:clamp(1rem, 1.1vw, 1.2rem); padding:15px; border-radius:15px;">
           <div id="search-suggestions" class="glass-panel hidden" style="position:absolute; top:calc(100% + 10px); left:0; width:100%; z-index:100; padding:10px; border-radius:15px; box-shadow:0 10px 40px rgba(0,0,0,0.5); max-height:400px; overflow-y:auto; border:2px solid #86efac; backdrop-filter:blur(25px);">
           </div>
         </div>
-        <select id="sort-select" class="glass-input" style="flex:1; min-width:180px; font-size:1.1rem; padding:15px; border-radius:15px;">
+        <select id="sort-select" class="glass-input" style="flex:1; min-width:180px; font-size:clamp(1rem, 1.1vw, 1.2rem); padding:15px; border-radius:15px; height: auto;">
           <option value="default" data-i18n="ency-sort-default">預設排序 Default</option>
           <option value="size" data-i18n="ency-sort-size">按體型 Size</option>
           <option value="prob" data-i18n="ency-sort-prob">按機率 Probability</option>

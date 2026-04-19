@@ -21,6 +21,8 @@ export function renderShowOff(container) {
         color: white; font-family: 'Outfit', sans-serif;
         display: flex; flex-direction: column; overflow: hidden;
         position: relative;
+        /* Ensure it behaves correctly on very small laptop screens */
+        min-height: 600px; 
       }
       .neon-title { 
         background: linear-gradient(90deg, #4ade80, #3b82f6, #a855f7, #4ade80); 
@@ -76,54 +78,63 @@ export function renderShowOff(container) {
       
       <div id="showoff-content" style="flex:1; display:flex; flex-direction:column; padding:2vh 5vw; z-index:1; min-height:0; justify-content: flex-start;">
         
-        <header class="page-header" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2vh; flex-shrink:0; width: 100%;">
-          <h1 class="page-title neon-title" style="font-size: clamp(3rem, 5vw, 5rem) !important; line-height:1; margin: 0;">Gu Gu Gu 🌿</h1>
-          <p style="font-size: clamp(0.8rem, 1.1vw, 1.1rem); color:#94a3b8; letter-spacing: 2px; text-transform:uppercase; font-weight:700; margin: 0; opacity: 0.8; white-space: nowrap;">Master IDEEA Project Group 4 -- 24/7 Monitoring Smart Website</p>
-          <button id="dev-exit" class="btn-secondary btn-back" style="position: fixed; top: 20px; right: 25px; min-width: auto; opacity: 0.3;">← Exit</button>
+        <header class="page-header" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2vh; flex-shrink:0; width: 100%; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1vh;">
+          <div style="flex: 1;">
+            <h1 class="page-title neon-title" style="font-size: clamp(2.2rem, 4vw, 4.5rem) !important; line-height:1; margin: 0;">Gu Gu Gu 🌿</h1>
+            <p style="font-size: clamp(0.6rem, 0.8vw, 1rem); color:#94a3b8; letter-spacing: 2px; text-transform:uppercase; font-weight:700; margin: 0.5vh 0 0; opacity: 0.6; white-space: nowrap;">Master IDEEA Project Group 4 -- 24/7 Monitoring Smart Website</p>
+          </div>
+          <button id="dev-exit" class="btn-secondary btn-back" style="position: fixed; top: 1.5rem; right: 1.5rem; min-width: auto; height: auto; padding: 0.8rem 1.2rem; opacity: 0.3; font-size: 0.9rem;">← Exit</button>
         </header>
 
-        <div id="main-grid" style="display:flex; gap:4vw; flex:1; min-height:0; align-items: stretch;">
+        <div id="main-grid" style="display:flex; gap:clamp(1rem, 3vw, 4rem); flex:1; min-height:0; align-items: stretch; margin-bottom: 2vh;">
           
-          <div style="flex:1.4; display:flex; flex-direction:column; gap:3vh; min-width:0;">
-            <div class="glass-panel" style="flex:1; display:flex; flex-direction:column; padding:2rem; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.1); border-radius:40px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); min-height:0;">
-              <h2 style="font-size:1.8rem; margin-bottom:1.5rem; color:#4ade80; display:flex; align-items:center; gap:15px; flex-shrink:0; font-weight:800;">
+          <!-- Left Content Area -->
+          <div style="flex:1.4; display:flex; flex-direction:column; gap:clamp(1rem, 2vh, 3vh); min-width:0;">
+            <!-- Video Panel -->
+            <div class="glass-panel" style="flex:1; display:flex; flex-direction:column; padding:clamp(1rem, 1.5vw, 2.5rem); background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.1); border-radius:30px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); min-height:0;">
+              <h2 style="font-size:clamp(1.2rem, 1.6vw, 2rem); margin-bottom:1rem; color:#4ade80; display:flex; align-items:center; gap:12px; flex-shrink:0; font-weight:800;">
                 <span class="rec-dot"></span> 專案宣傳影片 LIVE
               </h2>
-              <div style="width:100%; flex:1; background:#000; border-radius:30px; overflow:hidden; position:relative; border:1px solid rgba(255,255,255,0.15);">
-                  <video id="leaderboard-video" style="width:100%; height:100%; border-radius:30px; object-fit:cover;" autoplay loop muted playsinline>
+              <div style="width:100%; flex:1; background:#000; border-radius:20px; overflow:hidden; position:relative; border:1px solid rgba(255,255,255,0.15);">
+                  <video id="leaderboard-video" style="width:100%; height:100%; object-fit:cover;" autoplay loop muted playsinline>
                     <source src="./footage/previous_videos/video1.mp4" type="video/mp4" />
                   </video>
               </div>
             </div>
-            <div class="glass-panel" style="height:10vh; min-height:80px; display:flex; align-items:center; overflow:hidden; background:rgba(74, 222, 128, 0.05); border-radius:30px; border:1px solid rgba(74,222,128,0.2); padding:0 3rem;">
-              <div id="ticker" style="white-space:nowrap; font-size:1.6rem; color:#fbbf24; font-weight:800; animation:scrollLeft 25s linear infinite;">
+            
+            <!-- Ticker Panel -->
+            <div class="glass-panel" style="height: clamp(60px, 10vh, 100px); display:flex; align-items:center; overflow:hidden; background:rgba(74, 222, 128, 0.05); border-radius:25px; border:1px solid rgba(74,222,128,0.2); padding:0 2rem;">
+              <div id="ticker" style="white-space:nowrap; font-size:clamp(1rem, 1.2vw, 1.5rem); color:#fbbf24; font-weight:800; animation:scrollLeft 25s linear infinite;">
                 ⚡ 本地生態監測中 &nbsp;&nbsp;|&nbsp;&nbsp; 🌲 校園目前的鳥類活動頻率：高 &nbsp;&nbsp;|&nbsp;&nbsp; 🕊️ 感謝參與投票！ &nbsp;&nbsp;|&nbsp;&nbsp; ⛅ 天氣：晴 &nbsp;&nbsp;|&nbsp;&nbsp;
               </div>
             </div>
           </div>
 
-          <div style="flex:1; display:flex; flex-direction:column; gap:3vh; min-width:0;">
-            <div class="glass-panel" style="flex:1; display:flex; flex-direction:column; padding:2rem; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.1); border-radius:40px; min-height:0; box-shadow: 0 20px 50px rgba(0,0,0,0.4);">
-              <h2 style="font-size:1.8rem; color:#3b82f6; display:flex; align-items:center; gap:12px; margin-bottom:1rem; flex-shrink:0; font-weight:800;">
-                <span style="font-size:2rem; animation:rotate 15s linear infinite;">🏆</span> 即時人氣榜 (TOP 3)
+          <!-- Right Content Area -->
+          <div style="flex:1; display:flex; flex-direction:column; gap:clamp(1rem, 2vh, 3vh); min-width:0;">
+            <!-- Leaderboard Panel -->
+            <div class="glass-panel" style="flex:1; display:flex; flex-direction:column; padding:clamp(1rem, 1.5vw, 2.5rem); background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.1); border-radius:30px; min-height:0; box-shadow: 0 20px 50px rgba(0,0,0,0.4);">
+              <h2 style="font-size:clamp(1.2rem, 1.6vw, 2rem); color:#3b82f6; display:flex; align-items:center; gap:12px; margin-bottom:1rem; flex-shrink:0; font-weight:800;">
+                <span style="font-size:1.8rem; animation:rotate 15s linear infinite;">🏆</span> 即時人氣榜 (TOP 3)
               </h2>
               <div id="lb-container" style="flex:1; display:flex; flex-direction:column; pointer-events:none;">
                 <!-- Bird bars injected here -->
               </div>
             </div>
 
-            <div style="height: 30vh; max-height: 300px; display:flex; gap:2vw; align-items: stretch; min-height:0; flex-shrink:0;">
-              <div class="glass-panel" style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; background:rgba(255,255,255,0.03); border-radius:30px; border:1px solid rgba(255,255,255,0.1); box-shadow:0 15px 40px rgba(0,0,0,0.4);">
-                <div style="width:20vh; height:20vh; max-width:180px; max-height:180px; background:white; padding:12px; border-radius:25px; display:flex; align-items:center; justify-content:center; border: 5px solid #4ade80;">
+            <!-- QR & Mascot Bottom Area -->
+            <div style="height: clamp(150px, 30vh, 300px); display:flex; gap:2vw; align-items: stretch; min-height:0; flex-shrink:0;">
+              <div class="glass-panel" style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; background:rgba(255,255,255,0.03); border-radius:25px; border:1px solid rgba(255,255,255,0.1); box-shadow:0 15px 40px rgba(0,0,0,0.4);">
+                <div style="width:18vh; height:18vh; max-width:160px; max-height:160px; background:white; padding:10px; border-radius:20px; display:flex; align-items:center; justify-content:center; border: 4px solid #4ade80;">
                   <img src="./gugugu_qrcode.png" style="width:100%; height:100%; object-fit:contain;" />
                 </div>
-                <span style="font-size:1.1rem; font-weight:900; color:#4ade80; letter-spacing:1px;">掃碼投票</span>
+                <span style="font-size:clamp(0.8rem, 1vw, 1.1rem); font-weight:900; color:#4ade80; letter-spacing:1px;">掃碼投票</span>
               </div>
-              <div class="glass-panel" style="flex:1.2; position:relative; display:flex; justify-content:center; align-items:flex-end; background:rgba(255,255,255,0.03); border-radius:30px; border:1px solid rgba(255,255,255,0.1); overflow:visible;">
-                <div id="exhibit-mascot-bubble" style="position:absolute; top:-75px; right:50%; transform: translateX(50%) scale(0.8); background:white; color:#111; padding:10px 20px; border-radius:25px; font-weight:900; font-size:1rem; opacity:0; transition:all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); white-space:nowrap; z-index:10; box-shadow: 0 15px 45px rgba(0,0,0,0.5); border: 3px solid #4ade80; min-width: 150px; text-align: center;">
+              <div class="glass-panel" style="flex:1.2; position:relative; display:flex; justify-content:center; align-items:flex-end; background:rgba(255,255,255,0.03); border-radius:25px; border:1px solid rgba(255,255,255,0.1); overflow:hidden;">
+                <div id="exhibit-mascot-bubble" style="position:absolute; top:20px; right:10px; transform: scale(0.8); background:white; color:#111; padding:8px 16px; border-radius:20px; font-weight:900; font-size:0.9rem; opacity:0; transition:all 0.4s; white-space:nowrap; z-index:10; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 2px solid #4ade80; text-align: center;">
                   投票中... Gu!
                 </div>
-                <img src="./removedbg_gugugu.png" id="exhibit-mascot-img" style="height:28vh; max-height:280px; filter:drop-shadow(0 20px 40px rgba(0,0,0,0.5)); cursor:pointer; animation:mascotSway 5s ease-in-out infinite; transform-origin: bottom center;" />
+                <img src="./removedbg_gugugu.png" id="exhibit-mascot-img" style="height:90%; filter:drop-shadow(0 20px 40px rgba(0,0,0,0.5)); cursor:pointer; animation:mascotSway 5s ease-in-out infinite; transform-origin: bottom center;" />
               </div>
             </div>
           </div>
