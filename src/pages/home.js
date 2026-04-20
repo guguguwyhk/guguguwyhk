@@ -91,7 +91,7 @@ export function renderHome(container) {
     </div>
 
     <!-- Footer -->
-    <footer style="margin-top:auto; padding:2rem 0 8rem; border-top:1px solid var(--glass-border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+    <footer style="margin-top:auto; padding:4rem 0 10rem; border-top:1px solid var(--glass-border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
       <div>
         <p style="font-size:0.95rem; font-weight:bold;">IDEEA Project 3K Group 4</p>
         <p style="font-size:0.85rem; color:var(--text-muted);">Astin Lam, Brayden Chan, Cyrus Chan, Justin Lau</p>
@@ -107,16 +107,13 @@ export function renderHome(container) {
     </div>
   `;
 
-  // Update home greeting
   const greetingEl = document.getElementById('home-greeting');
   if (greetingEl) {
-    const name = store.getUserName() || '探險家';
     greetingEl.textContent = lang === 'en'
       ? `Hello, ${name}! Ready to explore today?`
       : `哈囉，${name}！準備好今天的探索了嗎？`;
   }
 
-  // Update Daily Fact
   const factEl = document.getElementById('daily-fact');
   if (factEl && factEl.dataset.factIndex) {
     const key = `fact-${factEl.dataset.factIndex}`;
@@ -125,12 +122,8 @@ export function renderHome(container) {
     }
   }
 
-  // Event Listeners
-  const cards = container.querySelectorAll('.nav-card');
-  cards.forEach(card => {
-    card.addEventListener('click', () => {
-      window.navigate(card.dataset.target);
-    });
+  container.querySelectorAll('.nav-card').forEach(card => {
+    card.addEventListener('click', () => window.navigate(card.dataset.target));
   });
 
   const logoutBtn = container.querySelector('#logout-btn');
@@ -142,23 +135,21 @@ export function renderHome(container) {
     });
   }
 
-  // Sync UI with current lang
-  applyTranslation(lang, true);
+  setTimeout(() => applyTranslation(lang, true), 0);
 
-  // Trigger Vote Modal only once after login
   if (sessionStorage.getItem('show_vote_modal') === 'true') {
     setTimeout(() => {
-      renderVoteModal(container);
-      sessionStorage.removeItem('show_vote_modal');
-    }, 600); // Slight delay for smooth entrance after login
+      try {
+        renderVoteModal(container);
+        sessionStorage.removeItem('show_vote_modal');
+      } catch (err) {
+        console.error("Modal Render Fail:", err);
+      }
+    }, 800);
   }
 
-  // Returning cleanup for the router
   return () => {
-    // ONLY remove the vote modal, NOT the global bird-modal!
-    const lingeringModals = document.querySelectorAll('.centered-modal-overlay');
-    lingeringModals.forEach(m => {
-      // If it doesn't have the global ID, it's a temporary one
+    document.querySelectorAll('.centered-modal-overlay').forEach(m => {
       if (m.id !== 'bird-modal') m.remove();
     });
   };
@@ -169,21 +160,23 @@ function renderVoteModal(container) {
   modal.className = 'centered-modal-overlay';
   modal.style.zIndex = '9998';
   modal.style.opacity = '0';
-  modal.style.transition = 'opacity 0.5s ease';
+  modal.style.transition = 'opacity 0.4s ease';
 
   const modalContent = document.createElement('div');
   modalContent.className = 'centered-modal-content glass-panel animate-poll-in';
   modalContent.style.cssText = `
     max-width: 1000px;
     position: relative;
-    border: 2px solid #86efac;
-    box-shadow: 0 0 60px rgba(134, 239, 172, 0.2);
-    background: rgba(5, 15, 10, 0.95);
+    border: 2px solid #4ade80;
+    box-shadow: 0 0 60px rgba(74, 222, 128, 0.2);
+    background: rgba(5, 10, 5, 0.98);
     max-height: 90vh;
     overflow-y: auto;
   `;
 
-  const lang = store.getLanguage();
+  const lang = (window.store && window.store.getLanguage()) || 'zh';
+  const t = (key) => (translations[key] && translations[key][lang]) || key;
+  const birdT = (key) => (translations[key] && translations[key][lang]) || 'Bird';
   const scriptUrl = "https://script.google.com/macros/s/AKfycbwRknj4-6Lphd0sz-4rK-v-VhQ3X-PmKah55lFmaVpuPMe22eVZHqNNzlOvNiNUECeR/exec";
 
   const pollBirds = [
@@ -194,7 +187,7 @@ function renderVoteModal(container) {
     { name: '樹麻雀', key: 'bird-sparrow', img: './footage/encyclopedia/images/樹麻雀.jpg' },
     { name: '牛背鷺', key: 'bird-egret', img: './footage/encyclopedia/images/牛背鷺.jpg' },
     { name: '鵲鴝', key: 'bird-magpie', img: './footage/encyclopedia/images/鵲鴝.jpg' },
-    { name: '普通翠鳥', key: 'bird-kingfisher', img: './footage/encyclopedia/images/普通翠鳥.jpg' },
+    { name: '普通翠鳥', key: 'bird-kingfisher', img: './footage/encyclopedia/images/普通翠鳥.png' },
     { name: '綠背姬鶲', key: 'bird-flycatcher', img: './footage/encyclopedia/images/綠背姬鶲.jpg' },
     { name: '黃眉柳鶯', key: 'bird-warbler', img: './footage/encyclopedia/images/黃眉柳鶯.jpg' },
     { name: '洋燕', key: 'bird-swallow', img: './footage/encyclopedia/images/洋燕.jpg' },
@@ -205,48 +198,30 @@ function renderVoteModal(container) {
 
   const renderInitialState = () => {
     modalContent.innerHTML = `
-      <style>
-        .poll-card {
-          opacity: 0;
-          transform: translateY(20px);
-          animation: cardAppear 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-        }
-        @keyframes cardAppear {
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .poll-card:hover {
-          border-color: #4ade80 !important;
-          box-shadow: 0 0 25px rgba(74, 222, 128, 0.2) !important;
-        }
-        /* Custom scrollbar for better orderliness */
-        .poll-grid-container::-webkit-scrollbar { width: 8px; }
-        .poll-grid-container::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); border-radius: 10px; }
-        .poll-grid-container::-webkit-scrollbar-thumb { background: rgba(134, 239, 172, 0.3); border-radius: 10px; }
-      </style>
-
-      <div style="text-align:center; margin-bottom:2.5rem; position: relative; padding-top: 2rem;">
-        <div style="background:var(--primary-color); color:black; display:inline-block; padding:10px 35px; border-radius:30px; font-size:0.95rem; font-weight:950; margin-bottom:1.5rem; letter-spacing:4px; box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4); text-transform: uppercase;">CAMPUS LIVE POLL</div>
-        <h2 class="modal-title-fluid" style="color:#86efac; margin-bottom:0.8rem; font-size: 2.8rem; letter-spacing: -0.5px; font-family: 'Outfit', sans-serif;" data-i18n="vote-manual">${translations['vote-manual'][lang]}</h2>
-        <p style="font-size:1.35rem; color:var(--text-muted); max-width: 650px; margin: 0 auto;" data-i18n="vote-subtitle">${translations['vote-subtitle'][lang]}</p>
-        <button id="close-vote" style="position:absolute; top: 10px; right: 0; background:rgba(255,255,255,0.08); border:none; color:white; font-size:2.8rem; cursor:pointer; width:70px; height:70px; border-radius:50%; display:flex; align-items:center; justify-content:center; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index:10;">&times;</button>
+      <div style="text-align:center; padding-top: 3.5rem; padding-bottom: 2.5rem;">
+        <div style="background:#4ade80; color:#000; display:inline-block; padding:8px 30px; border-radius:50px; font-weight:900; margin-bottom:1.5rem; letter-spacing:3px; font-size:0.85rem; text-transform:uppercase;">CAMPUS LIVE POLL</div>
+        <h2 style="color:#4ade80; font-size:clamp(2.5rem, 5vw, 3.2rem); font-weight:950; margin:0 0 10px; font-family:'Outfit';">${t('vote-manual')}</h2>
+        <p style="color:#94a3b8; font-size:1.3rem; max-width:600px; margin:0 auto 2.5rem;">${t('vote-subtitle')}</p>
+        <button id="close-vote" style="position:absolute; top:20px; right:20px; background:rgba(255,255,255,0.05); border:none; color:#fff; font-size:2.5rem; width:60px; height:60px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.3s ease;">&times;</button>
       </div>
-
-      <div class="poll-grid-container" style="max-height: 580px; overflow-y: auto; padding: 20px; margin: 0;">
-        <div class="poll-grid" style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 2rem;">
-          ${pollBirds.map((b, idx) => `
-            <div class="poll-card" data-bird="${b.name}" style="aspect-ratio: 1/1; position: relative; border-radius: 24px; overflow: hidden; border: 2px solid rgba(255,255,255,0.08); cursor: pointer; transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); animation-delay: ${idx * 0.05}s; background: rgba(255,255,255,0.02);">
-              <img src="${b.img}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;" onerror="this.src='./removedbg_gugugu.png'" />
-              <div class="poll-card-overlay" style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 40%, transparent 100%); display: flex; align-items: flex-end; justify-content: center; padding: 20px; transition: all 0.4s ease;">
-                <span data-i18n="${b.key}" style="font-weight: 900; font-size: 1.15rem; text-align: center; line-height: 1.1; color: #fff; text-shadow: 0 4px 8px rgba(0,0,0,0.5); word-break: break-word;">${translations[b.key][lang]}</span>
-              </div>
+      <div class="poll-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:2rem; padding:10px;">
+        ${pollBirds.map((b, idx) => `
+          <div class="poll-card" data-bird="${b.name}" style="background:rgba(255,255,255,0.03); border:1.5px solid rgba(255,255,255,0.08); border-radius:24px; overflow:hidden; position:relative; cursor:pointer; transition:all 0.4s ease; animation: fadeInUp 0.5s ease backwards; animation-delay:${idx * 0.05}s;">
+            <div style="width:100%; aspect-ratio:1/1; overflow:hidden;">
+              <img src="${b.img}" style="width:100%; height:100%; object-fit:cover; transition:transform 0.5s ease;" onerror="this.src='./removedbg_gugugu.png'" />
             </div>
-          `).join('')}
-        </div>
+            <div style="padding:15px; background:linear-gradient(to top, rgba(0,0,0,0.9), transparent); position:absolute; inset:0; display:flex; align-items:flex-end; justify-content:center;">
+              <span style="color:#fff; font-weight:900; text-align:center; font-size:1.1rem;">${birdT(b.key)}</span>
+            </div>
+          </div>
+        `).join('')}
       </div>
     `;
 
     modalContent.querySelectorAll('.poll-card').forEach(card => {
       card.onclick = () => castVote(card.dataset.bird);
+      card.onmouseenter = () => { card.style.borderColor = '#4ade80'; card.querySelector('img').style.transform = 'scale(1.1)'; };
+      card.onmouseleave = () => { card.style.borderColor = 'rgba(255,255,255,0.08)'; card.querySelector('img').style.transform = 'scale(1)'; };
     });
 
     modalContent.querySelector('#close-vote').onclick = () => {
@@ -256,91 +231,59 @@ function renderVoteModal(container) {
   };
 
   const castVote = async (bird) => {
-    window.mascot.say(`選得好！${bird} 真的很可愛！Gu!`);
-    modalContent.innerHTML = `<div style="text-align:center; padding:5rem 0;"><div class="loading-spinner"></div><h3 style="margin-top:2rem;">同步數據中... Syncing Data...</h3></div>`;
-
+    if (window.mascot) window.mascot.say(`Excellent! ${bird} is amazing! Gu!`);
+    modalContent.innerHTML = `<div style="text-align:center; padding:6rem 0;"><div class="loading-spinner"></div><h3 style="margin-top:2rem; color:#4ade80; letter-spacing:2px;">SYNCING DATA...</h3></div>`;
     try {
-      const finalUrl = `${scriptUrl}?bird=${encodeURIComponent(bird)}&user=${encodeURIComponent(store.getUserName() || 'Guest')}&timestamp=${encodeURIComponent(new Date().toISOString())}`;
+      const finalUrl = `${scriptUrl}?bird=${encodeURIComponent(bird)}&user=${encodeURIComponent(store.getUserName() || 'Guest')}&timestamp=${new Date().toISOString()}`;
       await fetch(finalUrl, { mode: 'no-cors' });
-      // Minor delay to let Google Sheets process before fetching results
-      setTimeout(() => renderResults(), 1200);
+      setTimeout(() => renderResults(), 1000);
     } catch (e) {
-      console.error("Voting submission failed:", e);
       renderResults();
     }
   };
 
   const renderResults = async (retries = 3) => {
-    window.mascot.say(lang === 'en' ? "Vote recorded! Let's check the rank! Gu!" : "投票成功！我們一起來看看人氣排名吧！Gu Gu!");
-    modalContent.innerHTML = `<div style="text-align:center; padding: 4rem 0;"><div class="loading-spinner"></div><h3 style="color:#86efac; margin-top:2rem;">載入排行榜中...</h3><p style="opacity:0.6; margin-top:10px;">${retries < 3 ? '正在重新連接伺服器...' : '連線中...'}</p></div>`;
-
+    modalContent.innerHTML = `<div style="text-align:center; padding:6rem 0;"><div class="loading-spinner"></div><h3 style="margin-top:2rem; color:#4ade80; letter-spacing:2px;">CALCULATING VOTES...</h3></div>`;
     try {
       const res = await fetch(`${scriptUrl}?action=get&cb=${Date.now()}`);
-      if (!res.ok) throw new Error("Fetch failed");
       const json = await res.json();
       const counts = json.results || {};
-
-      const sorted = pollBirds.map(b => ({
-        ...b,
-        votes: parseInt(counts[b.name] || 0)
-      })).sort((a, b) => b.votes - a.votes);
-
-      const total = sorted.reduce((sum, b) => sum + b.votes, 0);
+      const sorted = pollBirds.map(b => ({ ...b, votes: parseInt(counts[b.name] || 0) })).sort((a,b) => b.votes - a.votes);
+      const total = sorted.reduce((s,b) => s+b.votes, 0);
 
       modalContent.innerHTML = `
-        <div style="text-align:center; margin-bottom:2rem; animation: slideInRight 0.8s cubic-bezier(0.19, 1, 0.22, 1);">
-          <h2 style="font-size:clamp(1.8rem, 5vw, 2.5rem); color:#86efac; margin-bottom:0.5rem;" data-i18n="poll-live-rank">📊 即時投票排行</h2>
-          <p style="color:var(--text-muted); font-size:1.1rem;">目前共有 <span style="color:#86efac; font-weight:900; font-size:1.4rem;">${total}</span> 位探險家參與投票</p>
+        <div style="text-align:center; margin-bottom:2.5rem;">
+          <h2 style="color:#4ade80; font-size:2.8rem; font-weight:950; font-family:'Outfit';">${t('poll-live-rank')}</h2>
+          <p style="color:#94a3b8; font-size:1.2rem;">${total} EXPLORERS JOINED THE VOTE</p>
         </div>
-        
-        <div class="animate-ready" style="max-width:800px; margin:0 auto; display:flex; flex-direction:column; gap:1.4rem; padding: 0 1rem;">
-          ${sorted.slice(0, 6).map((b, idx) => `
-            <div class="result-row stagger-item" style="animation-delay: ${idx * 0.15}s">
-              <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-weight:800; font-size:1.1rem; align-items:center;">
-                <div style="display:flex; align-items:center; gap:12px;">
-                  <span style="color:rgba(255,255,255,0.3); font-size:0.9rem;">#${idx + 1}</span>
-                  <span style="letter-spacing:1px;">${b.name}</span>
-                </div>
-                <span style="color:#86efac; font-size:1.2rem; filter: drop-shadow(0 0 10px rgba(134,239,172,0.3));">${b.votes} <small style="font-size:0.7rem; opacity:0.6;">VOTES</small></span>
+        <div style="max-width:700px; margin:0 auto; display:flex; flex-direction:column; gap:1.2rem; padding: 0 1rem;">
+          ${sorted.slice(0, 5).map((b, idx) => `
+            <div class="result-row" style="animation: fadeInUp 0.4s ease backwards; animation-delay:${idx * 0.1}s;">
+              <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-weight:800; font-size:1.15rem;">
+                <span>#${idx + 1} ${b.name}</span>
+                <span style="color:#4ade80;">${b.votes} VOTES</span>
               </div>
-              <div class="chart-bar-container glint-effect" style="height:14px; background:rgba(255,255,255,0.05); border-radius:10px; overflow:hidden; border:1px solid rgba(255,255,255,0.05);">
-                <div class="chart-bar-fill" style="width: 0%; height:100%; background:linear-gradient(90deg, #3b82f6, #4ade80, #86efac); border-radius:10px; transition: width 1.5s cubic-bezier(0.19, 1, 0.22, 1); transition-delay: ${0.4 + idx * 0.1}s;"></div>
+              <div style="height:12px; background:rgba(255,255,255,0.05); border-radius:6px; overflow:hidden; border:1px solid rgba(255,255,255,0.1);">
+                <div style="width:0; height:100%; background:linear-gradient(90deg, #3b82f6, #4ade80); transition: width 1.5s cubic-bezier(0.19, 1, 0.22, 1); transition-delay:0.3s;" id="bar-${idx}"></div>
               </div>
             </div>
           `).join('')}
         </div>
-
-        <div style="text-align:center; margin-top:3.5rem; animation: fadeInUp 0.8s ease backwards; animation-delay: 1.2s;">
-          <button class="btn-primary liquid-btn glint-effect" id="finish-vote" style="padding:18px 50px; font-size:1.2rem; border-radius:30px; box-shadow: 0 10px 30px rgba(34, 197, 94, 0.4);">
-             進入校園探索 ✨
-          </button>
+        <div style="text-align:center; margin-top:4rem;">
+          <button class="btn-primary liquid-btn" id="finish-vote" style="padding:15px 50px; border-radius:50px; font-size:1.2rem;">ENTER CAMPUS ✨</button>
         </div>
       `;
-
-      // Trigger bar animations after content is set
       setTimeout(() => {
-        sorted.slice(0, 6).forEach((b, idx) => {
-          const fill = modalContent.querySelectorAll('.chart-bar-fill')[idx];
-          if (fill) fill.style.width = (sorted[0].votes > 0 ? (b.votes / sorted[0].votes * 100) : 0) + '%';
+        sorted.slice(0, 5).forEach((b, idx) => {
+          const bar = document.getElementById(`bar-${idx}`);
+          if (bar) bar.style.width = (sorted[0].votes > 0 ? (b.votes / sorted[0].votes * 100) : 0) + '%';
         });
-      }, 100);
-
-      modalContent.querySelector('#finish-vote').onclick = () => {
-        modal.style.opacity = '0';
-        setTimeout(() => modal.remove(), 400);
-      };
+      }, 150);
+      document.getElementById('finish-vote').onclick = () => { modal.style.opacity = '0'; setTimeout(() => modal.remove(), 450); };
     } catch (e) {
-      if (retries > 0) {
-        console.warn(`Polling failed, retrying... (${retries} left)`);
-        setTimeout(() => renderResults(retries - 1), 1500);
-      } else {
-        modalContent.innerHTML = `
-          <div style="text-align:center; padding: 4rem 0;">
-            <p style="color:#f87171; font-size:1.2rem; margin-bottom:1.5rem;">連線逾時，但你的投票已成功記錄！</p>
-            <button class="btn-primary" id="err-close">直接進入主頁 ✨</button>
-          </div>
-        `;
-        modalContent.querySelector('#err-close').onclick = () => modal.remove();
+      if (retries > 0) setTimeout(() => renderResults(retries - 1), 1500);
+      else {
+        modalContent.innerHTML = `<div style="text-align:center; padding:4rem;"><p style="color:#f87171; font-size:1.3rem;">Connection Error, but your vote is counts!</p><button class="btn-primary" style="margin-top:2rem;" onclick="this.closest('.centered-modal-overlay').remove()">CONTINUE ✨</button></div>`;
       }
     }
   };

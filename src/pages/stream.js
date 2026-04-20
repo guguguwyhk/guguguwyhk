@@ -5,8 +5,8 @@ export function renderStream(container) {
   container.innerHTML = `
     <div class="page-container">
     <header class="page-header">
-      <h1 class="page-title" data-i18n="nav-stream">直播鳥屋 🎥</h1>
-      <button class="btn-secondary btn-back" id="back-btn" data-i18n="back-home">⬅ 返回主頁</button>
+      <h1 class="page-title" data-i18n="nav-stream"></h1>
+      <button id="back-btn" class="btn-secondary btn-back liquid-btn" onclick="window.navigate('home')" data-i18n="back-home"></button>
     </header>
 
     <div class="glass-panel stream-config" style="display:none;">
@@ -26,7 +26,7 @@ export function renderStream(container) {
 
     <!-- History Media Selector -->
     <div id="media-selector" style="display:none; gap:1rem; margin-bottom:1rem; flex-wrap:wrap;">
-      <button class="btn-secondary history-media-btn" data-src="./footage/previous_videos/video1.mp4" data-type="video" data-i18n="clip-feeding">鳥屋片段 1</button>
+      <button class="btn-secondary history-media-btn" data-src="./footage/previous_videos/video1.mp4" data-type="video" data-i18n="clip-history">鳥屋片段</button>
       <button class="btn-secondary history-media-btn" data-src="./footage/previous_videos/IMAG0002.jpg" data-type="image" data-i18n="clip-snapshot">鳥屋快照</button>
     </div>
 
@@ -195,7 +195,6 @@ export function renderStream(container) {
       setStatus('online');
       showOnly(els.liveImg);
       els.fullscreen.classList.remove('hidden');
-      els.liveBadge.classList.remove('hidden');
       els.infoPanel.classList.remove('hidden');
       els.infoSource.textContent = url.replace('wss://', '').replace('ws://', '');
       
@@ -207,12 +206,17 @@ export function renderStream(container) {
     ws.onmessage = (event) => {
       if (currentTab !== 'live') return;
 
-      // Check if data is a Blob (Image) or String (JSON count)
-      if (event.data instanceof Blob) {
+      // Check if data is a Blob or ArrayBuffer (Image)
+      if (event.data instanceof Blob || event.data instanceof ArrayBuffer) {
         framesThisSecond++;
         if (lastObjectURL) URL.revokeObjectURL(lastObjectURL);
         lastObjectURL = URL.createObjectURL(event.data);
         els.liveImg.src = lastObjectURL;
+        
+        // Only show live badge once we actually have content
+        if (els.liveBadge.classList.contains('hidden')) {
+          els.liveBadge.classList.remove('hidden');
+        }
       } 
       else if (typeof event.data === 'string') {
         try {
@@ -278,7 +282,11 @@ export function renderStream(container) {
     framesThisSecond = 0;
     els.infoFps.textContent = '0';
     fpsInterval = setInterval(() => {
-      els.infoFps.textContent = framesThisSecond.toString();
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        els.infoFps.textContent = framesThisSecond.toString();
+      } else {
+        els.infoFps.textContent = '0';
+      }
       framesThisSecond = 0;
     }, 1000);
   }
@@ -364,6 +372,7 @@ export function renderStream(container) {
         v.src = src; v.play();
       } else {
         v.classList.add('hidden'); i.classList.remove('hidden');
+        v.pause();
         i.src = src;
       }
     };
@@ -383,16 +392,13 @@ export function renderStream(container) {
   };
 
   // Listen for ESC key or browser-native exit
-  document.addEventListener('fullscreenchange', () => {
+  const fsChange = () => {
     if (!document.fullscreenElement && !document.webkitFullscreenElement) {
       els.fullscreen.textContent = '⛶';
     }
-  });
-  document.addEventListener('webkitfullscreenchange', () => {
-    if (!document.webkitFullscreenElement) {
-      els.fullscreen.textContent = '⛶';
-    }
-  });
+  };
+  document.addEventListener('fullscreenchange', fsChange);
+  document.addEventListener('webkitfullscreenchange', fsChange);
 
   if (savedUrl) {
     setTimeout(connectWebSocket, 300);
@@ -404,6 +410,8 @@ export function renderStream(container) {
     clearInterval(clockInterval);
     stopUptimeCounter();
     stopFpsCounter();
+    document.removeEventListener('fullscreenchange', fsChange);
+    document.removeEventListener('webkitfullscreenchange', fsChange);
     if (els.histVideo) els.histVideo.pause();
   };
 }

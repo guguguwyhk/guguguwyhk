@@ -5,14 +5,14 @@ export function renderAbout(container) {
     <div class="page-container fade-in">
       
       <header class="page-header">
-        <h1 class="page-title" data-i18n="nav-about">About Us</h1>
-        <button class="btn-secondary btn-back liquid-btn" onclick="window.navigate('home')" data-i18n="back-home">⬅ 返回主頁</button>
+        <h1 class="page-title" data-i18n="nav-about"></h1>
+      <button id="back-btn" class="btn-secondary btn-back liquid-btn" onclick="window.navigate('home')" data-i18n="back-home"></button>
       </header>
 
       <!-- Hero Visual (Matches Photo Style) -->
       <div class="glass-panel" style="overflow:hidden; margin-bottom:var(--space-unit); border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);">
         <div style="position:relative; width:100%; height: clamp(200px, 30vh, 350px); background: #1a1a1a;">
-          <img src="./footage/about_us/birdhouse3.jpeg" style="width:100%; height:100%; object-fit:cover; filter: brightness(0.7);" onerror="this.style.display='none';" />
+          <img id="hero-img" src="./footage/about_us/birdhouse3.jpeg" style="width:100%; height:100%; object-fit:cover; filter: brightness(0.7);" onerror="this.style.display='none';" />
           <div style="position:absolute; bottom:0; left:0; right:0; padding:1.5rem 2rem; background:linear-gradient(transparent, rgba(0,0,0,0.85));">
              <h2 style="margin:0; font-size:clamp(1.3rem, 4vw, 1.8rem); font-weight:800; color:#86efac;" data-i18n="about-hero-title">我們是華仁 3K 第四組</h2>
              <p style="opacity:0.9; margin-top:0.4rem; font-size: 1rem;" data-i18n="about-hero-sub">IDEEA Project — 香港華仁書院</p>

@@ -70,7 +70,7 @@ window.gugugu_bird_modal = {
   },
 
   _fillData(bird) {
-    const isEn = (localStorage.getItem('gugugu_lang') || 'zh') === 'en';
+    const isEn = store.getLanguage() === 'en';
     
     document.getElementById('modal-img').src = bird.img;
     document.getElementById('modal-img').onerror = function() { this.src = './removedbg_gugugu.png'; };
@@ -110,10 +110,15 @@ window.gugugu_bird_modal = {
     
     document.getElementById('btn-play-audio').onclick = (e) => {
       e.stopPropagation();
-      if (!bird.audio) return window.mascot.say('No audio');
+      if (!bird.audio) return window.mascot.say(isEn ? 'Audio coming soon! Gu!' : '語音製作中，敬請期待！Gu!');
+      
+      console.log(`[Audio] Attempting to play: ${bird.audio}`);
       if (!window.audioPlayer) window.audioPlayer = new Audio();
       window.audioPlayer.src = bird.audio;
-      window.audioPlayer.play();
+      window.audioPlayer.play().catch(err => {
+        console.error(`[Audio Error] Failed to play ${bird.audio}:`, err);
+        window.mascot.say(isEn ? 'Oops! This bird is shy today (Audio missing).' : '哎呀！這隻小鳥今天比較害羞 (音檔缺失)。');
+      });
     };
     
     document.getElementById('btn-read-aloud').onclick = (e) => {
@@ -124,7 +129,7 @@ window.gugugu_bird_modal = {
       window.speechSynthesis.speak(utter);
     };
     
-    applyTranslation(localStorage.getItem('gugugu_lang') || 'zh', true);
+    applyTranslation(store.getLanguage(), true);
   },
 
   refreshI18n() {

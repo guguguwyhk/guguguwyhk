@@ -1,5 +1,4 @@
 import { store } from '../store.js';
-import { router } from '../router.js';
 
 export function renderLogin(container) {
   // Only hide mascot if we don't want it floating randomly, but the login design asks for it integrated.
@@ -27,7 +26,9 @@ export function renderLogin(container) {
 
   const BAD_WORDS = [
     'fuck', 'shit', 'bitch', 'asshole', 'dick', 'pussy', 'nigga', 'nigger', 'bastard',
-    '屌', '戇', '仆街', '鹹濕', '臭嗨', '收皮', '屌你', '死全家'
+    '屌', '戇', '仆街', '鹹濕', '臭嗨', '收皮', '屌你', '死全家',
+    'xijinping', '習近平', '習太普', '毛澤東', '64', '六四', 'tiananmen',
+    'niger', 'nigeria', 'hitler'
   ];
 
   const form = document.getElementById('login-form');
@@ -37,13 +38,15 @@ export function renderLogin(container) {
     
     // Developer Secret Door
     if (name === "justinisblacknigga") {
-      router.navigate('showoff');
+      window.navigate('showoff');
       return;
     }
 
     if (name) {
-      // Profanity Filter
-      const hasBadWord = BAD_WORDS.some(word => name.toLowerCase().includes(word));
+      // Normalize: remove spaces/symbols to catch "X i J i n P i n g" or similar
+      const normalized = name.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]/g, '');
+      const hasBadWord = BAD_WORDS.some(word => normalized.includes(word.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]/g, '')));
+      
       if (hasBadWord) {
         window.mascot.show();
         window.mascot.say("哎呀！這個名字不太禮貌喔，換一個吧！Gu Gu!", 5000);
@@ -55,7 +58,7 @@ export function renderLogin(container) {
       window.mascot.show();
       window.mascot.say(`Gu Gu Gu! 歡迎你，${name}！`, 5000);
       sessionStorage.setItem('show_vote_modal', 'true');
-      router.navigate('home');
+      window.navigate('home');
     }
   });
 
@@ -65,6 +68,6 @@ export function renderLogin(container) {
     window.mascot.show();
     window.mascot.say(`歡迎你，探險家！`, 5000);
     sessionStorage.setItem('show_vote_modal', 'true');
-    router.navigate('home');
+    window.navigate('home');
   });
 }

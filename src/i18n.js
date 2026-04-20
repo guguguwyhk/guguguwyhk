@@ -26,12 +26,14 @@ export const translations = {
   'card-about-desc':  { zh: 'The IDEEA Team', en: 'The IDEEA Team' },
 
   // =================== Voting Modal ===================
-  'vote-manual':      { zh: '心水鳥類投票 🗳️', en: 'Favourite Bird Vote 🗳️' },
-  'vote-subtitle':    { zh: '選出你今天最想在校園見到的鳥類！', en: 'Which bird do you hope to see today?' },
-  'vote-sync':        { zh: '你的投票將即時同步至校園數據中心', en: 'Your vote syncs to the campus data center' },
+  'vote-manual':      { zh: '🗳️ 校園生態小投票', en: '🗳️ Campus Ecology Vote' },
+  'vote-subtitle':    { zh: '你覺得校園中哪種鳥類最吸引你？你的選擇將幫助我們改進觀察計劃！', en: 'Which bird is the most attractive to you? Your choice helps our plan!' },
+  'poll-live-rank':   { zh: '📊 即時投票排行',   en: '📊 Live Poll Results' },
+  'poll-total-votes': { zh: '目前共有 {n} 位探險家參與投票', en: 'Currently {n} explorers voted' },
+  'poll-vote-btn':    { zh: '投牠一票 ✨',      en: 'Vote for it ✨' },
 
   // =================== Encyclopedia ===================
-  'ency-title':       { zh: '校園鳥類百科 📖',  en: 'Campus Encyclopedia 📖' },
+  'ency-title':       { zh: '校園鳥類百科',  en: 'Campus Encyclopedia' },
   'ency-search-placeholder': { zh: '搜尋鳥類...',  en: 'Search for birds...' },
   'ency-sort-default':{ zh: '預設排序',          en: 'Default' },
   'ency-sort-size':   { zh: '按體型',             en: 'By Size' },
@@ -53,7 +55,7 @@ export const translations = {
   'env-condition':    { zh: '校園環境',            en: 'Campus Conditions' },
   'local-time':       { zh: '本地時間',            en: 'Local Time' },
   'cond-good':        { zh: '良好',                en: 'Good' },
-  'clip-feeding':     { zh: '鳥屋片段 1',          en: 'Birdhouse Clip 1' },
+  'clip-history':     { zh: '鳥屋片段',            en: 'Birdhouse Clips' },
   'clip-snapshot':    { zh: '鳥屋快照',            en: 'Birdhouse Snapshot' },
 
   // =================== Game Page ===================
@@ -64,8 +66,11 @@ export const translations = {
   'game-score':       { zh: 'SCORE',               en: 'SCORE' },
   'game-lives':       { zh: 'LIVES',               en: 'LIVES' },
   'game-level':       { zh: 'LEVEL',               en: 'LEVEL' },
-  'game-failed':      { zh: 'MISSION FAILED',      en: 'MISSION FAILED' },
-  'game-try-again':   { zh: 'TRY AGAIN',           en: 'TRY AGAIN' },
+  'game-failed':      { zh: '任務失敗',          en: 'MISSION FAILED' },
+  'game-try-again':   { zh: '再試一次',           en: 'RESTART GAME ↩' },
+  'game-final-score': { zh: '你的最終得分：',      en: 'Your final score:' },
+  'game-level-reached': { zh: '到達等級：',        en: 'Level reached:' },
+  'game-cheer-msg':   { zh: 'Gu Gu! 獲得了 {score} 分！不要氣餒！', en: 'Gu Gu! Got {score} points! Keep it up!' },
 
   // =================== Login ===================
   'login-welcome':    { zh: '24/7 實時監測智慧網站',    en: '24/7 Monitoring Smart Website' },

@@ -190,9 +190,9 @@ export function renderEncyclopedia(container) {
   container.innerHTML = `
     <div class="page-container">
       <header class="page-header">
-        <h1 class="page-title" data-i18n="ency-title">校園鳥類百科</h1>
-        <button class="btn-secondary btn-back" id="back-btn" data-i18n="back-home">⬅ 返回主頁</button>
-      </header>
+      <h1 class="page-title" data-i18n="ency-title"></h1>
+      <button id="back-btn" class="btn-secondary btn-back liquid-btn" onclick="window.navigate('home')" data-i18n="back-home"></button>
+    </header>
 
       <div class="glass-panel" style="margin-bottom:var(--space-unit); display:flex; gap:1rem; flex-wrap:wrap; align-items:stretch; padding:1.2rem; position:relative;">
         <div style="flex:2; position:relative; min-width:260px;">
@@ -264,7 +264,6 @@ export function renderEncyclopedia(container) {
     `).join('');
   };
 
-  // Set global shared list for the modal to use (passed by reference)
   window.gugugu_app_birds = filtered;
 
   renderGrid();
@@ -307,13 +306,14 @@ export function renderEncyclopedia(container) {
     renderGrid();
   };
 
-  // Close suggestions on outside click
-  document.addEventListener('click', (e) => {
+  const gridClickOutside = (e) => {
     const s = document.getElementById('search-suggestions');
     if (s && !s.contains(e.target) && e.target.id !== 'search-input') {
       s.classList.add('hidden');
     }
-  });
+  };
+  
+  document.addEventListener('click', gridClickOutside);
 
   document.getElementById('sort-select').onchange = (e) => {
     const val = e.target.value;
@@ -325,4 +325,8 @@ export function renderEncyclopedia(container) {
   };
 
   document.getElementById('back-btn').onclick = () => window.navigate('home');
+
+  return () => {
+    document.removeEventListener('click', gridClickOutside);
+  };
 }
