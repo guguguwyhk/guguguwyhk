@@ -215,13 +215,19 @@ export function renderEncyclopedia(container) {
       .stat-bar-bg { flex:1; height:16px; background:rgba(255,255,255,0.08); border-radius:8px; overflow:hidden; }
       .stat-bar { height:100%; border-radius:8px; transition: width 0.8s cubic-bezier(0.165, 0.84, 0.44, 1); }
       .bird-card-info { 
-        padding: 2.5rem 1.5rem 1.5rem; 
+        padding: 1.2rem 1rem; 
         text-align: center; 
-        background: rgba(0, 0, 0, 0.85); 
-        backdrop-filter: blur(12px);
+        background: #000000; /* Solid black for high contrast */
         width: 100%;
         position: relative;
         z-index: 5;
+      }
+      
+      @media (max-width: 768px) {
+        .bird-card-info {
+           background: #000000 !important;
+           padding: 0.8rem 0.5rem !important;
+        }
       }
       
       .bird-card img { width:100%; height:280px; object-fit:cover; transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); display:block; }

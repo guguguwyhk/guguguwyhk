@@ -1,6 +1,6 @@
 export function renderMap(container) {
   container.innerHTML = `
-    <div class="page-container" style="display:flex; flex-direction:column; height: 100vh; overflow: hidden; padding: 0;">
+    <div class="page-container" style="display:flex; flex-direction:column; min-height: 100vh; overflow-x: hidden; overflow-y: auto; padding: 0;">
       <header class="page-header">
         <h1 class="page-title" data-i18n="card-map-title"></h1>
         <button id="back-btn" class="btn-secondary btn-back liquid-btn" data-i18n="back-home"></button>

@@ -37,7 +37,7 @@ export function renderShowOff(container) {
         width: 100vw; height: 100vh;
         background: radial-gradient(circle at center, #050b18 0%, #010409 100%);
         color: white; font-family: 'Outfit', sans-serif;
-        display: flex; flex-direction: column; overflow: hidden;
+        display: flex; flex-direction: column; min-height: 100vh; overflow-x: hidden; overflow-y: auto;
         position: relative;
         /* Ensure it behaves correctly on very small laptop screens */
         min-height: 600px; 

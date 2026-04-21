@@ -32,7 +32,7 @@ export function renderGame(container) {
       }
     </style>
 
-    <div class="page-container" style="padding: 10px; min-height: 100vh; display: flex; flex-direction: column; overflow: hidden;">
+    <div class="page-container" style="padding: 10px; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto;">
     <header class="page-header" style="z-index: 200;">
       <h1 class="page-title" data-i18n="nav-game"></h1>
       <button id="back-btn" class="btn-secondary btn-back liquid-btn" onclick="window.navigate('home')" data-i18n="back-home"></button>
@@ -65,7 +65,7 @@ export function renderGame(container) {
                <div style="background:rgba(255,255,255,0.06); border:1.5px solid rgba(251,191,36,0.3); padding:8px 18px; border-radius:14px; color:#fbbf24; font-size:0.9rem; font-weight:600;">✨ Catch: +10pts</div>
                <div style="background:rgba(255,255,255,0.06); border:1.5px solid rgba(239,68,68,0.3); padding:8px 18px; border-radius:14px; color:#f87171; font-size:0.9rem; font-weight:600;">🐦‍⬛ Crows: -1 Life</div>
              </div>
-             <button id="start-btn" class="btn-primary liquid-btn" style="padding:0.8rem 3rem; font-size: clamp(1.2rem, 4vw, 1.8rem); border-radius:100px; box-shadow: 0 0 40px rgba(34, 197, 94, 0.4); font-weight:900; border:none; z-index:101; position:relative;">${t('game-start-btn')}</button>
+             <button id="start-btn" class="btn-primary liquid-btn" style="padding:0.9rem 3.5rem; font-size: clamp(1.3rem, 5vw, 2rem); border-radius:100px; box-shadow: 0 0 40px rgba(34, 197, 94, 0.4); font-weight:950; border:none; z-index:110; position:relative; touch-action: none; cursor: pointer;">${t('game-start-btn')}</button>
            </div>
         </div>
       </div>
@@ -289,8 +289,16 @@ export function renderGame(container) {
   }
 
   const jump = (e) => { 
+    // If overlay is showing, let the user scroll the page normally
+    if (!startOverlay.style.display || startOverlay.style.display !== 'none') return;
+    
+    // Once overlay is gone, we are in 'Ready' state or 'Active' state
+    if (state.isWaitingToBegin) {
+      state.isWaitingToBegin = false;
+      state.isGameActive = true;
+    }
+
     if (e && e.cancelable) e.preventDefault(); 
-    if (state.isWaitingToBegin) { state.isWaitingToBegin = false; state.isGameActive = true; } 
     state.birdVelocity = -8.5; 
   };
   const handleKeyDown = (e) => { 
@@ -303,7 +311,21 @@ export function renderGame(container) {
   gameBox.addEventListener('mousedown', jump);
   gameBox.addEventListener('touchstart', jump, { passive: false });
   window.addEventListener('keydown', handleKeyDown);
-  startBtn.onclick = (e) => { e.stopPropagation(); startGame(); };
+  
+  // Robust start handler for all platforms (Mobile, iPad, PC)
+  const handleStart = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    startGame();
+  };
+  
+  // Use addEventListener for better iPad support
+  startBtn.addEventListener('pointerdown', handleStart);
+  startBtn.addEventListener('touchstart', handleStart, { passive: false });
+  // Fallback click
+  startBtn.onclick = (e) => { if (e && !e.defaultPrevented) handleStart(e); };
 
   spawnStars(); state.lastTime = performance.now(); loop();
   return () => { 

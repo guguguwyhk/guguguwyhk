@@ -980,7 +980,7 @@ select.glass-input option {
 
 .bird-card img { width: 100%; height: 220px; object-fit: cover; transition: transform 0.5s ease; display:block; }
 .bird-card:hover img { transform: scale(1.1); }
-.bird-card-info { padding: 1rem; text-align: center; }
+.bird-card-info { padding: 1rem; text-align: center; background: #000000; }
 
 /* =================== Poll Overhaul Styles =================== */
 .poll-card {
