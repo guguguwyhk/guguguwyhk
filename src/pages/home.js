@@ -39,7 +39,7 @@ export function renderHome(container) {
     <h2 id="home-greeting" style="margin-bottom:0.8rem; font-weight:600; font-size: 1.25rem; opacity: 0.9;"></h2>
 
     <!-- Daily Highlight (Responsive with Visible Image) -->
-    <div class="glass-panel daily-highlight" style="padding: 1.2rem 1.8rem; display: flex; align-items: center; border-radius: 25px; margin-bottom: 1.5rem; gap: 1.5rem; overflow: hidden;">
+    <div class="glass-panel daily-highlight" style="padding: 1.2rem 1.8rem; display: flex; align-items: center; border-radius: 25px; margin-bottom: 1.5rem; gap: 1.5rem; overflow: hidden; background: var(--glass-card-bg);">
       <div style="flex:1; min-width: 0;">
         <h3 id="daily-title" style="color:#86efac; margin-bottom:0.4rem; font-size: 1.15rem;" data-i18n="daily-highlight">✨ 每日鳥事</h3>
         <p id="daily-fact" data-fact-index="${factIndex}" style="font-size: 1.05rem; line-height:1.4; color:rgba(255,255,255,0.95); word-wrap: break-word; font-weight: 500;"></p>
@@ -131,7 +131,8 @@ export function renderHome(container) {
     logoutBtn.addEventListener('click', () => {
       store.setUserName(null);
       window.navigate('login');
-      window.mascot.say("期待你的下次探索！Gu Gu!");
+      const isEn = window.store && window.store.getLanguage() === 'en';
+      window.mascot.say(isEn ? "See you next time! Gu Gu!" : "期待你的下次探索！Gu Gu!");
     });
   }
 
@@ -206,7 +207,7 @@ function renderVoteModal(container) {
       </div>
       <div class="poll-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:2rem; padding:10px;">
         ${pollBirds.map((b, idx) => `
-          <div class="poll-card" data-bird="${b.name}" style="background:rgba(255,255,255,0.03); border:1.5px solid rgba(255,255,255,0.08); border-radius:24px; overflow:hidden; position:relative; cursor:pointer; transition:all 0.4s ease; animation: fadeInUp 0.5s ease backwards; animation-delay:${idx * 0.05}s;">
+          <div class="poll-card glass-card" data-bird="${b.name}" data-key="${b.key}" style="border-radius:24px; overflow:hidden; position:relative; cursor:pointer; transition:all 0.4s ease; animation: fadeInUp 0.5s ease backwards; animation-delay:${idx * 0.05}s;">
             <div style="width:100%; aspect-ratio:1/1; overflow:hidden;">
               <img src="${b.img}" style="width:100%; height:100%; object-fit:cover; transition:transform 0.5s ease;" onerror="this.src='./removedbg_gugugu.png'" />
             </div>
@@ -219,7 +220,7 @@ function renderVoteModal(container) {
     `;
 
     modalContent.querySelectorAll('.poll-card').forEach(card => {
-      card.onclick = () => castVote(card.dataset.bird);
+      card.onclick = () => castVote(card.dataset.bird, card.dataset.key);
       card.onmouseenter = () => { card.style.borderColor = '#4ade80'; card.querySelector('img').style.transform = 'scale(1.1)'; };
       card.onmouseleave = () => { card.style.borderColor = 'rgba(255,255,255,0.08)'; card.querySelector('img').style.transform = 'scale(1)'; };
     });
@@ -230,11 +231,14 @@ function renderVoteModal(container) {
     };
   };
 
-  const castVote = async (bird) => {
-    if (window.mascot) window.mascot.say(`Excellent! ${bird} is amazing! Gu!`);
-    modalContent.innerHTML = `<div style="text-align:center; padding:6rem 0;"><div class="loading-spinner"></div><h3 style="margin-top:2rem; color:#4ade80; letter-spacing:2px;">SYNCING DATA...</h3></div>`;
+  const castVote = async (birdName, birdKey) => {
+    const translatedBird = birdT(birdKey);
+    const mascotMsg = t('vote-cast-mascot').replace('{bird}', translatedBird);
+    if (window.mascot) window.mascot.say(mascotMsg);
+    
+    modalContent.innerHTML = `<div style="text-align:center; padding:6rem 0;"><div class="loading-spinner"></div><h3 style="margin-top:2rem; color:#4ade80; letter-spacing:2px;">${t('vote-syncing')}</h3></div>`;
     try {
-      const finalUrl = `${scriptUrl}?bird=${encodeURIComponent(bird)}&user=${encodeURIComponent(store.getUserName() || 'Guest')}&timestamp=${new Date().toISOString()}`;
+      const finalUrl = `${scriptUrl}?bird=${encodeURIComponent(birdName)}&user=${encodeURIComponent(store.getUserName() || 'Guest')}&timestamp=${new Date().toISOString()}`;
       await fetch(finalUrl, { mode: 'no-cors' });
       setTimeout(() => renderResults(), 1000);
     } catch (e) {
@@ -243,7 +247,7 @@ function renderVoteModal(container) {
   };
 
   const renderResults = async (retries = 3) => {
-    modalContent.innerHTML = `<div style="text-align:center; padding:6rem 0;"><div class="loading-spinner"></div><h3 style="margin-top:2rem; color:#4ade80; letter-spacing:2px;">CALCULATING VOTES...</h3></div>`;
+    modalContent.innerHTML = `<div style="text-align:center; padding:6rem 0;"><div class="loading-spinner"></div><h3 style="margin-top:2rem; color:#4ade80; letter-spacing:2px;">${t('vote-calculating')}</h3></div>`;
     try {
       const res = await fetch(`${scriptUrl}?action=get&cb=${Date.now()}`);
       const json = await res.json();
@@ -254,7 +258,7 @@ function renderVoteModal(container) {
       modalContent.innerHTML = `
         <div style="text-align:center; margin-bottom:2.5rem;">
           <h2 style="color:#4ade80; font-size:2.8rem; font-weight:950; font-family:'Outfit';">${t('poll-live-rank')}</h2>
-          <p style="color:#94a3b8; font-size:1.2rem;">${total} EXPLORERS JOINED THE VOTE</p>
+          <p style="color:#94a3b8; font-size:1.2rem;">${total} ${t('vote-explorers-count')}</p>
         </div>
         <div style="max-width:700px; margin:0 auto; display:flex; flex-direction:column; gap:1.2rem; padding: 0 1rem;">
           ${sorted.slice(0, 5).map((b, idx) => `

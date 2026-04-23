@@ -15,7 +15,7 @@ html {
   --primary-hover: #16a34a;
   --secondary-color: #60a5fa;
   
-  --glass-bg: rgba(5, 12, 8, 0.82);
+  --glass-bg: rgba(10, 22, 15, 0.72);
   --glass-card-bg: rgba(5, 12, 8, 0.65);
   --glass-border: rgba(134, 239, 172, 0.15);
   --glass-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.8);
@@ -84,15 +84,21 @@ body {
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
   border-radius: 24px;
+  /* Hardware acceleration for blur performance */
+  will-change: backdrop-filter, transform;
+  transform: translateZ(0);
 }
 
 .glass-card {
   background: var(--glass-card-bg);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(10px); /* Slightly reduced for better performance */
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
   border-radius: 18px;
   transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  will-change: transform, backdrop-filter;
+  transform: translateZ(0);
 }
 
 .glass-card:hover {
@@ -735,7 +741,10 @@ select.glass-input option {
 
 #mascot-img:hover {
   transform: scale(1.05);
-  filter: drop-shadow(0 12px 25px rgba(34, 197, 94, 0.3));
+  /* Brighter, more multi-layered soft glow for better visibility */
+  filter: drop-shadow(0 0 10px rgba(34, 197, 94, 0.7)) 
+          drop-shadow(0 0 25px rgba(34, 197, 94, 0.5))
+          drop-shadow(0 0 50px rgba(34, 197, 94, 0.3));
 }
 
 /* =================== Global Language Button =================== */
@@ -1060,7 +1069,7 @@ select.glass-input option {
 
 @media (max-width: 768px) {
   /* Layout & Spacing */
-  .page-header { flex-direction: column; gap: 0.8rem; align-items: flex-start; }
+  .page-header { flex-direction: column !important; gap: 0.8rem !important; align-items: flex-start !important; }
   .page-title { font-size: 1.6rem !important; }
   .page-container { padding: 1.5rem 1rem 7rem 1rem !important; }
   
@@ -1070,8 +1079,8 @@ select.glass-input option {
   
   /* Grid Nav - Home Page */
   .nav-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 1rem !important;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)) !important;
+    gap: 0.8rem !important;
   }
   .nav-card {
     padding: 1.2rem !important;
@@ -1109,6 +1118,9 @@ select.glass-input option {
     width: 96% !important;
     max-height: 90vh !important;
     border-radius: 20px !important;
+    backdrop-filter: blur(8px); /* Reduced on mobile for speed */
+    -webkit-backdrop-filter: blur(8px);
+    transform: translateZ(0);
   }
   .modal-body-flex {
     flex-direction: column !important;
@@ -1241,11 +1253,12 @@ select.glass-input option {
   }
 }
 
-@media (max-width: 380px) {
+@media (max-width: 480px) {
   .nav-grid, .grid-responsive {
-    grid-template-columns: 1fr !important;
-    gap: 0.8rem !important;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)) !important;
+    gap: 0.75rem !important;
   }
+  .page-title { font-size: 1.4rem !important; }
 }
 
 /* Ensure body doesn't horizontal scroll on mobile */
@@ -1277,3 +1290,89 @@ h3 { font-size: clamp(1.1rem, 5vw, 1.5rem); }
 .fixed-bg {
   backface-visibility: hidden;
 }
+
+/* =================== Landscape Mobile Optimization =================== */
+@media (max-height: 550px) and (orientation: landscape) {
+  /* Mascot Widget */
+  #mascot-widget {
+    bottom: 10px !important;
+    right: 10px !important;
+    transform: scale(0.7) !important;
+    z-index: 1000;
+  }
+  #mascot-bubble {
+    font-size: 0.85rem !important;
+    padding: 10px 15px !important;
+    bottom: 90px !important;
+    max-width: 200px !important;
+  }
+
+  /* Global Page Spacing */
+  .page-container {
+    padding: 0.5rem 1rem !important;
+  }
+  .page-header {
+    margin-bottom: 0.5rem !important;
+    padding: 0.5rem 0 !important;
+  }
+  .page-title {
+    font-size: 1.25rem !important;
+  }
+
+  /* Game Overlay Spacing */
+  #overlay-mascot-box {
+    margin-bottom: 0.8rem !important;
+  }
+  #overlay-mascot-box img {
+    width: 100px !important;
+  }
+  #overlay-content {
+    gap: 0.6rem !important;
+  }
+  #overlay-title {
+    font-size: 2rem !important;
+  }
+  #overlay-desc {
+    font-size: 0.9rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  #rules-row {
+    margin-bottom: 0.8rem !important;
+    gap: 6px !important;
+  }
+  #rules-row div {
+    padding: 4px 10px !important;
+    font-size: 0.75rem !important;
+  }
+  #start-btn {
+    padding: 0.6rem 2rem !important;
+    font-size: 1.1rem !important;
+    margin-bottom: 0 !important;
+  }
+  
+  /* Modal Adjustments */
+  .centered-modal-content {
+    padding: 1rem !important;
+    width: 95vw !important;
+  }
+}
+
+/* =================== Orientation Specifics (Landscape Phones) =================== */
+@media (orientation: landscape) and (max-height: 500px) {
+  .page-container { padding: 0.8rem 2rem 1rem 2rem !important; }
+  .page-header { margin-bottom: 0.8rem !important; padding: 0.5rem 0 !important; }
+  .page-title { font-size: 1.2rem !important; }
+  .btn-back { padding: 6px 14px !important; font-size: 0.85rem !important; }
+  
+  /* Modal adjustments for landscape */
+  .centered-modal-content {
+    max-height: 95vh !important;
+    width: 92% !important;
+    border-radius: 20px !important;
+  }
+  .modal-body-flex {
+    flex-direction: column !important;
+    overflow-y: auto !important;
+  }
+}
+

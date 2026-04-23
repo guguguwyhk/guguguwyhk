@@ -3,6 +3,9 @@ import { store } from './store.js';
 import { MascotController } from './mascot.js';
 import { applyTranslation } from './i18n.js';
 
+// Setup Store globally
+window.store = store;
+
 // Setup Mascot
 window.mascot = new MascotController();
 
@@ -44,6 +47,13 @@ window.gugugu_bird_modal = {
   open(birdId, list = []) {
     const modal = document.getElementById('bird-modal');
     if (!modal) return;
+    
+    // Stop any currently playing bird audio or speech before switching
+    if (window.audioPlayer) {
+      window.audioPlayer.pause();
+      window.audioPlayer.currentTime = 0;
+    }
+    window.speechSynthesis.cancel();
     
     const isUpdating = !modal.classList.contains('hidden');
     

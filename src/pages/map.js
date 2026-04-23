@@ -6,7 +6,7 @@ export function renderMap(container) {
         <button id="back-btn" class="btn-secondary btn-back liquid-btn" data-i18n="back-home"></button>
       </header>
 
-      <div class="map-layout" style="flex: 1; padding: 0; display: flex; overflow: hidden; position: relative; background: #050c08;">
+      <div class="map-layout" style="flex: 1; padding: 0; display: flex; overflow: hidden; position: relative; background: #050c08; min-height: clamp(400px, 70vh, 800px);">
         <!-- Loading Overlay -->
         <div id="map-loading" style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 50; background: rgba(5, 12, 8, 0.95); transition: opacity 0.5s ease;">
           <div class="loading-spinner" style="width: 60px; height: 60px; border: 4px solid rgba(134, 239, 172, 0.1); border-top-color: #86efac; border-radius: 50%; animation: spin 1s linear infinite;"></div>
@@ -21,11 +21,12 @@ export function renderMap(container) {
           frameborder="0" 
           width="100%" 
           height="100%" 
+          sandbox="allow-scripts allow-same-origin"
           allowfullscreen="true" 
           mozallowfullscreen="true" 
           webkitallowfullscreen="true"
           style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; opacity: 0; transition: opacity 0.8s ease; pointer-events: auto;"
-          tabindex="0">
+          tabindex="-1">
         </iframe>
       </div>
     </div>
@@ -41,10 +42,13 @@ export function renderMap(container) {
 
   const iframe = document.getElementById('slides-iframe');
   const loader = document.getElementById('map-loading');
+  const isEn = window.store && window.store.getLanguage() === 'en';
   
   if (window.mascot && window.mascot.img) {
     window.mascot.img.src = './gugugu_builder.png';
-    window.mascot.say("正在為你準備校園地圖！Gu Gu!");
+    const lang = (window.store && window.store.getLanguage()) || 'zh';
+    const msg = (translations['map-loading-mascot'] && translations['map-loading-mascot'][lang]) || "Preparing map...";
+    window.mascot.say(msg);
   }
 
   let loadFinished = false;
@@ -57,7 +61,9 @@ export function renderMap(container) {
       iframe.style.opacity = '1';
       if (window.mascot && window.mascot.img) {
         window.mascot.img.src = './removedbg_gugugu.png';
-        window.mascot.say("這裡是華仁生態地圖！Gu!");
+        const lang = (window.store && window.store.getLanguage()) || 'zh';
+        const msg = (translations['map-ready-mascot'] && translations['map-ready-mascot'][lang]) || "Map ready!";
+        window.mascot.say(msg);
       }
     }, 300);
   };
@@ -75,9 +81,18 @@ export function renderMap(container) {
   };
   
   window.addEventListener('keydown', preventKbdNav, true);
+  
+  // Prevent iframe from stealing focus to keep keyboard blocking effective
+  const focusInterval = setInterval(() => {
+    if (document.activeElement === iframe) {
+      iframe.blur();
+      window.focus();
+    }
+  }, 100);
 
   return () => {
     loadFinished = true;
     window.removeEventListener('keydown', preventKbdNav, true);
+    clearInterval(focusInterval);
   };
 }

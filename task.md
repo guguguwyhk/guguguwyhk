@@ -1,0 +1,8 @@
+- `[x]` Task 1 & 2: Update "Click: Fly Up" and translations in game.js and i18n.js
+- `[x]` Task 3: Update probabilities in encyclopedia.js
+- `[x]` Task 4: Fix Login Page Mobile UI and add mascot translations
+- `[x]` Task 5 & 7: Prevent keyboard navigation and deep linking on Map Page
+- `[x]` Task 6: Refine Level Up animation in game.js
+- `[x]` Task 8: Fix Stream Page history video black screen on mobile
+- `[x]` Task 9: Ensure mascot translations in login/map pages
+- `[x]` Task 10-12: Debugging and UI checks

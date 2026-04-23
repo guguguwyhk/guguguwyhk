@@ -1,3 +1,5 @@
+import { translations } from '../i18n.js';
+
 export function renderStream(container) {
   // 這裡預設將會是你部署到 Render 後的 URL
   const savedUrl = localStorage.getItem('esp32_relay_url') || 'wss://gugugu-relay.onrender.com';
@@ -62,7 +64,7 @@ export function renderStream(container) {
           </div>
 
           <!-- === HISTORY STATE === -->
-          <video id="history-video" class="hidden" style="width:100%; height:100%; object-fit:cover;" controls>
+          <video id="history-video" class="hidden" style="width:100%; height:100%; object-fit:contain; background:#000;" controls playsinline muted>
             <source src="./footage/previous_videos/video1.mp4" type="video/mp4" />
           </video>
           <img id="history-image" class="hidden" style="width:100%; height:100%; object-fit:contain;" />
@@ -193,11 +195,16 @@ export function renderStream(container) {
 
     ws.onopen = () => {
       setStatus('online');
-      showOnly(els.liveImg);
-      els.fullscreen.classList.remove('hidden');
-      els.infoPanel.classList.remove('hidden');
-      els.infoSource.textContent = url.replace('wss://', '').replace('ws://', '');
       
+      // ONLY switch to live image if we are actually on the LIVE tab
+      if (currentTab === 'live') {
+        showOnly(els.liveImg);
+        els.fullscreen.classList.remove('hidden');
+        els.liveBadge.classList.remove('hidden');
+        els.infoPanel.classList.remove('hidden');
+      }
+      
+      els.infoSource.textContent = url.replace('wss://', '').replace('ws://', '');
       connectTime = Date.now();
       startUptimeCounter();
       startFpsCounter();
@@ -234,17 +241,24 @@ export function renderStream(container) {
     };
 
     ws.onclose = () => {
-      handleWsError('中繼站連線已中斷');
+      const lang = (window.store && window.store.getLanguage()) || 'zh';
+      const msg = (translations['stream-relay-disconnected'] && translations['stream-relay-disconnected'][lang]) || 'Disconnected';
+      handleWsError(msg);
     };
   }
 
   function handleWsError(msg) {
     ws = null;
     setStatus('error');
-    showOnly(els.liveError);
+    
+    // Only show the error screen if we are currently on the LIVE tab
+    if (currentTab === 'live') {
+      showOnly(els.liveError);
+      els.fullscreen.classList.add('hidden');
+      els.liveBadge.classList.add('hidden');
+    }
+    
     els.errorDetail.textContent = msg;
-    els.fullscreen.classList.add('hidden');
-    els.liveBadge.classList.add('hidden');
     stopUptimeCounter();
     stopFpsCounter();
   }
@@ -345,18 +359,11 @@ export function renderStream(container) {
     document.getElementById('tab-live').className = 'btn-secondary';
     els.mediaSel.style.display = 'flex';
     
-    // Explicitly hide ALL live related overlays
+    // Completely clear all live states
+    showOnly(null); 
     els.fullscreen.classList.add('hidden');
     els.liveBadge.classList.add('hidden');
     els.infoPanel.classList.add('hidden');
-
-    // Hide live segments
-    els.liveImg.classList.add('hidden');
-    els.liveImg.src = ''; 
-    if (lastObjectURL) URL.revokeObjectURL(lastObjectURL);
-    lastObjectURL = null;
-
-    showOnly(null); // Clear live states
 
     const firstMedia = document.querySelector('.history-media-btn');
     if (firstMedia) firstMedia.click();
@@ -364,16 +371,31 @@ export function renderStream(container) {
 
   document.querySelectorAll('.history-media-btn').forEach(btn => {
     btn.onclick = (e) => {
-      const { src, type } = e.target.dataset;
+      // Ensure we get the dataset from the button even if child is clicked
+      const target = e.currentTarget;
+      const { src, type } = target.dataset;
       const v = els.histVideo;
       const i = els.histImage;
+
+      // Update UI active state
+      document.querySelectorAll('.history-media-btn').forEach(b => b.style.opacity = '0.6');
+      target.style.opacity = '1';
+
       if (type === 'video') {
-        i.classList.add('hidden'); v.classList.remove('hidden');
-        v.src = src; v.play();
+        showOnly(v);
+        v.src = src; 
+        v.load();
+        v.play().catch(err => {
+          console.error("[History Video Error]", err);
+          // If video fails, maybe show a friendly message or fallback
+        });
       } else {
-        v.classList.add('hidden'); i.classList.remove('hidden');
-        v.pause();
+        showOnly(i);
         i.src = src;
+        i.onerror = () => {
+          console.error("[History Image Error] Failed to load:", src);
+          i.src = './removedbg_gugugu.png'; // Fallback
+        };
       }
     };
   });

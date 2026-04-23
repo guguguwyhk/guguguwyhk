@@ -34,12 +34,11 @@ export function renderShowOff(container) {
   container.innerHTML = `
     <style>
       #showoff-main {
-        width: 100vw; height: 100vh;
+        width: 100%; height: 100vh; height: 100dvh;
         background: radial-gradient(circle at center, #050b18 0%, #010409 100%);
         color: white; font-family: 'Outfit', sans-serif;
-        display: flex; flex-direction: column; min-height: 100vh; overflow-x: hidden; overflow-y: auto;
+        display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto;
         position: relative;
-        /* Ensure it behaves correctly on very small laptop screens */
         min-height: 600px; 
       }
       .neon-title { 
@@ -90,21 +89,33 @@ export function renderShowOff(container) {
         0%, 100% { transform: scale(1) translateY(0); }
         50% { transform: scale(1.1) translateY(-30px); }
       }
+
+      /* Responsive Overrides for ShowOff Page */
+      @media (max-width: 950px) {
+        #showoff-main { overflow-y: auto !important; height: auto !important; min-height: 100dvh !important; }
+        #showoff-content { height: auto !important; min-height: 100% !important; padding: 2rem 1.5rem !important; }
+        .showoff-grid-container { flex-direction: column !important; height: auto !important; gap: 2rem !important; }
+        #bottom-area { height: auto !important; flex-direction: column !important; gap: 1.5rem !important; }
+        #bottom-area .glass-panel { padding: 2rem !important; }
+        #leaderboard-video { min-height: 250px; }
+        #lb-container { min-height: 400px; gap: 1.5rem !important; }
+        #dev-exit { opacity: 1 !important; background: var(--secondary-color) !important; border-color: rgba(255,255,255,0.3) !important; }
+      }
     </style>
 
-    <div id="showoff-main" style="width:100vw; height:100vh; background:radial-gradient(circle at center, #050b18 0%, #010409 100%); color:white; font-family:'Outfit', sans-serif; display:flex; flex-direction:column; overflow:hidden; position:relative;">
+    <div id="showoff-main" style="width:100%; height:100vh; height: 100dvh; background:radial-gradient(circle at center, #050b18 0%, #010409 100%); color:white; font-family:'Outfit', sans-serif; display:flex; flex-direction:column; overflow-x:hidden; overflow-y:auto; position:relative;">
       
-      <div id="showoff-content" style="flex:1; display:flex; flex-direction:column; padding:2vh 5vw; z-index:1; min-height:0; justify-content: flex-start;">
+      <div id="showoff-content" style="flex:1; display:flex; flex-direction:column; padding: clamp(1rem, 3vh, 5vh) clamp(1rem, 5vw, 8vw); z-index:1; min-height:0; justify-content: flex-start;">
         
-        <header class="page-header" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2vh; flex-shrink:0; width: 100%; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1vh;">
-          <div style="flex: 1;">
-            <h1 class="page-title neon-title" style="font-size: clamp(2.2rem, 4vw, 4.5rem) !important; line-height:1; margin: 0;">Gu Gu Gu</h1>
-            <p style="font-size: clamp(0.6rem, 0.8vw, 1rem); color:#94a3b8; letter-spacing: 2px; text-transform:uppercase; font-weight:700; margin: 0.5vh 0 0; opacity: 0.6; white-space: nowrap;">Master IDEEA Project Group 4 -- 24/7 Monitoring Smart Website</p>
+        <header class="page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2vh; flex-shrink:0; width: 100%; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 1vh 0; position: relative;">
+          <div style="flex: 1; min-width: 0;">
+            <h1 class="page-title neon-title" style="font-size: clamp(2.2rem, 5vw, 4.5rem) !important; line-height:1; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Gu Gu Gu</h1>
+            <p style="font-size: clamp(0.6rem, 0.9vw, 1rem); color:#94a3b8; letter-spacing: 2px; text-transform:uppercase; font-weight:700; margin: 0.5vh 0 0; opacity: 0.6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Master IDEEA Project Group 4 -- 24/7 Monitoring Smart Website</p>
           </div>
-          <button id="dev-exit" class="btn-secondary btn-back" style="position: fixed; top: 1.5rem; right: 1.5rem; min-width: auto; height: auto; padding: 0.8rem 1.2rem; opacity: 0.3; font-size: 0.9rem;">← Exit</button>
+          <button id="dev-exit" class="btn-secondary btn-back liquid-btn" style="position: relative; top: auto; right: auto; min-width: auto; height: auto; padding: 0.6rem 1.2rem; opacity: 0.6; font-size: 0.9rem; margin-left: 1rem; flex-shrink: 0;">← Exit</button>
         </header>
 
-        <div id="main-grid" style="display:flex; gap:clamp(1rem, 3vw, 4rem); flex:1; min-height:0; align-items: stretch; margin-bottom: 2vh;">
+        <div id="main-grid" class="showoff-grid-container" style="display:flex; gap:clamp(1rem, 3vw, 4rem); flex:1; min-height:0; align-items: stretch; margin-bottom: 2vh;">
           
           <!-- Left Content Area -->
           <div style="flex:1.4; display:flex; flex-direction:column; gap:clamp(1rem, 2vh, 3vh); min-width:0;">
@@ -135,13 +146,13 @@ export function renderShowOff(container) {
               <h2 style="font-size:clamp(1.2rem, 1.6vw, 2rem); color:#3b82f6; display:flex; align-items:center; gap:12px; margin-bottom:1rem; flex-shrink:0; font-weight:800;">
                 <span style="font-size:1.8rem; animation:rotate 15s linear infinite;">🏆</span> 即時人氣榜 (TOP 3)
               </h2>
-              <div id="lb-container" style="flex:1; display:flex; flex-direction:column; pointer-events:none;">
+              <div id="lb-container" style="flex:1; display:flex; flex-direction:column; justify-content: space-between; min-height:0; overflow:hidden; padding: 1vh 0;">
                 <!-- Bird bars injected here -->
               </div>
             </div>
 
             <!-- QR & Mascot Bottom Area -->
-            <div style="height: clamp(150px, 30vh, 300px); display:flex; gap:2vw; align-items: stretch; min-height:0; flex-shrink:0;">
+            <div id="bottom-area" style="height: clamp(150px, 30vh, 300px); display:flex; gap:2vw; align-items: stretch; min-height:0; flex-shrink:0;">
               <div class="glass-panel" style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; background:rgba(255,255,255,0.08); border-radius:30px; border:2px solid rgba(255,255,255,0.18); box-shadow:0 25px 60px rgba(0,0,0,0.6);">
                 <div style="width:18vh; height:18vh; max-width:160px; max-height:160px; background:white; padding:10px; border-radius:20px; display:flex; align-items:center; justify-content:center; border: 5px solid #4ade80;">
                   <img src="./gugugu_qrcode.png" style="width:100%; height:100%; object-fit:contain;" />
@@ -180,8 +191,9 @@ export function renderShowOff(container) {
 
     lbContainer.style.display = 'flex';
     lbContainer.style.flexDirection = 'column';
-    lbContainer.style.justifyContent = 'space-around';
+    lbContainer.style.justifyContent = 'space-between';
     lbContainer.style.height = '100%';
+    lbContainer.style.gap = '1.5vh';
 
     const colors = [
       { main: '#fbbf24', secondary: '#f59e0b', shadow: 'rgba(251, 191, 36, 0.4)' },
@@ -196,37 +208,36 @@ export function renderShowOff(container) {
       const theme = colors[idx] || colors[2];
 
       return `
-        <div class="chart-row premium-row" style="animation-delay: ${idx * 0.2}s; flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0;">
-          <!-- Top Row Grid -->
-          <div style="display:grid; grid-template-columns: clamp(50px, 5vw, 80px) clamp(80px, 8vw, 120px) 1fr clamp(100px, 10vw, 150px); align-items:center; margin-bottom:10px; width:100%;">
+        <div class="chart-row premium-row" style="animation-delay: ${idx * 0.2}s; flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0; padding: 1vh 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+          <!-- Main Info Grid -->
+          <div style="display:grid; grid-template-columns: clamp(40px, 4vw, 60px) clamp(60px, 6vw, 90px) 1fr clamp(80px, 8vw, 120px); align-items:center; width:100%; gap: 10px;">
             
             <!-- Rank Column -->
             <div style="display:flex; justify-content:center;">
-              <span style="color:${theme.main}; font-size: clamp(2.5rem, 3.8vw, 4.5rem); font-weight: 950; text-shadow: 0 0 15px ${theme.shadow}; line-height:1;">${idx+1}</span>
+              <span style="color:${theme.main}; font-size: clamp(2rem, 3.5vw, 4rem); font-weight: 950; text-shadow: 0 0 15px ${theme.shadow}; line-height:1;">${idx+1}</span>
             </div>
 
             <!-- Image Column -->
             <div style="display:flex; justify-content:center;">
-              <div style="width: clamp(65px, 6.5vw, 95px); height: clamp(65px, 6.5vw, 95px); border: 3px solid ${theme.main}; box-shadow: 0 0 25px ${theme.shadow}; border-radius: 22px; overflow:hidden;">
+              <div style="width: clamp(55px, 5.5vw, 80px); height: clamp(55px, 5.5vw, 80px); border: 2.3px solid ${theme.main}; box-shadow: 0 0 20px ${theme.shadow}; border-radius: 20px; overflow:hidden; background: rgba(0,0,0,0.5);">
                 <img src="${birdImg}" style="width: 100%; height: 100%; object-fit: cover;">
               </div>
             </div>
 
-            <!-- Name Column -->
-            <div style="padding-left: 10px;">
-              <span class="shimmer-text" style="font-size: clamp(1.6rem, 2.2vw, 2.8rem); font-weight: 900; letter-spacing: 1px; white-space: nowrap;">${item.bird}</span>
+            <!-- Name and Bar Column -->
+            <div style="display: flex; flex-direction: column; gap: 8px; overflow: hidden; justify-content: center;">
+              <span class="shimmer-text" style="font-size: clamp(1.4rem, 2vw, 2.4rem); font-weight: 900; letter-spacing: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.bird}</span>
+              <!-- Integrated Progress Bar -->
+              <div style="width:95%; height:clamp(14px, 1.8vh, 20px); background:rgba(0,0,0,0.5); border-radius:10px; overflow:hidden; border:1px solid rgba(255,255,255,0.15); box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); position: relative;">
+                <div id="bar-${item.bird}" class="bar-fill ${isTarget ? 'bar-pulse' : ''}" style="width:${percentage}%; background: linear-gradient(90deg, ${theme.secondary}, ${theme.main}, ${theme.secondary}); background-size: 200% 100%; box-shadow: 0 0 15px ${theme.shadow};"></div>
+              </div>
             </div>
 
             <!-- Votes Column -->
-            <div style="text-align: right; background: rgba(0,0,0,0.6); padding: 10px 25px; border-radius: 25px; border: 2px solid rgba(255,255,255,0.15); box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
-              <div style="color:${theme.main}; font-size: clamp(1.8rem, 2.8vw, 3.2rem); font-weight: 950; line-height: 1; text-shadow: 0 0 10px ${theme.shadow};">${item.votes}</div>
-              <small style="font-size:0.8rem; color:#4ade80; font-weight:900; opacity:1; letter-spacing: 2px;">VOTES</small>
+            <div style="text-align: right; background: rgba(0,0,0,0.7); padding: 0.8vh 1.2vw; border-radius: 18px; border: 2px solid rgba(255,255,255,0.15); box-shadow: 0 4px 15px rgba(0,0,0,0.4); min-width: clamp(75px, 9vw, 110px);">
+              <div style="color:${theme.main}; font-size: clamp(1.6rem, 2.4vw, 2.8rem); font-weight: 950; line-height: 1; text-shadow: 0 0 10px ${theme.shadow};">${item.votes}</div>
+              <small style="font-size:0.7rem; color:#4ade80; font-weight:900; opacity:1; letter-spacing: 1px;">VOTES</small>
             </div>
-          </div>
-
-          <!-- Bottom Bar Full Width within row padding -->
-          <div style="width:100%; height:18px; background:rgba(0,0,0,0.4); border-radius:10px; overflow:hidden; border:2px solid rgba(255,255,255,0.1); box-shadow: inset 0 2px 8px rgba(0,0,0,0.8);">
-            <div id="bar-${item.bird}" class="bar-fill ${isTarget ? 'bar-pulse' : ''}" style="width:${percentage}%; background: linear-gradient(90deg, ${theme.secondary}, ${theme.main}, ${theme.secondary}); background-size: 200% 100%;"></div>
           </div>
         </div>
       `;
@@ -285,7 +296,11 @@ export function renderShowOff(container) {
 
         if (lastVote && lastVote.id !== lastProcessedVoteId) {
           if (lastProcessedVoteId !== null) {
-            triggerMascotNews(`${lastVote.user} 投給了 ${lastVote.bird}！Gu!`);
+            const isEn = (window.store && window.store.getLanguage() === 'en');
+            const msg = isEn 
+              ? `News! ${lastVote.user} voted for ${lastVote.bird}! Gu!` 
+              : `剛剛收到！${lastVote.user} 剛剛投票給了 ${lastVote.bird}！Gu!`;
+            triggerMascotNews(msg);
           }
           lastProcessedVoteId = lastVote.id;
         }
