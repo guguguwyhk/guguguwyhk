@@ -231,8 +231,8 @@ h3 { font-size: clamp(1.2rem, 5vw, 1.5rem); margin-bottom: 0.5rem; }
 
 /* =================== Form Elements =================== */
 .glass-input {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
   border-radius: 12px;
   color: white;
   padding: 14px 18px;
@@ -961,6 +961,8 @@ select.glass-input option {
   border: 1px solid var(--glass-border);
   transition: all 0.35s ease;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .bird-card::after {
@@ -989,7 +991,19 @@ select.glass-input option {
 
 .bird-card img { width: 100%; height: 220px; object-fit: cover; transition: transform 0.5s ease; display:block; }
 .bird-card:hover img { transform: scale(1.1); }
-.bird-card-info { padding: 1rem; text-align: center; background: #000000; }
+.bird-card-info { 
+  padding: 1.2rem 1rem; 
+  text-align: center; 
+  background: #000000; 
+  border-radius: 0 0 24px 24px; /* Matches parent card radius */
+  margin-top: -1px; /* Overlap slightly to prevent sub-pixel gaps */
+  position: relative;
+  z-index: 2;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 
 /* =================== Poll Overhaul Styles =================== */
 .poll-card {
@@ -1359,20 +1373,28 @@ h3 { font-size: clamp(1.1rem, 5vw, 1.5rem); }
 
 /* =================== Orientation Specifics (Landscape Phones) =================== */
 @media (orientation: landscape) and (max-height: 500px) {
-  .page-container { padding: 0.8rem 2rem 1rem 2rem !important; }
-  .page-header { margin-bottom: 0.8rem !important; padding: 0.5rem 0 !important; }
-  .page-title { font-size: 1.2rem !important; }
-  .btn-back { padding: 6px 14px !important; font-size: 0.85rem !important; }
+  .page-container { padding: 0.5rem 1.5rem 1rem 1.5rem !important; }
+  .page-header { margin-bottom: 0.5rem !important; padding: 0.2rem 0 !important; }
+  .page-title { font-size: 1.1rem !important; }
+  .btn-back { padding: 4px 12px !important; font-size: 0.8rem !important; }
+  
+  /* Login Page Specifics in Landscape */
+  .login-wrapper { padding: 0.5rem !important; }
+  .login-wrapper .glass-panel { 
+    padding: 1rem !important; 
+    max-width: 480px !important;
+    border-radius: 20px !important;
+  }
+  .login-wrapper img { width: 80px !important; margin-bottom: 0.5rem !important; }
+  .login-wrapper h1 { font-size: 2.2rem !important; margin-bottom: 0 !important; }
+  .login-wrapper h2 { font-size: 0.85rem !important; margin-bottom: 0.8rem !important; }
+  .login-wrapper .glass-input { padding: 10px 14px !important; margin-bottom: 0.8rem !important; }
   
   /* Modal adjustments for landscape */
   .centered-modal-content {
-    max-height: 95vh !important;
-    width: 92% !important;
+    max-height: 98vh !important;
+    width: 96% !important;
     border-radius: 20px !important;
-  }
-  .modal-body-flex {
-    flex-direction: column !important;
-    overflow-y: auto !important;
   }
 }
 

@@ -1,3 +1,5 @@
+import { translations } from '../i18n.js';
+
 export function renderMap(container) {
   container.innerHTML = `
     <div class="page-container" style="display:flex; flex-direction:column; min-height: 100vh; overflow-x: hidden; overflow-y: auto; padding: 0;">

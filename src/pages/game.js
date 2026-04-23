@@ -335,8 +335,14 @@ export function renderGame(container) {
     if (state.isWaitingToBegin) {
       const pulse = 1 + 0.05 * Math.sin(state.frameCount * 0.15);
       ctx.save(); ctx.translate(canvas.width/2, canvas.height/2); ctx.scale(pulse, pulse);
-      ctx.fillStyle = '#fff'; ctx.font = '900 clamp(3.8rem, 13vw, 5.8rem) "Outfit", sans-serif'; ctx.textAlign = 'center'; ctx.fillText('READY?', 0, -10);
-      ctx.font = '800 clamp(1.5rem, 5vw, 2.4rem) "Inter", sans-serif'; ctx.fillStyle = '#4ade80'; ctx.fillText('CLICK TO START!', 0, 75);
+      ctx.fillStyle = '#fff'; 
+      const readySize = Math.max(45, Math.min(canvas.width * 0.12, 100));
+      ctx.font = `900 ${readySize}px "Outfit", sans-serif`; 
+      ctx.textAlign = 'center'; ctx.fillText('READY?', 0, -10);
+      
+      const startSize = Math.max(20, Math.min(canvas.width * 0.045, 35));
+      ctx.font = `800 ${startSize}px "Inter", sans-serif`; 
+      ctx.fillStyle = '#4ade80'; ctx.fillText('CLICK TO START!', 0, 75);
       ctx.restore();
     }
     
@@ -347,11 +353,13 @@ export function renderGame(container) {
       ctx.globalAlpha = alpha;
       ctx.textAlign = 'center'; 
       ctx.fillStyle = '#fbbf24'; 
-      ctx.font = '900 clamp(3.5rem, 9vw, 5.5rem) "Outfit", sans-serif'; 
+      const lvlUpSize = Math.max(40, Math.min(canvas.width * 0.1, 90));
+      ctx.font = `900 ${lvlUpSize}px "Outfit", sans-serif`; 
       ctx.fillText(t('game-level-up'), 0, 0); 
       
       ctx.fillStyle = '#fff';
-      ctx.font = '800 clamp(1.2rem, 3vw, 2rem) "Inter", sans-serif';
+      const descSize = Math.max(18, Math.min(canvas.width * 0.035, 30));
+      ctx.font = `800 ${descSize}px "Inter", sans-serif`;
       ctx.fillText(state.levelUpDesc, 0, 40);
       ctx.restore();
     }
@@ -393,11 +401,11 @@ export function renderGame(container) {
       /* Ultra-compact for landscape phones or very small screens */
       @media (max-height: 500px) {
         #overlay-mascot-box { display: none !important; } 
-        #game-container { height: 82vh !important; max-height: unset !important; }
-        #rules-row { margin-bottom: 0.2rem !important; }
-        #overlay-title { font-size: 1.8rem !important; margin-bottom: 2px !important; }
+        #game-container { height: 72vh !important; max-height: unset !important; }
+        #rules-row { display: none !important; } /* Hide rules in landscape to save space */
+        #overlay-title { font-size: 1.6rem !important; margin-bottom: 2px !important; }
         #overlay-desc { display: none !important; }
-        #start-btn { padding: 0.4rem 1.5rem !important; font-size: 1rem !important; }
+        #start-btn { padding: 0.5rem 2rem !important; font-size: 1.1rem !important; }
       }
 
       /* Adjusting header for mobile */
