@@ -162,7 +162,7 @@ export function renderShowOff(container) {
 
             <!-- QR & Mascot Bottom Area -->
             <div id="bottom-area" style="height: clamp(150px, 30vh, 300px); display:flex; gap:2vw; align-items: stretch; min-height:0; flex-shrink:0;">
-              <div class="glass-panel" style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; background:rgba(255,255,255,0.08); border-radius:30px; border:2px solid rgba(255,255,255,0.18); box-shadow:0 25px 60px rgba(0,0,0,0.6);">
+              <div class="glass-panel" style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:15px; background:rgba(255,255,255,0.08); border-radius:30px; border:2px solid rgba(255,255,255,0.18); box-shadow:0 25px 60px rgba(0,0,0,0.6);">
                 <div style="width:15vh; height:15vh; max-width:130px; max-height:130px; background:white; padding:8px; border-radius:18px; display:flex; align-items:center; justify-content:center; border: 4px solid #4ade80;">
                   <img src="./gugugu_qrcode.png" style="width:100%; height:100%; object-fit:contain;" />
                 </div>
@@ -217,7 +217,7 @@ export function renderShowOff(container) {
       const theme = colors[idx] || colors[2];
 
       return `
-        <div class="chart-row premium-row" style="animation-delay: ${idx * 0.2}s; flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0; padding: 0.5vh 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+        <div class="chart-row premium-row" style="animation-delay: ${idx * 0.2}s; flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0; padding: 1.2vh 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
           <!-- Main Info Grid -->
           <div style="display:grid; grid-template-columns: 45px 80px 1fr 100px; align-items:center; width:100%; gap: 10px;">
             
