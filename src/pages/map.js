@@ -8,7 +8,7 @@ export function renderMap(container) {
         <button id="back-btn" class="btn-secondary btn-back liquid-btn" data-i18n="back-home"></button>
       </header>
 
-      <div class="map-layout" style="flex: 1; padding: 0; display: flex; overflow: hidden; position: relative; background: #050c08; min-height: clamp(400px, 70vh, 800px);">
+      <div class="map-layout" style="flex: 1; padding: 0; position: relative; background: #050c08; min-height: clamp(400px, 70vh, 800px); display: flex; flex-direction: column;">
         <!-- Loading Overlay -->
         <div id="map-loading" style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 50; background: rgba(5, 12, 8, 0.95); transition: opacity 0.5s ease;">
           <div class="loading-spinner" style="width: 60px; height: 60px; border: 4px solid rgba(134, 239, 172, 0.1); border-top-color: #86efac; border-radius: 50%; animation: spin 1s linear infinite;"></div>
@@ -23,7 +23,7 @@ export function renderMap(container) {
           frameborder="0" 
           width="100%" 
           height="100%" 
-          sandbox="allow-scripts allow-same-origin"
+          sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals"
           allowfullscreen="true" 
           mozallowfullscreen="true" 
           webkitallowfullscreen="true"
@@ -84,9 +84,10 @@ export function renderMap(container) {
   
   window.addEventListener('keydown', preventKbdNav, true);
   
-  // Prevent iframe from stealing focus to keep keyboard blocking effective
+  // Prevent iframe from stealing focus to keep keyboard blocking effective (Desktop only)
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   const focusInterval = setInterval(() => {
-    if (document.activeElement === iframe) {
+    if (!isMobile && document.activeElement === iframe) {
       iframe.blur();
       window.focus();
     }
@@ -96,5 +97,8 @@ export function renderMap(container) {
     loadFinished = true;
     window.removeEventListener('keydown', preventKbdNav, true);
     clearInterval(focusInterval);
+    if (window.mascot && window.mascot.img) {
+      window.mascot.img.src = './removedbg_gugugu.png';
+    }
   };
 }

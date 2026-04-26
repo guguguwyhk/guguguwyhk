@@ -1,3 +1,6 @@
+import { translations } from '../i18n.js';
+import { store } from '../store.js';
+
 export const BIRDS = [
   { 
     id: '1', 
@@ -184,6 +187,7 @@ export const BIRDS = [
 ];
 
 export function renderEncyclopedia(container) {
+  const t = (key) => (translations[key] && translations[key][store.getLanguage()]) || key;
   let filtered = [...BIRDS];
   let currentBirdIndex = -1;
 
@@ -234,7 +238,7 @@ export function renderEncyclopedia(container) {
       .bird-card:hover img { transform: scale(1.1); }
 
       .bird-card::after { 
-        content: "查看詳情 View Details"; 
+        content: attr(data-details); 
         position: absolute; 
         bottom: 0; 
         left: 0; 
@@ -260,7 +264,7 @@ export function renderEncyclopedia(container) {
     if (!grid) return;
     
     grid.innerHTML = filtered.map(b => `
-      <div class="bird-card" onclick="window.gugugu_bird_modal.open('${b.id}', window.gugugu_app_birds)">
+      <div class="bird-card" data-details="${t('ency-view-details')}" onclick="window.gugugu_bird_modal.open('${b.id}', window.gugugu_app_birds)">
         <img src="${b.img}" loading="lazy" />
         <div class="bird-card-info">
           <h3 style="margin:0; font-size:1.4rem; color:#86efac;">${b.name}</h3>

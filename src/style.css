@@ -9,7 +9,7 @@ html {
 }
 
 :root {
-  --bg-image: url('/footage/about_us/birdhouse3.jpeg');
+  --bg-image: url('../public/footage/about_us/birdhouse3.jpeg');
   
   --primary-color: #22c55e;
   --primary-hover: #16a34a;
@@ -51,6 +51,10 @@ body {
 
 .page-container {
   padding: 1.2rem clamp(1rem, 3.5vw, 4rem) 8rem;
+  padding-top: calc(1.2rem + env(safe-area-inset-top, 0px));
+  padding-bottom: calc(8rem + env(safe-area-inset-bottom, 0px));
+  padding-left: calc(clamp(1rem, 3.5vw, 4rem) + env(safe-area-inset-left, 0px));
+  padding-right: calc(clamp(1rem, 3.5vw, 4rem) + env(safe-area-inset-right, 0px));
   max-width: 1600px; /* Slightly wider for 4K */
   margin: 0 auto;
   min-height: 100vh;
@@ -871,8 +875,8 @@ select.glass-input option {
 }
 
 /* =================== Stat bar for encyclopedia =================== */
-.stat-row { display:flex; align-items:center; gap:1.2rem; font-size:1rem; }
-.stat-row span:first-child { width:120px; color:#94a3b8; font-weight:600; font-size: 0.9rem; }
+.stat-row { display:flex; align-items:center; gap:0.8rem; font-size:0.95rem; margin-bottom: 0.5rem; }
+.stat-row span:first-child { width: clamp(80px, 25vw, 120px); color:#94a3b8; font-weight:600; font-size: 0.85rem; flex-shrink: 0; }
 .stat-bar-bg { flex:1; height:12px; background:rgba(255,255,255,0.08); border-radius:6px; overflow:hidden; }
 .stat-bar { height:100% !important; border-radius:6px; transition: width 0.8s cubic-bezier(0.165, 0.84, 0.44, 1); min-width: 2px; }
 .stat-val { width:60px; text-align:right; font-weight:900; color:#fff; font-size: 0.9rem; }
@@ -910,12 +914,9 @@ select.glass-input option {
 
 @media (max-width: 850px) {
   .map-layout {
-    flex-direction: column;
-    height: auto;
-    border: none;
-    box-shadow: none;
-    border-radius: 0;
-    background: transparent;
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: 60vh !important;
   }
   .map-info-panel {
     position: relative;
@@ -923,15 +924,10 @@ select.glass-input option {
     width: 100%;
     margin-bottom: 1rem;
     border-radius: 20px;
-    box-shadow: var(--glass-shadow);
-    border: 1px solid var(--glass-border);
   }
   .map-interactive-area {
-    height: 60vh;
+    height: 50vh;
     border-radius: 24px;
-    box-shadow: var(--glass-shadow);
-    border: 1px solid var(--glass-border);
-    background: #8cdba9;
   }
 }
 
@@ -1083,9 +1079,15 @@ select.glass-input option {
 
 @media (max-width: 768px) {
   /* Layout & Spacing */
-  .page-header { flex-direction: column !important; gap: 0.8rem !important; align-items: flex-start !important; }
-  .page-title { font-size: 1.6rem !important; }
-  .page-container { padding: 1.5rem 1rem 7rem 1rem !important; }
+  /* Layout & Spacing */
+  .page-header { 
+    flex-direction: column !important; 
+    gap: 0.5rem !important; 
+    align-items: flex-start !important; 
+    padding: 0.5rem !important;
+  }
+  .page-title { font-size: 1.5rem !important; line-height: 1.2 !important; }
+  .page-container { padding: 1rem 0.8rem 7rem 0.8rem !important; }
   
   .mobile-stack {
     flex-direction: column !important;
@@ -1175,6 +1177,20 @@ select.glass-input option {
     height: 36px;
     font-size: 1.4rem;
     z-index: 1000001; /* Ensure above bubble */
+  }
+
+  /* Shrink modal nav arrows on mobile to avoid text overlap */
+  .modal-nav-btn {
+    width: 38px !important;
+    height: 38px !important;
+    font-size: 1.1rem !important;
+    top: 40% !important; /* Move down slightly */
+  }
+  
+  /* Ensure modal names have side padding to avoid arrow overlap */
+  #modal-name, #modal-enName {
+    padding-left: 20px;
+    padding-right: 20px;
   }
   
   /* Daily Highlight Refinement */

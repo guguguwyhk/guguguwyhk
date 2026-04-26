@@ -1,11 +1,16 @@
 node_modules/
 .DS_Store
 dist/
-# 允許這些資源上傳到 GitHub 以供部署
-# *.avi
-# *.mp4
-# *.MOV
-# public/footage/previous_videos/
+
+# Deployment assets - excluding extremely large files (>100MB)
+*.zip
+*.exe
+ffmpeg*/
+
+# Video assets
+# Keep optimized mp4, ignore raw large avi
+public/footage/showoff/*.avi
+!public/footage/showoff/*.mp4
 
 # Remotion Related
 remotion-ad/

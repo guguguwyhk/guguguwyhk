@@ -21,7 +21,12 @@ const HIGHLIGHTS_EN = [
 
 export function renderHome(container) {
   window.mascot.show();
-
+  const t = (key, data = {}) => {
+    const curLang = (window.store && window.store.getLanguage()) || 'zh';
+    let msg = (translations[key] && translations[key][curLang]) || key;
+    for (const k in data) msg = msg.replace(`{${k}}`, data[k]);
+    return msg;
+  };
   const lang = store.getLanguage();
   const facts = lang === 'en' ? HIGHLIGHTS_EN : HIGHLIGHTS_ZH;
   const factIndex = Math.floor(Math.random() * 6) + 1;
@@ -32,7 +37,7 @@ export function renderHome(container) {
     <header class="page-header" style="flex-direction: row; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.8rem;">
       <div style="display:flex; align-items:center; gap: 1rem; flex-wrap: wrap;">
         <h1 class="page-title" data-i18n="home-title" style="font-size: 1.5rem;">Gu Gu Gu 🌿</h1>
-        <span style="background:var(--primary-color); color:black; padding:4px 10px; border-radius:10px; font-size: 0.75rem; font-weight:900; letter-spacing:1px; box-shadow:0 4px 15px rgba(134,239,172,0.3); white-space: nowrap;">24/7 MONITORING</span>
+        <span data-i18n="badge-monitoring" style="background:var(--primary-color); color:black; padding:4px 10px; border-radius:10px; font-size: 0.75rem; font-weight:900; letter-spacing:1px; box-shadow:0 4px 15px rgba(134,239,172,0.3); white-space: nowrap;">24/7 MONITORING</span>
       </div>
     </header>
 
@@ -79,8 +84,8 @@ export function renderHome(container) {
 
       <div class="glass-card nav-card liquid-btn" data-target="game" style="padding: 1.5rem 1.2rem; cursor:pointer; text-align:center;">
         <div style="font-size: 2.2rem; margin-bottom:0.5rem;">🎮</div>
-        <h3 data-i18n="card-game-title" style="font-size: 1.2rem; color:#86efac; font-weight: 800;">守護者挑戰</h3>
-        <p data-i18n="card-game-desc" style="color:var(--text-muted); font-size: 0.85rem; margin-top:0.3rem; line-height: 1.3;">邊玩邊學鳥類知識</p>
+        <h3 data-i18n="card-game-title" style="font-size: 1.2rem; color:#86efac; font-weight: 800;">守護小鳥大挑戰</h3>
+        <p data-i18n="card-game-desc" style="color:var(--text-muted); font-size: 0.85rem; margin-top:0.3rem; line-height: 1.3;">保護小鳥躲避危險，獲得高分！</p>
       </div>
 
       <div class="glass-card nav-card liquid-btn" data-target="about" style="padding: 1.5rem 1.2rem; cursor:pointer; text-align:center;">
@@ -93,8 +98,8 @@ export function renderHome(container) {
     <!-- Footer -->
     <footer style="margin-top:auto; padding:4rem 0 10rem; border-top:1px solid var(--glass-border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
       <div>
-        <p style="font-size:0.95rem; font-weight:bold;">IDEEA Project 3K Group 4</p>
-        <p style="font-size:0.85rem; color:var(--text-muted);">Astin Lam, Brayden Chan, Cyrus Chan, Justin Lau</p>
+        <p data-i18n="about-team-title" style="font-size:0.95rem; font-weight:bold;">IDEEA Project 3K Group 4</p>
+        <p data-i18n="about-team-names" style="font-size:0.85rem; color:var(--text-muted);">Astin Lam, Brayden Chan, Cyrus Chan, Justin Lau</p>
       </div>
       <div style="display:flex; gap:1.5rem; align-items:center;">
         <a href="https://www.instagram.com/gugugu_wyhk/" target="_blank" id="ig-link" style="text-decoration:none; font-weight:bold; font-size:1.1rem; display:flex; align-items:center; gap:8px; color:#fb923c; filter: drop-shadow(0 0 8px rgba(251,146,60,0.7)); transition: filter 0.2s;">
@@ -132,7 +137,7 @@ export function renderHome(container) {
       store.setUserName(null);
       window.navigate('login');
       const isEn = window.store && window.store.getLanguage() === 'en';
-      window.mascot.say(isEn ? "See you next time! Gu Gu!" : "期待你的下次探索！Gu Gu!");
+      window.mascot.say(t('mascot-bye'));
     });
   }
 
@@ -287,7 +292,7 @@ function renderVoteModal(container) {
     } catch (e) {
       if (retries > 0) setTimeout(() => renderResults(retries - 1), 1500);
       else {
-        modalContent.innerHTML = `<div style="text-align:center; padding:4rem;"><p style="color:#f87171; font-size:1.3rem;">Connection Error, but your vote is counts!</p><button class="btn-primary" style="margin-top:2rem;" onclick="this.closest('.centered-modal-overlay').remove()">CONTINUE ✨</button></div>`;
+        modalContent.innerHTML = `<div style="text-align:center; padding:4rem;"><p style="color:#f87171; font-size:1.3rem;">${t('vote-error-counts')}</p><button class="btn-primary" style="margin-top:2rem;" onclick="this.closest('.centered-modal-overlay').remove()">${t('btn-continue-spark')}</button></div>`;
       }
     }
   };

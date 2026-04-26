@@ -1,8 +1,15 @@
 import { store } from '../store.js';
+import { translations } from '../i18n.js';
 
 export function renderLogin(container) {
   // Only hide mascot if we don't want it floating randomly, but the login design asks for it integrated.
   // We'll hide the global floating mascot here to use the big design one, or just keep it.
+  const t = (key, data = {}) => {
+    const curLang = (window.store && window.store.getLanguage()) || 'zh';
+    let msg = (translations[key] && translations[key][curLang]) || key;
+    for (const k in data) msg = msg.replace(`{${k}}`, data[k]);
+    return msg;
+  };
   window.mascot.hide();
 
   container.innerHTML = `
@@ -10,7 +17,7 @@ export function renderLogin(container) {
       <div class="glass-panel fade-in" style="padding: clamp(1.2rem, 5vw, 3rem); text-align: center; max-width: min(90vw, 540px); width: 100%; position: relative; box-shadow: 0 40px 80px rgba(0,0,0,0.8), 0 0 20px rgba(134, 239, 172, 0.05); border: 1.5px solid rgba(134, 239, 172, 0.25); background: rgba(5, 15, 10, 0.92); display: flex; flex-direction: column; align-items: center; border-radius: 35px; overflow: hidden;">
         <img src="./removedbg_gugugu.png" alt="Gu Gu Gu" style="width: clamp(120px, 25vw, 240px); filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4)); margin-bottom: 1.2rem; animation: mascotBounce 3s infinite ease-in-out;" />
         <h1 style="font-size: clamp(2.8rem, 10vw, 4.5rem); margin-bottom: 0.2rem; color:#22c55e; font-weight: 900; letter-spacing: -2px; text-shadow: 0 5px 20px rgba(34,197,94,0.4); line-height: 1;">Gu Gu Gu</h1>
-        <h2 style="font-size: clamp(0.9rem, 3.5vw, 1.4rem); font-weight:600; color:#94a3b8; margin-bottom: 2rem; letter-spacing: 0.5px;" data-i18n="login-welcome">24/7 實時監測智慧網站</h2>
+        <h2 style="font-size: clamp(0.9rem, 3.5vw, 1.4rem); font-weight:600; color:#94a3b8; margin-bottom: 2rem; letter-spacing: 0.5px;" data-i18n="login-welcome">華仁鳥屋監察及生態網站</h2>
         
         <form id="login-form" style="width: 100%; max-width: 460px;">
           <input type="text" id="username" class="glass-input" placeholder="請輸入你的名字/暱稱" data-i18n-placeholder="login-enter-name" style="margin-bottom: 1.2rem; padding: 20px 24px; font-size: 1.2rem; width: 100%; box-sizing: border-box; border-radius: 18px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.03);" autocomplete="off" />
@@ -51,15 +58,13 @@ export function renderLogin(container) {
 
     if (rawName) {
       if (rawName.length < 2) {
-        const isEn = window.store && window.store.getLanguage() === 'en';
         window.mascot.show();
-        window.mascot.say(isEn ? "That name is too short! Gu Gu!" : "這個名字太短了喔！Gu Gu!", 4000);
+        window.mascot.say(t('login-name-short'), 4000);
         return;
       }
       if (rawName.length > 15) {
-        const isEn = window.store && window.store.getLanguage() === 'en';
         window.mascot.show();
-        window.mascot.say(isEn ? "That name is too long! Keep it under 15 chars! Gu Gu!" : "名字太長了，請保持在 15 個字以內！Gu Gu!", 4000);
+        window.mascot.say(t('login-name-long'), 4000);
         return;
       }
 
@@ -74,17 +79,15 @@ export function renderLogin(container) {
       });
       
       if (hasBadWord) {
-        const isEn = window.store && window.store.getLanguage() === 'en';
         window.mascot.show();
-        window.mascot.say(isEn ? "STOP! This name is strictly forbidden. Choose a respectful identity! Gu Gu!" : "停止！此名字已被禁止。請選擇一個得體的稱呼！Gu Gu!", 6000);
+        window.mascot.say(t('login-name-forbidden'), 6000);
         document.getElementById('username').value = '';
         return;
       }
 
       store.setUserName(rawName);
-      const isEn = window.store && window.store.getLanguage() === 'en';
       window.mascot.show();
-      window.mascot.say(isEn ? `Gu Gu Gu! Welcome, ${rawName}!` : `Gu Gu Gu! 歡迎你，${rawName}！`, 5000);
+      window.mascot.say(t('login-welcome-name', { name: rawName }), 5000);
       sessionStorage.setItem('show_vote_modal', 'true');
       window.navigate('home');
     }
@@ -93,9 +96,8 @@ export function renderLogin(container) {
   const skipBtn = document.getElementById('skip-btn');
   skipBtn.addEventListener('click', () => {
     store.setUserName('探險家');
-    const isEn = window.store && window.store.getLanguage() === 'en';
     window.mascot.show();
-    window.mascot.say(isEn ? "Welcome, Explorer!" : "歡迎你，探險家！", 5000);
+    window.mascot.say(t('login-welcome-guest'), 5000);
     sessionStorage.setItem('show_vote_modal', 'true');
     window.navigate('home');
   });

@@ -95,9 +95,30 @@ export function renderGame(container) {
   function triggerDeath() {
     state.isGameActive = false; 
     state.isDying = true;
+    state.shake = 45; // Heavy screen shake
+    state.timeScale = 0.1; // Extreme slow motion for death impact
+    
+    playSfx(deathSfx);
+    
     const canvas = document.getElementById('gameCanvas');
     spawnExplosion(canvas ? canvas.width * 0.15 : 100, state.birdY, '#f87171');
-    setTimeout(() => gameOver(), 500);
+    
+    // Red Flash Effect
+    const dissolveLayer = document.getElementById('dissolve-layer');
+    if (dissolveLayer) {
+      dissolveLayer.style.transition = 'none';
+      dissolveLayer.style.background = 'rgba(239, 68, 68, 0.5)';
+      dissolveLayer.style.opacity = '1';
+      setTimeout(() => {
+        dissolveLayer.style.transition = 'opacity 0.6s ease';
+        dissolveLayer.style.opacity = '0';
+      }, 100);
+    }
+
+    setTimeout(() => {
+      state.timeScale = 1.0;
+      gameOver();
+    }, 1000);
   }
 
   function gameOver() {
@@ -231,6 +252,7 @@ export function renderGame(container) {
       state.level = 1 + Math.floor(state.score / 100); 
       
       if (state.level > prevLvl) {
+        playSfx(levelUpSfx);
         state.levelUpFrames = 150; 
         state.timeScale = 0.2;
         const lvlEl = document.getElementById('level-val'); 
@@ -305,16 +327,22 @@ export function renderGame(container) {
          const pulse = 0.7 + 0.3 * Math.sin(state.frameCount * 0.15); 
          ctx.save(); ctx.shadowColor = '#fbbf24'; ctx.shadowBlur = 10; ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(o.x, o.y, 18*pulse, 0, Math.PI*2); ctx.fill(); ctx.restore();
          if (state.isGameActive && Math.hypot(o.x - bx, o.y - state.birdY) < 48) { 
-           state.score += 10; const sEl = document.getElementById('score-val'); if(sEl) sEl.innerText = state.score; state.obstacles.splice(i, 1); 
+           state.score += 10; 
+           playSfx(coinSfx);
+           const sEl = document.getElementById('score-val'); if(sEl) sEl.innerText = state.score; state.obstacles.splice(i, 1); 
          }
       } else {
         drawPillar(ctx, canvas, o);
         if (state.isGameActive) {
           const pW = 65; const h = o.type === 'top' ? o.y2 : canvas.height - o.y1; const y = o.type === 'top' ? 0 : o.y1;
           if (bx + 25 > o.x && bx - 25 < o.x + pW && state.birdY + 25 > y && state.birdY - 25 < y + h) {
-             state.lives--; state.shake = 22; spawnExplosion(bx, state.birdY, '#f87171'); state.obstacles.splice(i, 1); 
+             state.lives--; 
+             state.shake = 22; 
+             spawnExplosion(bx, state.birdY, '#f87171'); 
+             state.obstacles.splice(i, 1); 
              const lEl = document.getElementById('life-val'); if (lEl) lEl.innerText = state.lives > 0 ? '❤️'.repeat(state.lives) : '💔'; 
              if (state.lives <= 0) { triggerDeath(); return; }
+             else { playSfx(hitSfx); }
           }
         }
       }
@@ -325,9 +353,13 @@ export function renderGame(container) {
        let e = state.enemies[i]; if (!state.isDying) { e.x -= (scrollSpeed * 1.35); e.y += e.vy * dt; e.wing += 0.3 * dtRaw; }
        drawCrow(ctx, e.x, e.y, e.wing, e.size);
        if (state.isGameActive && Math.hypot(e.x - bx, e.y - state.birdY) < (e.size * 0.8 + 20)) {
-         state.lives--; state.shake = 30; spawnExplosion(bx, state.birdY, '#ef4444'); state.enemies.splice(i, 1); 
+         state.lives--; 
+         state.shake = 30; 
+         spawnExplosion(bx, state.birdY, '#ef4444'); 
+         state.enemies.splice(i, 1); 
          const lEl = document.getElementById('life-val'); if (lEl) lEl.innerText = state.lives > 0 ? '❤️'.repeat(state.lives) : '💔'; 
          if (state.lives <= 0) { triggerDeath(); return; }
+         else { playSfx(hitSfx); }
        }
        if (e.x < -150) state.enemies.splice(i, 1);
     }
@@ -338,11 +370,11 @@ export function renderGame(container) {
       ctx.fillStyle = '#fff'; 
       const readySize = Math.max(45, Math.min(canvas.width * 0.12, 100));
       ctx.font = `900 ${readySize}px "Outfit", sans-serif`; 
-      ctx.textAlign = 'center'; ctx.fillText('READY?', 0, -10);
+      ctx.textAlign = 'center'; ctx.fillText(t('game-ready'), 0, -10);
       
       const startSize = Math.max(20, Math.min(canvas.width * 0.045, 35));
       ctx.font = `800 ${startSize}px "Inter", sans-serif`; 
-      ctx.fillStyle = '#4ade80'; ctx.fillText('CLICK TO START!', 0, 75);
+      ctx.fillStyle = '#4ade80'; ctx.fillText(t('game-click-start'), 0, 75);
       ctx.restore();
     }
     
@@ -361,6 +393,19 @@ export function renderGame(container) {
       const descSize = Math.max(18, Math.min(canvas.width * 0.035, 30));
       ctx.font = `800 ${descSize}px "Inter", sans-serif`;
       ctx.fillText(state.levelUpDesc, 0, 40);
+      ctx.restore();
+    }
+
+    // MISSION FAILED Text for Dying state
+    if (state.isDying) {
+      ctx.save();
+      ctx.translate(canvas.width / 2, canvas.height / 2);
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#f87171';
+      ctx.font = '900 clamp(3.5rem, 10vw, 6rem) "Outfit", sans-serif';
+      ctx.shadowColor = 'rgba(248, 113, 113, 0.5)';
+      ctx.shadowBlur = 20;
+      ctx.fillText(t('game-failed'), 0, 0);
       ctx.restore();
     }
 
@@ -457,9 +502,22 @@ export function renderGame(container) {
     </div>
   `;
 
+  // Init vars after DOM
   const birdImg = new Image(); birdImg.src = './removedbg_gugugu.png';
   const gameBox = document.getElementById('game-container');
   const startBtn = document.getElementById('start-btn');
+
+  // Audio initialization
+  const coinSfx = new Audio('./footage/game/coin.mp3');
+  const levelUpSfx = new Audio('./footage/game/levelup.mp3');
+  const hitSfx = new Audio('./footage/game/hit.mp3');
+  const deathSfx = new Audio('./footage/game/death.mp3');
+  
+  function playSfx(audio) {
+    if (!audio) return;
+    audio.currentTime = 0;
+    audio.play().catch(() => {}); // Catch browser auto-play prevention
+  }
 
   window.addEventListener('resize', resizeCanvas); 
   resizeCanvas();
@@ -480,6 +538,11 @@ export function renderGame(container) {
     startBtn.addEventListener('touchstart', handleStart, { passive: false });
     startBtn.onclick = (e) => { if (e && !e.defaultPrevented) handleStart(e); };
   }
+
+  // Inject SFX calls into state logic (using closure)
+  const originalLoop = loop;
+  // Actually, I can just modify the loop function directly or add hooks.
+  // But wait, I can just modify the loop function above since I have the whole file.
 
   spawnStars(); 
   state.lastTime = performance.now(); 

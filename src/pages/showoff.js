@@ -1,4 +1,5 @@
 import { store } from '../store.js';
+import { translations } from '../i18n.js';
 
 // Local copy of bird data to ensure maximum stability for exhibition mode
 const SHOWOFF_BIRDS = [
@@ -30,6 +31,14 @@ export function renderShowOff(container) {
 
   container.style.padding = '0';
   document.body.style.overflow = 'hidden';
+
+  const t = (key, data = {}) => {
+    const curLang = (window.store && window.store.getLanguage()) || 'zh';
+    let msg = (translations[key] && translations[key][curLang]) || key;
+    for (const k in data) msg = msg.replace(`{${k}}`, data[k]);
+    return msg;
+  };
+  const lang = store.getLanguage();
 
   container.innerHTML = `
     <style>
@@ -110,23 +119,23 @@ export function renderShowOff(container) {
         <header class="page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2vh; flex-shrink:0; width: 100%; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 1vh 0; position: relative;">
           <div style="flex: 1; min-width: 0;">
             <h1 class="page-title neon-title" style="font-size: clamp(2.2rem, 5vw, 4.5rem) !important; line-height:1; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Gu Gu Gu</h1>
-            <p style="font-size: clamp(0.6rem, 0.9vw, 1rem); color:#94a3b8; letter-spacing: 2px; text-transform:uppercase; font-weight:700; margin: 0.5vh 0 0; opacity: 0.6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Master IDEEA Project Group 4 -- 24/7 Monitoring Smart Website</p>
+            <p style="font-size: clamp(0.6rem, 0.9vw, 1rem); color:#94a3b8; letter-spacing: 2px; text-transform:uppercase; font-weight:700; margin: 0.5vh 0 0; opacity: 0.6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">IDEEA Project 3K Group 4 -- ${t('login-welcome')}</p>
           </div>
-          <button id="dev-exit" class="btn-secondary btn-back liquid-btn" style="position: relative; top: auto; right: auto; min-width: auto; height: auto; padding: 0.6rem 1.2rem; opacity: 0.6; font-size: 0.9rem; margin-left: 1rem; flex-shrink: 0;">← Exit</button>
+          <button id="dev-exit" class="btn-secondary btn-back liquid-btn" style="position: relative; top: auto; right: auto; min-width: auto; height: auto; padding: 0.6rem 1.2rem; opacity: 0.6; font-size: 0.9rem; margin-left: 1rem; flex-shrink: 0;">${t('showoff-exit')}</button>
         </header>
 
         <div id="main-grid" class="showoff-grid-container" style="display:flex; gap:clamp(1rem, 3vw, 4rem); flex:1; min-height:0; align-items: stretch; margin-bottom: 2vh;">
           
-          <!-- Left Content Area -->
-          <div style="flex:1.4; display:flex; flex-direction:column; gap:clamp(1rem, 2vh, 3vh); min-width:0;">
+          <!-- Left Content Area (Video) - Large impact 16:9 -->
+          <div style="flex:2.2; display:flex; flex-direction:column; gap:clamp(1rem, 2vh, 3vh); min-width:0;">
             <!-- Video Panel -->
             <div class="glass-panel" style="flex:1; display:flex; flex-direction:column; padding:clamp(1rem, 1.5vw, 2.5rem); background:rgba(255,255,255,0.08); border:2px solid rgba(255,255,255,0.18); border-radius:30px; box-shadow: 0 25px 60px rgba(0,0,0,0.6); min-height:0;">
-              <h2 style="font-size:clamp(1.2rem, 1.6vw, 2rem); margin-bottom:1rem; color:#4ade80; display:flex; align-items:center; gap:12px; flex-shrink:0; font-weight:800; text-shadow: 0 0 10px rgba(74, 222, 128, 0.3);">
-                <span class="rec-dot"></span> 專案宣傳影片 LIVE
+              <h2 style="font-size:clamp(1.2rem, 1.6vw, 2rem); margin-bottom:1rem; color:#4ade80; display:flex; align-items:center; gap:8px; flex-shrink:0; font-weight:800; text-shadow: 0 0 10px rgba(74, 222, 128, 0.3); transform: translateX(-4px);">
+                <span class="rec-dot"></span> Gu Gu Gu 宣傳影片 LIVE
               </h2>
               <div style="width:100%; flex:1; background:#000; border-radius:20px; overflow:hidden; position:relative; border:1px solid rgba(255,255,255,0.15);">
-                  <video id="leaderboard-video" style="width:100%; height:100%; object-fit:cover;" autoplay loop muted playsinline>
-                    <source src="./footage/previous_videos/video1.mp4" type="video/mp4" />
+                  <video id="leaderboard-video" style="width:100%; height:100%; object-fit:contain; background:#000;" autoplay loop playsinline>
+                    <source src="./footage/showoff/gugugu_motionad.mp4" type="video/mp4" />
                   </video>
               </div>
             </div>
@@ -134,17 +143,17 @@ export function renderShowOff(container) {
             <!-- Ticker Panel -->
             <div class="glass-panel" style="height: clamp(60px, 10vh, 100px); display:flex; align-items:center; overflow:hidden; background:rgba(74, 222, 128, 0.05); border-radius:25px; border:1px solid rgba(74,222,128,0.2); padding:0 2rem;">
               <div id="ticker" style="white-space:nowrap; font-size:clamp(1rem, 1.2vw, 1.5rem); color:#fbbf24; font-weight:800; animation:scrollLeft 25s linear infinite;">
-                ⚡ 本地生態監測中 &nbsp;&nbsp;|&nbsp;&nbsp; 🌲 校園目前的鳥類活動頻率：高 &nbsp;&nbsp;|&nbsp;&nbsp; 🕊️ 感謝參與投票！ &nbsp;&nbsp;|&nbsp;&nbsp; ⛅ 天氣：晴 &nbsp;&nbsp;|&nbsp;&nbsp;
+                ${t('showoff-ticker-1')} &nbsp;&nbsp;|&nbsp;&nbsp; ${t('showoff-ticker-2')} &nbsp;&nbsp;|&nbsp;&nbsp; ${t('showoff-ticker-3')} &nbsp;&nbsp;|&nbsp;&nbsp; ${t('showoff-ticker-4')} &nbsp;&nbsp;|&nbsp;&nbsp;
               </div>
             </div>
           </div>
 
-          <!-- Right Content Area -->
-          <div style="flex:1; display:flex; flex-direction:column; gap:clamp(1rem, 2vh, 3vh); min-width:0;">
+          <!-- Right Content Area - Larger to fix clipping -->
+          <div style="flex:1.3; display:flex; flex-direction:column; gap:clamp(1rem, 2vh, 3vh); min-width:0;">
             <!-- Leaderboard Panel -->
-            <div class="glass-panel" style="flex:1; display:flex; flex-direction:column; padding:clamp(1rem, 1.5vw, 2.5rem); background:rgba(255,255,255,0.08); border:2px solid rgba(255,255,255,0.18); border-radius:30px; min-height:0; box-shadow: 0 25px 60px rgba(0,0,0,0.6);">
+            <div class="glass-panel" style="flex:1; display:flex; flex-direction:column; padding:clamp(1rem, 1.8vw, 2.8rem); background:rgba(255,255,255,0.08); border:2px solid rgba(255,255,255,0.18); border-radius:30px; min-height:0; box-shadow: 0 25px 60px rgba(0,0,0,0.6);">
               <h2 style="font-size:clamp(1.2rem, 1.6vw, 2rem); color:#3b82f6; display:flex; align-items:center; gap:12px; margin-bottom:1rem; flex-shrink:0; font-weight:800;">
-                <span style="font-size:1.8rem; animation:rotate 15s linear infinite;">🏆</span> 即時人氣榜 (TOP 3)
+                <span style="font-size:1.8rem; animation:rotate 15s linear infinite;">🏆</span> ${t('showoff-rank-title')}
               </h2>
               <div id="lb-container" style="flex:1; display:flex; flex-direction:column; justify-content: space-between; min-height:0; overflow:hidden; padding: 1vh 0;">
                 <!-- Bird bars injected here -->
@@ -154,16 +163,16 @@ export function renderShowOff(container) {
             <!-- QR & Mascot Bottom Area -->
             <div id="bottom-area" style="height: clamp(150px, 30vh, 300px); display:flex; gap:2vw; align-items: stretch; min-height:0; flex-shrink:0;">
               <div class="glass-panel" style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; background:rgba(255,255,255,0.08); border-radius:30px; border:2px solid rgba(255,255,255,0.18); box-shadow:0 25px 60px rgba(0,0,0,0.6);">
-                <div style="width:18vh; height:18vh; max-width:160px; max-height:160px; background:white; padding:10px; border-radius:20px; display:flex; align-items:center; justify-content:center; border: 5px solid #4ade80;">
+                <div style="width:15vh; height:15vh; max-width:130px; max-height:130px; background:white; padding:8px; border-radius:18px; display:flex; align-items:center; justify-content:center; border: 4px solid #4ade80;">
                   <img src="./gugugu_qrcode.png" style="width:100%; height:100%; object-fit:contain;" />
                 </div>
-                <span style="font-size:clamp(0.9rem, 1.1vw, 1.2rem); font-weight:900; color:#4ade80; letter-spacing:2px; text-shadow: 0 0 10px rgba(74, 222, 128, 0.4);">掃碼投票 SCAN TO VOTE</span>
+                <span style="font-size:clamp(0.9rem, 1.1vw, 1.2rem); font-weight:900; color:#4ade80; letter-spacing:2px; text-shadow: 0 0 10px rgba(74, 222, 128, 0.4); text-align: center; line-height: 1.4; padding: 0 10px;">${t('showoff-scan-vote')}</span>
               </div>
-              <div class="glass-panel" style="flex:1.2; position:relative; display:flex; justify-content:center; align-items:flex-end; background:rgba(255,255,255,0.08); border-radius:30px; border:2px solid rgba(255,255,255,0.18); overflow:visible; box-shadow:0 25px 60px rgba(0,0,0,0.6);">
-                <div id="exhibit-mascot-bubble" style="position:absolute; top:-30px; left:50%; transform: translateX(-50%) scale(0.8); background:white; color:#111; padding:10px 20px; border-radius:30px; font-weight:900; font-size:1rem; opacity:0; transition:all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); white-space:nowrap; z-index:10; box-shadow: 0 15px 45px rgba(0,0,0,0.4); border: 3px solid #4ade80; min-width: 180px; text-align: center;">
+              <div class="glass-panel" style="flex:1.2; position:relative; display:flex; justify-content:center; align-items:flex-end; background:rgba(255,255,255,0.08); border-radius:30px; border:2px solid rgba(255,255,255,0.18); overflow:visible; box-shadow:0 25px 60px rgba(0,0,0,0.6); padding-top: 60px;">
+                <div id="exhibit-mascot-bubble" style="position:absolute; top:10px; left:50%; transform: translateX(-50%) scale(0.8); background:white; color:#111; padding:10px 20px; border-radius:30px; font-weight:900; font-size:1rem; opacity:0; transition:all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); white-space:nowrap; z-index:10; box-shadow: 0 15px 45px rgba(0,0,0,0.4); border: 3px solid #4ade80; min-width: 180px; text-align: center;">
                   投票中... Gu!
                 </div>
-                <img src="./removedbg_gugugu.png" id="exhibit-mascot-img" style="height:90%; filter:drop-shadow(0 20px 40px rgba(0,0,0,0.5)); cursor:pointer; animation:mascotSway 5s ease-in-out infinite; transform-origin: bottom center;" />
+                <img src="./removedbg_gugugu.png" id="exhibit-mascot-img" style="height:115%; filter:drop-shadow(0 20px 40px rgba(0,0,0,0.5)); cursor:pointer; animation:mascotSway 5s ease-in-out infinite; transform-origin: bottom center; position: relative; bottom: -10px;" />
               </div>
             </div>
           </div>
@@ -208,9 +217,9 @@ export function renderShowOff(container) {
       const theme = colors[idx] || colors[2];
 
       return `
-        <div class="chart-row premium-row" style="animation-delay: ${idx * 0.2}s; flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0; padding: 1vh 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+        <div class="chart-row premium-row" style="animation-delay: ${idx * 0.2}s; flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0; padding: 0.5vh 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
           <!-- Main Info Grid -->
-          <div style="display:grid; grid-template-columns: clamp(40px, 4vw, 60px) clamp(60px, 6vw, 90px) 1fr clamp(80px, 8vw, 120px); align-items:center; width:100%; gap: 10px;">
+          <div style="display:grid; grid-template-columns: clamp(40px, 4vw, 55px) clamp(70px, 8vw, 95px) 1fr clamp(90px, 10vw, 120px); align-items:center; width:100%; gap: clamp(8px, 1.5vw, 20px);">
             
             <!-- Rank Column -->
             <div style="display:flex; justify-content:center;">
@@ -219,24 +228,24 @@ export function renderShowOff(container) {
 
             <!-- Image Column -->
             <div style="display:flex; justify-content:center;">
-              <div style="width: clamp(55px, 5.5vw, 80px); height: clamp(55px, 5.5vw, 80px); border: 2.3px solid ${theme.main}; box-shadow: 0 0 20px ${theme.shadow}; border-radius: 20px; overflow:hidden; background: rgba(0,0,0,0.5);">
+              <div style="width: 75px; height: 75px; border: 3px solid ${theme.main}; box-shadow: 0 0 20px ${theme.shadow}; border-radius: 20px; overflow:hidden; background: rgba(0,0,0,0.5);">
                 <img src="${birdImg}" style="width: 100%; height: 100%; object-fit: cover;">
               </div>
             </div>
 
             <!-- Name and Bar Column -->
-            <div style="display: flex; flex-direction: column; gap: 8px; overflow: hidden; justify-content: center;">
-              <span class="shimmer-text" style="font-size: clamp(1.4rem, 2vw, 2.4rem); font-weight: 900; letter-spacing: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.bird}</span>
+            <div style="display: flex; flex-direction: column; gap: 6px; overflow: visible; justify-content: center; min-width: 0;">
+              <span class="shimmer-text" style="font-size: clamp(1.4rem, 2.2vw, 2.6rem); font-weight: 900; letter-spacing: 1px; white-space: nowrap; overflow: visible;">${item.bird}</span>
               <!-- Integrated Progress Bar -->
-              <div style="width:95%; height:clamp(14px, 1.8vh, 20px); background:rgba(0,0,0,0.5); border-radius:10px; overflow:hidden; border:1px solid rgba(255,255,255,0.15); box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); position: relative;">
+              <div style="width:100%; height:12px; background:rgba(0,0,0,0.5); border-radius:10px; overflow:hidden; border:1px solid rgba(255,255,255,0.15); box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); position: relative;">
                 <div id="bar-${item.bird}" class="bar-fill ${isTarget ? 'bar-pulse' : ''}" style="width:${percentage}%; background: linear-gradient(90deg, ${theme.secondary}, ${theme.main}, ${theme.secondary}); background-size: 200% 100%; box-shadow: 0 0 15px ${theme.shadow};"></div>
               </div>
             </div>
 
             <!-- Votes Column -->
-            <div style="text-align: right; background: rgba(0,0,0,0.7); padding: 0.8vh 1.2vw; border-radius: 18px; border: 2px solid rgba(255,255,255,0.15); box-shadow: 0 4px 15px rgba(0,0,0,0.4); min-width: clamp(75px, 9vw, 110px);">
-              <div style="color:${theme.main}; font-size: clamp(1.6rem, 2.4vw, 2.8rem); font-weight: 950; line-height: 1; text-shadow: 0 0 10px ${theme.shadow};">${item.votes}</div>
-              <small style="font-size:0.7rem; color:#4ade80; font-weight:900; opacity:1; letter-spacing: 1px;">VOTES</small>
+            <div style="text-align: right; background: rgba(0,0,0,0.7); padding: 6px 12px; border-radius: 18px; border: 2px solid rgba(255,255,255,0.15); box-shadow: 0 4px 15px rgba(0,0,0,0.4); min-width: 90px; margin-right: 5px;">
+              <div style="color:${theme.main}; font-size: clamp(1.8rem, 2.8vw, 3.2rem); font-weight: 950; line-height: 1; text-shadow: 0 0 10px ${theme.shadow};">${item.votes}</div>
+              <small style="font-size:0.75rem; color:#4ade80; font-weight:900; opacity:1; letter-spacing: 1px;">VOTES</small>
             </div>
           </div>
         </div>
@@ -261,19 +270,19 @@ export function renderShowOff(container) {
   };
 
   const autoLines = [
-    "歡迎來到 Gu Gu Gu 展位！✨",
-    "快拿起手機，掃碼投下你神聖的一票！🕊️",
-    "你知道嗎？校園裡其實有很多隱藏的鳥類明星哦！",
-    "我是展覽限定版的 Gu Gu，大家多多指教！🌿",
-    "看！影片裡正拍到精彩的畫面呢！🎬",
-    "目前第一名競爭非常激烈呀！Gu! 🔥"
+    t('showoff-mascot-1'),
+    t('showoff-mascot-2'),
+    t('showoff-mascot-3'),
+    t('showoff-mascot-4'),
+    t('showoff-mascot-5'),
+    t('showoff-mascot-6')
   ];
   const triggerAutoLine = () => {
     const line = autoLines[Math.floor(Math.random() * autoLines.length)];
     triggerMascotNews(line);
   };
 
-  mascot.onclick = () => triggerMascotNews("我是展覽限定版的 Gu Gu！✨");
+  mascot.onclick = () => triggerMascotNews(t('showoff-mascot-4'));
 
   async function fetchLiveResults() {
     try {
@@ -283,6 +292,7 @@ export function renderShowOff(container) {
         const counts = json.results || {};
         const lastVote = json.lastVote;
         let changedBird = null;
+        let voteIncreased = false;
 
         Object.keys(counts).forEach(birdName => {
           let b = votingData.find(v => v.bird === birdName);
@@ -290,19 +300,20 @@ export function renderShowOff(container) {
             if (counts[birdName] > b.votes) {
               b.votes = counts[birdName];
               changedBird = birdName;
+              voteIncreased = true;
             }
           }
         });
 
         if (lastVote && lastVote.id !== lastProcessedVoteId) {
           if (lastProcessedVoteId !== null) {
-            const isEn = (window.store && window.store.getLanguage() === 'en');
-            const msg = isEn 
-              ? `News! ${lastVote.user} voted for ${lastVote.bird}! Gu!` 
-              : `剛剛收到！${lastVote.user} 剛剛投票給了 ${lastVote.bird}！Gu!`;
+            const msg = t('showoff-live-msg', { name: lastVote.user, bird: lastVote.bird });
             triggerMascotNews(msg);
           }
           lastProcessedVoteId = lastVote.id;
+        } else if (voteIncreased && lastProcessedVoteId !== null) {
+          // Fallback if lastVote details aren't ready but count increased
+          triggerMascotNews("有人投票了！Gu! ✨");
         }
         renderLeaderboard(changedBird);
       }
@@ -310,6 +321,18 @@ export function renderShowOff(container) {
       console.log("Polling error:", e);
     }
   }
+
+  const video = container.querySelector('#leaderboard-video');
+  const unmuteVideo = () => {
+    if (video) {
+      video.muted = false;
+      video.play().catch(e => console.log("Audio play blocked", e));
+    }
+  };
+
+  // Modern browsers require interaction to play unmuted audio.
+  // We'll unmute on the first click anywhere in the container.
+  container.addEventListener('click', unmuteVideo, { once: true });
 
   renderLeaderboard();
   const pollInterval = setInterval(fetchLiveResults, 8000);
