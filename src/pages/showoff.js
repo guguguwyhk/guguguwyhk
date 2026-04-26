@@ -219,7 +219,7 @@ export function renderShowOff(container) {
       return `
         <div class="chart-row premium-row" style="animation-delay: ${idx * 0.2}s; flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0; padding: 0.5vh 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
           <!-- Main Info Grid -->
-          <div style="display:grid; grid-template-columns: clamp(40px, 4vw, 55px) clamp(70px, 8vw, 95px) 1fr clamp(90px, 10vw, 120px); align-items:center; width:100%; gap: clamp(8px, 1.5vw, 20px);">
+          <div style="display:grid; grid-template-columns: 45px 80px 1fr 100px; align-items:center; width:100%; gap: 10px;">
             
             <!-- Rank Column -->
             <div style="display:flex; justify-content:center;">
@@ -234,8 +234,8 @@ export function renderShowOff(container) {
             </div>
 
             <!-- Name and Bar Column -->
-            <div style="display: flex; flex-direction: column; gap: 6px; overflow: visible; justify-content: center; min-width: 0;">
-              <span class="shimmer-text" style="font-size: clamp(1.4rem, 2.2vw, 2.6rem); font-weight: 900; letter-spacing: 1px; white-space: nowrap; overflow: visible;">${item.bird}</span>
+            <div style="display: flex; flex-direction: column; gap: 4px; overflow: visible; justify-content: center; min-width: 0; flex: 1;">
+              <span class="shimmer-text" style="font-size: clamp(1.4rem, 2.2vw, 2.6rem); font-weight: 900; letter-spacing: 0px; white-space: nowrap; overflow: visible; text-overflow: clip;">${item.bird}</span>
               <!-- Integrated Progress Bar -->
               <div style="width:100%; height:12px; background:rgba(0,0,0,0.5); border-radius:10px; overflow:hidden; border:1px solid rgba(255,255,255,0.15); box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); position: relative;">
                 <div id="bar-${item.bird}" class="bar-fill ${isTarget ? 'bar-pulse' : ''}" style="width:${percentage}%; background: linear-gradient(90deg, ${theme.secondary}, ${theme.main}, ${theme.secondary}); background-size: 200% 100%; box-shadow: 0 0 15px ${theme.shadow};"></div>
